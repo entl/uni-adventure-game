@@ -1,10 +1,7 @@
 package com.university.utils.parsers;
 
 
-import com.university.utils.commands.Command;
-import com.university.utils.commands.Direction;
-import com.university.utils.commands.ICommand;
-import com.university.utils.commands.MoveCommand;
+import com.university.utils.commands.*;
 
 import java.util.*;
 
@@ -16,6 +13,7 @@ public class CommandParser {
     public CommandParser() {
         commandMap = new HashMap<>();
         initializeCommands();
+        initializeStopwords();
     }
 
     public ICommand parse(String userInput) {
@@ -30,11 +28,13 @@ public class CommandParser {
                     return new MoveCommand(direction);
                 }
                 else {
-                    System.out.println("> Specify direction");
+                    System.out.println("* Specify direction");
                     return null;
                 }
+            case LOOK_AROUND:
+                return new LookAroundCommand();
             default:
-                System.out.println("> I can't understand your input. \n > Enter `help` to see commands");
+                System.out.println("* I can't understand your input.\n* Enter `help` to see commands");
                 return null;
         }
     }
