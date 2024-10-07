@@ -16,6 +16,7 @@ public class Game {
     private Dungeon[] dungeons;     // array of dungeons
     private GameContext gameContext;    // game context
     private CommandParser commandParser;    // command parser
+    private Scanner scanner;
 
 
     private Game() {
@@ -31,6 +32,7 @@ public class Game {
     }
 
     private void initializeGame() {
+        scanner = new Scanner(System.in);
         commandParser = new CommandParser();
 
         Player player = new Player("Dummy Name", 100);
@@ -42,19 +44,55 @@ public class Game {
         }
 
         gameContext = new GameContext(player, dungeons[0], dungeons[0].getEntranceRoom());
+        player.setCurrentRoom(gameContext.getCurrentRoom());
     }
 
     public void startGame() {
-        System.out.println("Game started!");
+        String startingArt = """
+                ######################################
+                
+                oooooooooo.    .o"o.   oooooooooo.  \s
+                `888'   `Y8b  "' "  `" `888'   `Y8b \s
+                 888      888    "      888      888\s
+                 888      888    "      888      888\s
+                 888      888    "      888      888\s
+                 888     d88'    "      888     d88'\s
+                o888bood8P'      "     o888bood8P'  \s
+                
+                ######################################
+                """;
+        System.out.println(startingArt);
+        System.out.println("* Welcome to the game `Dungeons NAND Dragons!`");
+
+        System.out.println("* Press Enter to start the game...");
+        scanner.nextLine();
+
+
+        System.out.println(
+                        """
+                        * Year: 1347.\s
+                        * The Black Death devastates Europe, claiming lives without mercy.\s
+                        * In your small village, your wife has fallen ill with the plague.\s
+                        * Desperate and out of options, you hear rumors of a *legendary elixir* hidden deep within a dangerous dungeon.
+                        * Armed with nothing but your will to save her, you determined to go on a dangerous adventure into the dark ancient dungeon.\s
+                        * Time is running out.\s
+                        * Will you find the cure before it's too late, or will the dungeon claim you, as it has so many before?
+                        """);
+
+        System.out.println("* Press Enter to begin your journey...");
+        scanner.nextLine();
+
         loop();
     }
 
     public void loop() {
-        Scanner scanner = new Scanner(System.in);
         while (gameContext.isRunning()) {
-            System.out.println("What would you like to do?");
+            System.out.println();
+            System.out.println("* What would you like to do?");
 
+            System.out.print("> ");
             String userInput = scanner.nextLine();
+            System.out.println();
 
             ICommand command = commandParser.parse(userInput);
 

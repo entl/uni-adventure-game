@@ -21,27 +21,26 @@ public class Player {
         Room nextRoom = currentRoom.getRoomInDirection(direction);
         if (nextRoom != null) {
             currentRoom = nextRoom;
-            System.out.println("Player moved to the next room!");
+            System.out.printf("* You moved to the %s room!\n", direction);
         } else {
-            System.out.println("There is no room in that direction!");
+            System.out.printf("* There is no room to the %s.\n* Try to look around\n", direction);
         }
     }
 
     public void lookAround() {
-        System.out.println("Player looked around!");
-        if (!currentRoom.getItems().isEmpty()) {
-            System.out.println("Items in the room:");
-            for (IItem item : currentRoom.getItems()) {
-                System.out.println(item.getName());
-            }
-        } else {
-            System.out.println("No items in the room.");
-        }
+        System.out.println("* Look through darkness...");
 
-        // Print adjacent rooms
-        System.out.println("Adjacent rooms:");
+        if (currentRoom.getItems() == null) {
+            System.out.println("* There's no items in the room.");
+        } else {
+            System.out.println("* You can barely see these items in the room:");
+            for (IItem item : currentRoom.getItems()) {
+                System.out.printf("* %s\n", item.getName());
+            }
+        }
+        System.out.println("* You manage to see the following rooms:");
         for (Direction direction : currentRoom.getAdjacentRooms().keySet()) {
-            System.out.println(direction);
+            System.out.printf("* To the %s\n", direction);
         }
     }
 
@@ -51,5 +50,13 @@ public class Player {
 
     public void use() {
         System.out.println("Player used item!");
+    }
+
+    public Room getCurrentRoom() {
+        return currentRoom;
+    }
+
+    public void setCurrentRoom(Room currentRoom) {
+        this.currentRoom = currentRoom;
     }
 }
