@@ -1,20 +1,20 @@
 package com.university.item;
 
-public class Item implements IItem {
+public class Tool implements IItem {
     private String name;
     private String description;
 
-    public Item(String name, String description) {
+    public Tool(String name, String description) {
         this.name = name;
         this.description = description;
     }
 
     public void use() {
-        System.out.println("Item used!");
+        System.out.println("Tool used!");
     }
 
-    public String information() {
-        return "Item name: " + name + "\nItem description: " + description;
+    public String describe() {
+        return "Tool name: " + name + "\nTool description: " + description;
     }
 
     @Override

@@ -2,7 +2,7 @@ package com.university.item;
 
 public interface IItem {
     void use();
-    String information();
+    String describe();
 
     String getName();
     String getDescription();

@@ -13,17 +13,17 @@ public class Spell implements IItem {
         System.out.println("Spell used!");
     }
 
-    public String information() {
+    public String describe() {
         return "Spell name: " + name + "\nSpell description: " + description;
     }
 
     @Override
     public String getName() {
-        return "";
+        return name;
     }
 
     @Override
     public String getDescription() {
-        return "";
+        return description;
     }
 }
