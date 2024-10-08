@@ -8,12 +8,14 @@ import java.util.*;
 public class CommandParser {
 
     private Map<String, Command> commandMap;
+    private Set<String> itemNames; // think about improvement
     private Set<String> stopwords;
 
     public CommandParser() {
         commandMap = new HashMap<>();
         initializeCommands();
         initializeStopwords();
+        initializeItemNames();
     }
 
     public ICommand parse(String userInput) {
@@ -33,6 +35,15 @@ public class CommandParser {
                 }
             case LOOK_AROUND:
                 return new LookAroundCommand();
+            case USE:
+                String itemName = parseItemName(processedTokens);
+                if (itemName != null) {
+                    return new UseCommand(itemName);
+                }
+                else {
+                    System.out.println("* Specify item to use");
+                    return null;
+                }
             default:
                 System.out.println("* I can't understand your input.\n* Enter `help` to see commands");
                 return null;
@@ -109,6 +120,13 @@ public class CommandParser {
         ));
     }
 
+    private void initializeItemNames() {
+        itemNames = new HashSet<>(Arrays.asList(
+                "teleportation spell", "freeze spell", "hammer", "spanner",
+                "alarm clock", "cake", "sandwich", "vision potion"
+        ));
+    }
+
     private String[] preprocessInput(String userInput) {
         String[] tokens = userInput.trim().toLowerCase().split(" ");
 
@@ -150,5 +168,28 @@ public class CommandParser {
             }
         }
         return null;
+    }
+
+    private String parseItemName(String[] words) {
+        String bestMatch = null;
+        int highestMatchCount = 0;
+
+        for (String itemName : itemNames) {
+            int matchCount = 0;
+
+            // count how many words from the input are present in the item name.
+            for (String word : words) {
+                if (itemName.contains(word)) {
+                    matchCount++;
+                }
+            }
+
+            if (matchCount > highestMatchCount) {
+                highestMatchCount = matchCount;
+                bestMatch = itemName;
+            }
+        }
+
+        return bestMatch;
     }
 }
