@@ -51,6 +51,18 @@ public class Room {
         this.items = items;
     }
 
+    public boolean removeItem(IItem item) {
+        if (items.contains(item)) {
+            items.remove(item);
+            return true;
+        }
+        return false;
+    }
+
+    public void addItem(IItem item) {
+        items.add(item);
+    }
+
     public HashMap<Direction, Room> getAdjacentRooms() {
         return adjacentRooms;
     }
