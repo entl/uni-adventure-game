@@ -4,7 +4,6 @@ import com.university.Config;
 import com.university.dungeon.Dungeon;
 import com.university.dungeon.DungeonService;
 import com.university.player.Player;
-import com.university.utils.commands.Command;
 import com.university.utils.commands.ICommand;
 import com.university.utils.parsers.CommandParser;
 
@@ -80,7 +79,11 @@ public class Game {
                         """);
 
         System.out.println("* Press Enter to begin your journey...");
+        System.out.println("* Type `help` to see the list of available commands.");
         scanner.nextLine();
+
+        System.out.println("* You step into the dungeon, the air growing cold and moisture around you...");
+        System.out.println("* As you turn to look back, the entrance slams shut, sealing you inside. There is no way out.");
 
         loop();
     }
