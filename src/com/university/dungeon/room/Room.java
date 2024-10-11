@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 
 public class Room {
+    private String label;
     private List<IItem> items;
     private HashMap<Direction, Room> adjacentRooms;
     private boolean isVisited;
@@ -15,7 +16,8 @@ public class Room {
     private final boolean isTreasureRoom;
     private final boolean isWall;
 
-    public Room(List<IItem> items, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall) {
+    public Room(String label, List<IItem> items, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall) {
+        this.label = label;
         this.items = items;
         this.isEntrance = isEntrance;
         this.isExit = isExit;
@@ -89,5 +91,9 @@ public class Room {
 
     public boolean isWall() {
         return isWall;
+    }
+
+    public String getLabel() {
+        return label;
     }
 }

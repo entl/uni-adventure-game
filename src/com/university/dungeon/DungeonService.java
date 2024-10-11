@@ -14,10 +14,10 @@ public class DungeonService {
     public DungeonService() {
     }
 
-    public Dungeon initializeDungeon(String dungeonCSV) {
+    public Dungeon initializeDungeon(String dungeonCSV, int level) {
         List<List<Room>> rooms = initializeDungeonMap(dungeonCSV);
         Room entrance = getEntrance(rooms);
-        return new Dungeon(rooms, entrance);
+        return new Dungeon(rooms, entrance, level);
     }
 
     private List<List<Room>> initializeDungeonMap(String dungeonCSV) {
@@ -32,10 +32,11 @@ public class DungeonService {
             return null;
         }
 
-        for (List<String> row : dungeonCells) {
+        for (int i = 0; i < dungeonCells.size(); i++) {
             List<Room> roomRow = new ArrayList<>();
-            for (String cell : row) {
-                Room room = RoomService.createRoomFromCell(cell);
+            for (int j = 0; j < dungeonCells.get(i).size(); j++) {
+                String roomLabel = generateGridLabel(i, j);
+                Room room = RoomService.createRoomFromCell(dungeonCells.get(i).get(j), roomLabel);
                 roomRow.add(room);
             }
             dungeon.add(roomRow);
@@ -79,6 +80,11 @@ public class DungeonService {
         }
     }
 
+    private String generateGridLabel(int rowIndex, int columnIndex) {
+        char rowLabel = (char) ('A' + rowIndex); // Start from A, each row is a letter
+        int columnLabel = columnIndex + 1; // Start from 1, each column is a number
+        return rowLabel + String.valueOf(columnLabel);
+    }
 
     public void printDungeon(List<List<Room>> dungeon) {
         for (List<Room> row : dungeon) {

@@ -6,26 +6,26 @@ import java.util.HashMap;
 import java.util.List;
 
 public class RoomService {
-    public static Room createRoomFromCell(String cell) {
+    public static Room createRoomFromCell(String cell, String name) {
         return switch (cell.toUpperCase()) {
             case "W" ->
                 // Wall
-                    new Room(null, false, false, false, true);
+                    new Room(name, null, false, false, false, true);
             case "E" ->
                 // Entrance
-                    new Room(null, true, false, false, false);
+                    new Room(name, null, true, false, false, false);
             case "X" ->
                 // Exit
-                    new Room(null, false, true, false, false);
+                    new Room(name, null, false, true, false, false);
             case "T" ->
                 // Treasure
-                    new Room(null, false, false, true, false);
+                    new Room(name, null, false, false, true, false);
             case "R" ->
                 // Regular Room
-                    new Room(null, false, false, false, false);
+                    new Room(name, null, false, false, false, false);
             default ->
                 // Handle unknown cell types as walls for safety
-                    new Room(null, false, false, false, true);
+                    new Room(name, null, false, false, false, true);
         };
     }
 
