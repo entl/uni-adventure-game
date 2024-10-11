@@ -39,7 +39,7 @@ public class Game {
 
         dungeons = new Dungeon[dungeonPaths.length];
         for (int i = 0; i < dungeonPaths.length; i++) {
-            dungeons[i] = dungeonService.initializeDungeon(dungeonPaths[i]);
+            dungeons[i] = dungeonService.initializeDungeon(dungeonPaths[i], i + 1);
         }
 
         gameContext = new GameContext(player, dungeons[0], dungeons[0].getEntranceRoom());
