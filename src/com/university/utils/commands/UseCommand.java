@@ -14,16 +14,14 @@ public class UseCommand implements ICommand {
     @Override
     public void execute(GameContext context) {
         Player player = context.getPlayer();
-        System.out.println(itemName);
-        IItem item = player.getItemFromName(itemName);
-
-        System.out.println(player.getInventory());
-        String temp = player.getInventory().get(0).getName();
-        System.out.println(temp);
+        IItem item = player.getInventoryManager().getItemByName(itemName);
 
         if (item != null) {
-            player.use(item);
-            System.out.println("* Item used! DELETE LATER");
+            item.use(context);
+
+            if (item.isConsumable()) {
+                player.getInventoryManager().removeItem(item);
+            }
         } else {
             System.out.println("* Item not found!");
         }
