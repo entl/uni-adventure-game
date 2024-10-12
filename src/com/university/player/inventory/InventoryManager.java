@@ -1,9 +1,6 @@
 package com.university.player.inventory;
 
-import com.university.item.IItem;
-import com.university.item.Spell;
-import com.university.item.TeleportationSpell;
-import com.university.item.Tool;
+import com.university.item.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,8 +15,7 @@ public class InventoryManager {
 
     public InventoryManager() {
         this.inventory = new ArrayList<>();
-        inventory.add(new TeleportationSpell("teleportation spell", "Teleport to the destination room", "destination"));
-        this.spellsCount = 1;
+        this.spellsCount = 0;
         this.toolsCount = 0;
     }
 

@@ -5,21 +5,27 @@ import com.university.item.IItem;
 import com.university.player.inventory.InventoryManager;
 import com.university.utils.commands.Direction;
 
-import java.util.List;
 
 public class Player {
     private String name;
     private int powerPoints;
     private Room currentRoom;
     private InventoryManager inventory;
+    private boolean isTrapped;
 
     public Player(String name, Integer powerPoints) {
         this.name = name;
         this.powerPoints = powerPoints;
         this.inventory = new InventoryManager();
+        this.isTrapped = false;
     }
 
     public void move(Direction direction) {
+        if (isTrapped) {
+            System.out.println("* You are trapped and cannot move!");
+            return;
+        }
+
         Room nextRoom = currentRoom.getRoomInDirection(direction);
         if (nextRoom != null) {
             currentRoom = nextRoom;
@@ -30,24 +36,23 @@ public class Player {
     }
 
     public void lookAround() {
-        System.out.println("* Look through darkness...");
+        System.out.println("* Looking through darkness...");
+        System.out.println("* The glimmer of light reveals **blood-stained signs** etched into the walls.");
+        System.out.printf("* You are in the **Room %s**\n\n", currentRoom.getLabel());
 
         if (currentRoom.getItems() == null) {
             System.out.println("* There's no items in the room.");
         } else {
-            System.out.println("* You can barely see these items in the room:");
+            System.out.println("* You can barely see following items in the room:");
             for (IItem item : currentRoom.getItems()) {
                 System.out.printf("* %s\n", item.getName());
             }
         }
+        System.out.println();
         System.out.println("* You manage to see the following rooms:");
         for (Direction direction : currentRoom.getAdjacentRooms().keySet()) {
-            System.out.printf("* To the %s\n", direction);
+            System.out.printf("- %s\n", direction);
         }
-    }
-
-    public void attack() {
-        System.out.println("Player attacked!");
     }
 
     public void pickUp(IItem item) {
@@ -68,15 +73,6 @@ public class Player {
         }
     }
 
-    public void use(IItem item) {
-        if (inventory.hasItem(item)) {
-            item.use();
-            inventory.removeItem(item);
-        } else {
-            System.out.println("* Item not found in the inventory!");
-        }
-    }
-
     public Room getCurrentRoom() {
         return currentRoom;
     }
@@ -85,11 +81,24 @@ public class Player {
         this.currentRoom = currentRoom;
     }
 
-    public IItem getItemFromName(String itemName) {
-        return inventory.getItemByName(itemName);
+
+    public InventoryManager getInventoryManager() {
+        return inventory;
     }
 
-    public List<IItem> getInventory() {
-        return inventory.getInventory();
+    public void addPowerPoints(int powerPoints) {
+        this.powerPoints += powerPoints;
+    }
+
+    public void removePowerPoints(int powerPoints) {
+        this.powerPoints -= powerPoints;
+    }
+
+    public boolean isTrapped() {
+        return isTrapped;
+    }
+
+    public void setTrapped(boolean isTrapped) {
+        this.isTrapped = isTrapped;
     }
 }
