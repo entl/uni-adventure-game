@@ -1,6 +1,6 @@
 package com.university.dungeon.room;
 
-import com.university.item.IItem;
+import com.university.items.IItem;
 import com.university.utils.commands.Direction;
 
 import java.util.HashMap;

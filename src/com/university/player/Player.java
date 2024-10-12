@@ -1,7 +1,7 @@
 package com.university.player;
 
 import com.university.dungeon.room.Room;
-import com.university.item.IItem;
+import com.university.items.IItem;
 import com.university.player.inventory.InventoryManager;
 import com.university.utils.commands.Direction;
 

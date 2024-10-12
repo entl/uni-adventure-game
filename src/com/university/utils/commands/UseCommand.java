@@ -1,7 +1,7 @@
 package com.university.utils.commands;
 
 import com.university.game.GameContext;
-import com.university.item.IItem;
+import com.university.items.IItem;
 import com.university.player.Player;
 
 public class UseCommand implements ICommand {
