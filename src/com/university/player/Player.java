@@ -1,6 +1,8 @@
 package com.university.player;
 
 import com.university.dungeon.room.Room;
+import com.university.game.GameContext;
+import com.university.gameElements.traps.ITrap;
 import com.university.items.IItem;
 import com.university.player.inventory.InventoryManager;
 import com.university.utils.commands.Direction;
@@ -28,7 +30,12 @@ public class Player {
 
         Room nextRoom = currentRoom.getRoomInDirection(direction);
         if (nextRoom != null) {
+            // extract logic to the game loop
             currentRoom = nextRoom;
+            ITrap trap = currentRoom.getTrap();
+            if (trap != null) {
+                trap.activate(GameContext.getInstance());
+            }
             System.out.printf("* You moved to the %s room!\n", direction);
         } else {
             System.out.printf("* There is no room to the %s.\n* Try to look around\n", direction);
@@ -40,7 +47,7 @@ public class Player {
         System.out.println("* The glimmer of light reveals **blood-stained signs** etched into the walls.");
         System.out.printf("* You are in the **Room %s**\n\n", currentRoom.getLabel());
 
-        if (currentRoom.getItems() == null) {
+        if (currentRoom.getItems().isEmpty()) {
             System.out.println("* There's no items in the room.");
         } else {
             System.out.println("* You can barely see following items in the room:");
@@ -52,24 +59,6 @@ public class Player {
         System.out.println("* You manage to see the following rooms:");
         for (Direction direction : currentRoom.getAdjacentRooms().keySet()) {
             System.out.printf("- %s\n", direction);
-        }
-    }
-
-    public void pickUp(IItem item) {
-        if (currentRoom.removeItem(item)) {
-            System.out.printf("* You picked up %s\n", item.getName());
-            inventory.addItem(item);
-        } else {
-            System.out.println("* Item not found in the room!");
-        }
-    }
-
-    public void drop(IItem item) {
-        if (inventory.removeItem(item)) {
-            currentRoom.addItem(item);
-            System.out.printf("* You dropped %s\n", item.getName());
-        } else {
-            System.out.println("* Item not found in the inventory!");
         }
     }
 

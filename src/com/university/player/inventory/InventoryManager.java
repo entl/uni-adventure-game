@@ -50,10 +50,6 @@ public class InventoryManager {
         return isRemoved;
     }
 
-    public boolean hasItem(IItem item) {
-        return inventory.contains(item);
-    }
-
     public IItem getItemByName(String itemName) {
         for (IItem item : inventory) {
             if (item.getName().equals(itemName)) {
