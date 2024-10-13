@@ -1,6 +1,7 @@
 package com.university.utils.parsers;
 
 
+import com.university.items.ItemFactory;
 import com.university.utils.commands.*;
 
 import java.util.*;
@@ -8,14 +9,14 @@ import java.util.*;
 public class CommandParser {
 
     private Map<String, Command> commandMap;
-    private Set<String> itemNames; // think about improvement
     private Set<String> stopwords;
+    private ItemFactory itemFactory;
 
     public CommandParser() {
+        itemFactory = new ItemFactory();
         commandMap = new HashMap<>();
         initializeCommands();
         initializeStopwords();
-        initializeItemNames();
     }
 
     public ICommand parse(String userInput) {
@@ -23,9 +24,11 @@ public class CommandParser {
 
         Command command = extractCommand(processedTokens);
 
+        String itemName = itemFactory.findBestMatchingItemName(processedTokens);
+        Direction direction = parseDirection(processedTokens);
+
         switch (command) {
             case MOVE:
-                Direction direction = parseDirection(processedTokens);
                 if (direction != null) {
                     return new MoveCommand(direction);
                 }
@@ -36,12 +39,27 @@ public class CommandParser {
             case LOOK_AROUND:
                 return new LookAroundCommand();
             case USE:
-                String itemName = parseItemName(processedTokens);
                 if (itemName != null) {
                     return new UseCommand(itemName);
                 }
                 else {
                     System.out.println("* Specify item to use");
+                    return null;
+                }
+            case PICK_UP:
+                if (itemName != null) {
+                    return new PickUpCommand(itemName);
+                }
+                else {
+                    System.out.println("* Specify item to pick up");
+                    return null;
+                }
+            case DROP:
+                if (itemName != null) {
+                    return new DropCommand(itemName);
+                }
+                else {
+                    System.out.println("* Specify item to drop");
                     return null;
                 }
             default:
@@ -120,12 +138,6 @@ public class CommandParser {
         ));
     }
 
-    private void initializeItemNames() {
-        itemNames = new HashSet<>(Arrays.asList(
-                "teleportation spell", "freeze spell", "hammer", "spanner",
-                "alarm clock", "cake", "sandwich", "vision potion"
-        ));
-    }
 
     private String[] preprocessInput(String userInput) {
         String[] tokens = userInput.trim().toLowerCase().split(" ");
@@ -168,28 +180,5 @@ public class CommandParser {
             }
         }
         return null;
-    }
-
-    private String parseItemName(String[] words) {
-        String bestMatch = null;
-        int highestMatchCount = 0;
-
-        for (String itemName : itemNames) {
-            int matchCount = 0;
-
-            // count how many words from the input are present in the item name.
-            for (String word : words) {
-                if (itemName.contains(word)) {
-                    matchCount++;
-                }
-            }
-
-            if (matchCount > highestMatchCount) {
-                highestMatchCount = matchCount;
-                bestMatch = itemName;
-            }
-        }
-
-        return bestMatch;
     }
 }
