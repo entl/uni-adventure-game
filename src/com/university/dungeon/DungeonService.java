@@ -1,7 +1,7 @@
 package com.university.dungeon;
 
 import com.university.dungeon.room.Room;
-import com.university.dungeon.room.RoomService;
+import com.university.dungeon.room.RoomFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -36,13 +36,13 @@ public class DungeonService {
             List<Room> roomRow = new ArrayList<>();
             for (int j = 0; j < dungeonCells.get(i).size(); j++) {
                 String roomLabel = generateGridLabel(i, j);
-                Room room = RoomService.createRoomFromCell(dungeonCells.get(i).get(j), roomLabel);
+                Room room = RoomFactory.createRoomFromCell(dungeonCells.get(i).get(j), roomLabel);
                 roomRow.add(room);
             }
             dungeon.add(roomRow);
         }
 
-        RoomService.setAdjacentRooms(dungeon);
+        RoomFactory.setAdjacentRooms(dungeon);
 
         return dungeon;
     }
