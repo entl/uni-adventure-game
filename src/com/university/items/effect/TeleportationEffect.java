@@ -29,7 +29,6 @@ public class TeleportationEffect implements IEffect {
 
     private void teleportPlayer(GameContext gameContext, Room destination) {
         gameContext.getPlayer().setCurrentRoom(destination);
-        gameContext.setCurrentRoom(destination);
     }
 
     private List<Room> flattenRoomsAndRemoveWalls(List<List<Room>> rooms) {
