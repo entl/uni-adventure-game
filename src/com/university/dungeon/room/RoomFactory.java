@@ -2,19 +2,18 @@ package com.university.dungeon.room;
 
 import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.MadScientists;
-import com.university.gameElements.traps.Trap;
-import com.university.items.IItem;
 import com.university.items.ItemFactory;
 import com.university.utils.commands.Direction;
 
 import java.util.*;
 
-public class RoomService {
+public class RoomFactory {
     private static final Random random = new Random();
     private static final double TRAP_PROBABILITY = 0.2;
     private static final double ZERO_ITEM_PROBABILITY = 0.6;
     private static final double ONE_ITEM_PROBABILITY = 0.3;
     private static final double TWO_ITEM_PROBABILITY = 0.1;
+    private static final ItemFactory itemFactory = new ItemFactory();
 
     public static Room createRoomFromCell(String cell, String name) {
         switch (cell.toUpperCase()) {
@@ -61,12 +60,10 @@ public class RoomService {
     }
 
     private static void addItemsToRoom(Room room) {
-        List<IItem> items = new ArrayList<>();
-
         int numberOfItems = generateNumberOfItemsToSpawn();
 
         for (int i = 0; i < numberOfItems; i++) {
-            items.add(ItemFactory.c());
+            room.addItem(itemFactory.createRandomItem());
         }
     }
 

@@ -1,8 +1,10 @@
 package com.university.dungeon.room;
 
+import com.university.gameElements.traps.ITrap;
 import com.university.items.IItem;
 import com.university.utils.commands.Direction;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,26 +17,17 @@ public class Room {
     private final boolean isExit;
     private final boolean isTreasureRoom;
     private final boolean isWall;
+    private final ITrap trap;
 
-    public Room(String label, List<IItem> items, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall) {
+    public Room(String label, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall, ITrap trap) {
         this.label = label;
-        this.items = items;
         this.isEntrance = isEntrance;
         this.isExit = isExit;
         this.isTreasureRoom = isTreasureRoom;
         this.isVisited = false;
         this.isWall = isWall;
-    }
-
-    public IItem pickUpItem(String itemName) {
-        System.out.println("Item picked up!");
-        for (IItem item : items) {
-            if (item.getName().equals(itemName)) {
-                items.remove(item);
-                return item;
-            }
-        }
-        return null;
+        this.trap = trap;
+        this.items = new ArrayList<>();
     }
 
     public Room getRoomInDirection(Direction direction) {
@@ -49,8 +42,13 @@ public class Room {
         return items;
     }
 
-    public void setItems(List<IItem> items) {
-        this.items = items;
+    public IItem getItemByName(String itemName) {
+        for (IItem item : items) {
+            if (item.getName().equals(itemName)) {
+                return item;
+            }
+        }
+        return null;
     }
 
     public boolean removeItem(IItem item) {
@@ -95,5 +93,9 @@ public class Room {
 
     public String getLabel() {
         return label;
+    }
+
+    public ITrap getTrap() {
+        return trap;
     }
 }
