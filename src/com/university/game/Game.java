@@ -42,8 +42,8 @@ public class Game {
             dungeons[i] = dungeonService.initializeDungeon(dungeonPaths[i], i + 1);
         }
 
-        gameContext = new GameContext(player, dungeons[0], dungeons[0].getEntranceRoom());
-        player.setCurrentRoom(gameContext.getCurrentRoom());
+        gameContext = GameContext.getInstance(player, dungeons[0]);
+        player.setCurrentRoom(dungeons[0].getEntranceRoom());
     }
 
     public void startGame() {

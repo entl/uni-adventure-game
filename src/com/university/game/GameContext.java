@@ -1,23 +1,36 @@
 package com.university.game;
 
 import com.university.dungeon.Dungeon;
-import com.university.dungeon.room.Room;
 import com.university.player.Player;
 
 public class GameContext {
+    private static GameContext instance;
+
     private Player player;
     private boolean isRunning = true;
     private boolean isGameOver = false;
     private boolean isGameWon = false;
     private boolean isGameLost = false;
     private Dungeon currentDungeon;
-    private Room currentRoom;
 
-
-    public GameContext(Player player, Dungeon currentDungeon, Room currentRoom) {
+    private GameContext(Player player, Dungeon currentDungeon) {
         this.player = player;
         this.currentDungeon = currentDungeon;
-        this.currentRoom = currentRoom;
+    }
+
+    public static  GameContext getInstance(Player player, Dungeon currentDungeon) {
+        if (instance == null) {
+            instance = new GameContext(player, currentDungeon);
+        }
+        return instance;
+    }
+
+    // overloaded method for getting the instance without parameters if it has already been initialized
+    public static GameContext getInstance() {
+        if (instance == null) {
+            throw new IllegalStateException("GameContext has not been initialized. Please initialize it first.");
+        }
+        return instance;
     }
 
     public Player getPlayer() {
@@ -62,13 +75,5 @@ public class GameContext {
 
     public void setCurrentDungeon(Dungeon currentDungeon) {
         this.currentDungeon = currentDungeon;
-    }
-
-    public Room getCurrentRoom() {
-        return currentRoom;
-    }
-
-    public void setCurrentRoom(Room currentRoom) {
-        this.currentRoom = currentRoom;
     }
 }
