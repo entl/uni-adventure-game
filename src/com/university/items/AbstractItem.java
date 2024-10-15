@@ -34,6 +34,11 @@ public abstract class AbstractItem implements IItem {
         effect.apply(gameContext);
     }
 
+    @Override
+    public String getDisplayName() {
+        return name;
+    }
+
     // Override equals method to compare based on the item's name
     @Override
     public boolean equals(Object o) {

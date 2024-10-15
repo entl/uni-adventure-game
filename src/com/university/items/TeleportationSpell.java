@@ -4,6 +4,6 @@ import com.university.items.effect.TeleportationEffect;
 
 public class TeleportationSpell extends Spell {
     public TeleportationSpell() {
-        super("teleportation spell", "a spell that teleports the user to a random location", new TeleportationEffect());
+        super("teleportation spell", "A spell that teleports the user to a random location", new TeleportationEffect());
     }
 }

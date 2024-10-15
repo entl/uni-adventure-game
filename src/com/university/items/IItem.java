@@ -11,4 +11,6 @@ public interface IItem {
 
     String getName();
     String getDescription();
+
+    String getDisplayName();
 }

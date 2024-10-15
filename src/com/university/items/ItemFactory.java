@@ -14,9 +14,13 @@ public class ItemFactory {
     // it is possible to use lambda expressions instead () -> new FreezeSpell()
     public ItemFactory() {
         addItem("freeze spell", FreezeSpell::new, 0.2);
-        addItem("teleportation spell", TeleportationSpell::new, 0.2);
-        addItem("hammer", Hammer::new, 0.2);
-        addItem("cake", Cake::new, 0.4);
+        addItem("teleportation spell", TeleportationSpell::new, 0.1);
+        addItem("hammer", Hammer::new, 0.1);
+        addItem("cake", Cake::new, 0.2);
+        addItem("sandwich", Sandwich::new, 0.2);
+        addItem("spanner", Spanner::new, 0.1);
+        addItem("potion", Potion::new, 0.1);
+        addItem("alarm clock", AlarmClock::new, 0.1);
     }
 
     public void addItem(String itemName, Supplier<IItem> itemSupplier, double probability) {
