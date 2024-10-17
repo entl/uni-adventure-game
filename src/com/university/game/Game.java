@@ -3,8 +3,11 @@ package com.university.game;
 import com.university.Config;
 import com.university.dungeon.Dungeon;
 import com.university.dungeon.DungeonService;
+import com.university.dungeon.room.Room;
 import com.university.player.Player;
+import com.university.utils.ClearScreen;
 import com.university.utils.commands.ICommand;
+import com.university.utils.commands.WakeUpCommand;
 import com.university.utils.parsers.CommandParser;
 
 import java.util.Scanner;
@@ -34,7 +37,7 @@ public class Game {
         scanner = new Scanner(System.in);
         commandParser = new CommandParser();
 
-        Player player = new Player("Dummy Name", 100);
+        Player player = new Player("Brave Adventurer", 100);
         DungeonService dungeonService = new DungeonService();
 
         dungeons = new Dungeon[dungeonPaths.length];
@@ -44,11 +47,12 @@ public class Game {
 
         gameContext = GameContext.getInstance(player, dungeons[0]);
         player.setCurrentRoom(dungeons[0].getEntranceRoom());
+        player.getCurrentRoom().setVisited(true);
     }
 
     public void startGame() {
         String startingArt = """
-                ######################################
+                ======================================
                 
                 oooooooooo.    .o"o.   oooooooooo.  \s
                 `888'   `Y8b  "' "  `" `888'   `Y8b \s
@@ -58,7 +62,7 @@ public class Game {
                  888     d88'    "      888     d88'\s
                 o888bood8P'      "     o888bood8P'  \s
                 
-                ######################################
+                ======================================
                 """;
         System.out.println(startingArt);
         System.out.println("* Welcome to the game `Dungeons NAND Dragons!`");
@@ -90,7 +94,36 @@ public class Game {
 
     public void loop() {
         while (gameContext.isRunning()) {
-            System.out.println();
+            Player player = gameContext.getPlayer();
+            Room currentRoom = gameContext.getPlayer().getCurrentRoom();
+
+            if (player.getPowerPoints() <= 0) {
+                gameContext.setGameLost(true);
+                gameContext.setRunning(false);
+                break;
+            }
+
+            if (currentRoom.isTreasureRoom()) {
+                gameContext.setGameWon(true);
+                gameContext.setRunning(false);
+                break;
+            }
+
+            if (currentRoom.isExit()) {
+                advanceToNextDungeon();
+            }
+
+
+            // need to check if player is asleep in the game loop
+            // since no input is taken in the sleep effect
+            if (player.isAsleep()) {
+                new WakeUpCommand().execute(gameContext);
+            }
+
+            System.out.print("\n* Press Enter to continue...");
+            scanner.nextLine();
+            ClearScreen.clear();
+
             System.out.println("* What would you like to do?");
 
             System.out.print("> ");
@@ -103,6 +136,37 @@ public class Game {
                 command.execute(gameContext);
             }
         }
+
+        endGame();
         scanner.close();
     }
+
+    private boolean isGameWon() {
+        return gameContext.isGameWon();
+    }
+
+    private boolean isGameLost() {
+        return gameContext.isGameLost();
+    }
+
+    private void endGame() {
+        if (isGameWon()) {
+            System.out.println("* You have found the cure and saved your wife!");
+            System.out.printf("* You have won the game with %d! Congratulations!\n", gameContext.getPlayer().getPowerPoints());
+        } else if (isGameLost()) {
+            System.out.println("* You have run out of power points and died in the dungeon.");
+            System.out.println("* You have lost the game. Better luck next time!");
+        }
+    }
+
+    private void advanceToNextDungeon() {
+        Dungeon currentDungeon = gameContext.getCurrentDungeon();
+        int currentDungeonIndex = currentDungeon.getLevel() - 1;
+        Dungeon nextDungeon = dungeons[currentDungeonIndex + 1];
+        gameContext.setCurrentDungeon(nextDungeon);
+        currentDungeon = nextDungeon;
+        gameContext.getPlayer().setCurrentRoom(currentDungeon.getEntranceRoom());
+        System.out.printf("* You have entered the Dungeon Level %d\n", currentDungeon.getLevel());
+    }
+
 }
