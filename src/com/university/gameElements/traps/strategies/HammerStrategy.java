@@ -1,9 +1,10 @@
 package com.university.gameElements.traps.strategies;
 
+import com.university.game.GameContext;
+
 public class HammerStrategy implements IEscapeStrategy {
-    private final String item = "Hammer";
     @Override
-    public void escape() {
-        System.out.println("* You used " + item + " to escape the trap!");
+    public void escape(GameContext gameContext) {
+        System.out.println("* You used hammer to escape the trap!");
     }
 }
