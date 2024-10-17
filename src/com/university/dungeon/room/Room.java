@@ -1,5 +1,6 @@
 package com.university.dungeon.room;
 
+import com.university.gameElements.chests.IChest;
 import com.university.gameElements.traps.ITrap;
 import com.university.items.IItem;
 import com.university.utils.commands.Direction;
@@ -18,8 +19,9 @@ public class Room {
     private final boolean isTreasureRoom;
     private final boolean isWall;
     private final ITrap trap;
+    private final IChest chest;
 
-    public Room(String label, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall, ITrap trap) {
+    public Room(String label, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall, ITrap trap, IChest chest) {
         this.label = label;
         this.isEntrance = isEntrance;
         this.isExit = isExit;
@@ -27,6 +29,7 @@ public class Room {
         this.isVisited = false;
         this.isWall = isWall;
         this.trap = trap;
+        this.chest = chest;
         this.items = new ArrayList<>();
     }
 
@@ -97,5 +100,24 @@ public class Room {
 
     public ITrap getTrap() {
         return trap;
+    }
+
+    public IChest getChest() {
+        return chest;
+    }
+
+    public void describe() {
+        if (getItems().isEmpty()) {
+            System.out.println("* There's no items in the room.");
+        } else {
+            System.out.println("* You can barely see following items in the room:");
+            for (IItem item : getItems()) {
+                System.out.printf("- %s\n", item.getDisplayName());
+            }
+        }
+
+        if (getChest() != null) {
+            System.out.println("* You see a chest in the room.");
+        }
     }
 }
