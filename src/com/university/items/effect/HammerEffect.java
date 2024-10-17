@@ -13,9 +13,4 @@ public class HammerEffect implements IEffect{
             currentRoom.getTrap().escape(gameContext, new HammerStrategy());
         }
     }
-
-    @Override
-    public void remove(GameContext gameContext) {
-
-    }
 }

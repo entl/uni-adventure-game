@@ -20,11 +20,8 @@ public class TeleportationEffect implements IEffect {
         }
 
         teleportPlayer(gameContext, destination);
-    }
-
-    @Override
-    public void remove(GameContext gameContext) {
-
+        System.out.println("* You have used the teleportation spell");
+        System.out.println("* You have been teleported to a random room");
     }
 
     private void teleportPlayer(GameContext gameContext, Room destination) {

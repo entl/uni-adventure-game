@@ -4,5 +4,4 @@ import com.university.game.GameContext;
 
 public interface IEffect {
     void apply(GameContext gameContext);
-    void remove(GameContext gameContext);
 }
