@@ -17,22 +17,16 @@ public class MadScientists implements ITrap {
 
     @Override
     public void activate(GameContext gameContext) {
+        printDescriptionByState();
         if (!isActive) {
-            System.out.println("* You see the mad scientists, but they are not talking about their experiments anymore.");
             return;
         }
-
-        System.out.println("* " + getDescription());
-        System.out.println("* Oh no! They have trapped you by talking about their experiments. You can't move.");
-        System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.");
-
         gameContext.getPlayer().setTrapped(true);
     }
 
     @Override
     public void escape(GameContext gameContext, IEscapeStrategy escapeStrategy) {
-        System.out.println("escaped mad");
-        escapeStrategy.escape();
+        escapeStrategy.escape(gameContext);
         gameContext.getPlayer().setTrapped(false);
         isActive = false;
     }
@@ -45,5 +39,22 @@ public class MadScientists implements ITrap {
     @Override
     public String getDescription() {
         return description;
+    }
+
+    @Override
+    public boolean isActive() {
+        return isActive;
+    }
+
+    @Override
+    public void printDescriptionByState() {
+        if (!isActive) {
+            System.out.println("* You see the mad scientists, but they are not talking about their experiments anymore.");
+            return;
+        }
+
+        System.out.println("* " + getDescription());
+        System.out.println("* Oh no! They have trapped you by talking about their experiments. You can't move.");
+        System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.");
     }
 }

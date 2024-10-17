@@ -8,4 +8,8 @@ public interface ITrap {
     void escape(GameContext gameContext, IEscapeStrategy escapeStrategy);
     String getName();
     String getDescription();
+
+    boolean isActive();
+
+    void printDescriptionByState();
 }
