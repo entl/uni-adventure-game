@@ -6,16 +6,14 @@ import com.university.utils.commands.*;
 
 import java.util.*;
 
+
 public class CommandParser {
 
-    private Map<String, Command> commandMap;
     private Set<String> stopwords;
     private ItemFactory itemFactory;
 
     public CommandParser() {
         itemFactory = new ItemFactory();
-        commandMap = new HashMap<>();
-        initializeCommands();
         initializeStopwords();
     }
 
@@ -62,6 +60,18 @@ public class CommandParser {
                     System.out.println("* Specify item to drop");
                     return null;
                 }
+            case SHOW_INVENTORY:
+                return new ShowInventoryCommand();
+            case HELP:
+                return new HelpCommand();
+            case ESCAPE:
+                return new EscapeCommand();
+            case QUIT:
+                return new QuitCommand();
+            case SHOW_STATS:
+                return new ShowStatsCommand();
+            case SHOW_MAP:
+                return new ShowMapCommand();
             default:
                 System.out.println("* I can't understand your input.\n* Enter `help` to see commands");
                 return null;
@@ -69,57 +79,6 @@ public class CommandParser {
     }
 
 
-    private void initializeCommands() {
-        // Movement Keywords
-        commandMap.put("move", Command.MOVE);
-        commandMap.put("go", Command.MOVE);
-        commandMap.put("walk", Command.MOVE);
-        commandMap.put("run", Command.MOVE);
-
-        // Pick Up keywords
-        commandMap.put("pick", Command.PICK_UP);
-        commandMap.put("pickup", Command.PICK_UP);
-        commandMap.put("get", Command.PICK_UP);
-        commandMap.put("grab", Command.PICK_UP);
-
-        // Drop keywords
-        commandMap.put("drop", Command.DROP);
-        commandMap.put("discard", Command.DROP);
-        commandMap.put("leave", Command.DROP);
-
-        // Use keywords
-        commandMap.put("use", Command.USE);
-        commandMap.put("apply", Command.USE);
-        commandMap.put("activate", Command.USE);
-
-        // Eat keywords
-        commandMap.put("eat", Command.EAT);
-        commandMap.put("consume", Command.EAT);
-
-        // Drink keywords
-        commandMap.put("drink", Command.DRINK);
-
-        // Look Around keywords (see iteams in the room and get information where to move)
-        commandMap.put("look", Command.LOOK_AROUND);
-        commandMap.put("examine", Command.LOOK_AROUND);
-        commandMap.put("inspect", Command.LOOK_AROUND);
-        commandMap.put("search", Command.LOOK_AROUND);
-
-        // Inventory keywords
-        commandMap.put("inventory", Command.SHOW_INVENTORY);
-        commandMap.put("items", Command.SHOW_INVENTORY);
-
-        // Statistics keywords
-        commandMap.put("stats", Command.SHOW_STATS);
-
-        // Help keywords (help user to determine which action words can be used)
-        commandMap.put("help", Command.HELP);
-        commandMap.put("commands", Command.HELP);
-
-        // Quit keywords
-        commandMap.put("quit", Command.QUIT);
-        commandMap.put("exit", Command.QUIT);
-    }
 
     private void initializeStopwords() {
         stopwords = new HashSet<>(Arrays.asList(
@@ -155,8 +114,9 @@ public class CommandParser {
 
     private Command extractCommand(String[] words) {
         for (String word : words) {
-            if (commandMap.containsKey(word)) {
-                return commandMap.get(word);
+            Command command = Command.fromAlias(word);
+            if (command != Command.UNKNOWN) {
+                return command;
             }
         }
         return Command.UNKNOWN;

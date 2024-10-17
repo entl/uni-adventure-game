@@ -22,7 +22,7 @@ public class PickUpCommand implements ICommand {
                 return;
             }
             context.getPlayer().getCurrentRoom().removeItem(item);
-            System.out.println("* You picked up " + item.getName());
+            System.out.println("* You picked up " + item.getDisplayName());
         } else {
             System.out.println("* Item not found!");
         }

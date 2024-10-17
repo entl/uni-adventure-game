@@ -17,7 +17,7 @@ public class DropCommand implements ICommand {
         if (item != null) {
             context.getPlayer().getCurrentRoom().addItem(item);
             context.getPlayer().getInventoryManager().removeItem(item);
-            System.out.println("* You dropped " + item.getName());
+            System.out.println("* You dropped " + item.getDisplayName());
         } else {
             System.out.printf("* %s not found!", itemName);
         }
