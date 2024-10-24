@@ -1,7 +1,6 @@
 
 # **Dungeon Adventure**
 
-![Dungeon Adventure Banner](path/to/banner/image.png)
 
 ## **Table of Contents**
 - [Introduction](#introduction)
@@ -25,7 +24,7 @@
 - **Command Parsing:** Intuitive command system allowing players to interact with the game world using natural language inputs.
 - **Inventory Management:** Pick up, drop, use, eat, and drink various items to aid your adventure.
 - **Magical Items:** Discover and utilize potions and spells with unique and hidden effects.
-- **Dynamic Environment:** Rooms are randomly generated with varying descriptions and items to keep each playthrough unique.
+- **Dynamic Environment:** Room contents are randomly generated to keep each playthrough unique.
 - **Status Tracking:** Monitor your Power Points and other vital stats as you progress through the dungeon.
 
 ## **Getting Started**
@@ -68,22 +67,24 @@ Interact with the game using the following commands. You can type commands in na
     - `move north`
     - `go south`
     - `walk east`
-    - `run west`
+
+  *Note: you can use forward, left, right, back*
 
 - **Item Interaction:**
-    - `pick up the silver key`
+    - `pick up the cake`
     - `drop ancient sword`
     - `use healing potion`
-    - `eat apple`
+    - `eat sandwich`
     - `drink potion`
 
 - **Spell Casting:**
-    - `cast teleportation spell`
+    - `use teleportation spell`
+    - `cast frozen spell`
 
 - **Environment Interaction:**
     - `look around`
-    - `examine room`
-    - `search for traps`
+
+  *Note: you can use spanner to open chest. Item from chest will be added to room contents.*
 
 - **Inventory and Status:**
     - `inventory`
@@ -93,7 +94,6 @@ Interact with the game using the following commands. You can type commands in na
 
 - **Game Controls:**
     - `help`
-    - `commands`
     - `quit`
     - `exit`
 
@@ -116,17 +116,15 @@ Interact with the game using the following commands. You can type commands in na
 
 - **Spells:**
     - **Teleportation Spell:** Instantly moves you to a random room within the dungeon.
+    - **Freeze Spell:** Allows you to escape Mad Scientists and Trap without losing points.
 
-*Note: The types of potions and spells are hidden. Use them at your own risk!*
+*Note: The types of potions are hidden. Use them at your own risk!*
 
 ### **Player Status**
 
 - **Power Points:** Represents your energy and capabilities. Certain actions consume Power Points.
-- **Asleep Status:** Being asleep prevents you from performing actions for one turn.
 
 ## **Contributing**
-
-Contributions are welcome! If you'd like to contribute to Dungeon Adventure, please follow these steps:
 
 1. **Fork the Repository**
 2. **Create a Feature Branch**
