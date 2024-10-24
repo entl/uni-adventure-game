@@ -15,6 +15,7 @@ public class WakeUpCommand implements ICommand {
                 alarm.use(context);
             } else {
                 player.removePowerPoints(10);
+                player.setAsleep(false);
                 System.out.println("* You wake up to the sound of a loud noise, but you can't find the source of it. You lose 10 power points.");
             }
         } else {

@@ -10,8 +10,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * The {@code XRayEffect} class represents an effect that allows the player to see into a random adjacent room
+ * without entering it. This effect is typically applied when the player uses an X-Ray vision potion or spell.
+ */
 public class XRayEffect implements IEffect {
 
+    /**
+     * Applies the X-Ray vision effect, allowing the player to look into a random adjacent room and see its contents.
+     * The player is notified about the direction they are looking into, and if there is a trap in that room,
+     * the player is informed about the trap.
+     *
+     * @param gameContext the current game context, including the player and the dungeon state.
+     */
     @Override
     public void apply(GameContext gameContext) {
         Player player = gameContext.getPlayer();

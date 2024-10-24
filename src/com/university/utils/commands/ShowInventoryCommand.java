@@ -5,7 +5,21 @@ import com.university.items.IItem;
 
 import java.util.List;
 
+/**
+ * The {@code ShowInventoryCommand} class implements the {@code ICommand} interface
+ * and is responsible for displaying the player's current inventory.
+ * The inventory is displayed with formatted borders and includes item names and descriptions.
+ */
 public class ShowInventoryCommand implements ICommand {
+
+    /**
+     * Executes the command to display the player's inventory.
+     * If the inventory is empty, a message is shown to the player indicating the lack of items.
+     * Otherwise, the inventory is displayed in a formatted table with item names and descriptions.
+     *
+     * @param context the current game context which contains the player's inventory
+     *                and other game-related state information.
+     */
     @Override
     public void execute(GameContext context) {
         List<IItem> inventory = context.getPlayer().getInventoryManager().getInventory();

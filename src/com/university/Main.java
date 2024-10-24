@@ -2,7 +2,6 @@ package com.university;
 
 import com.university.game.Game;
 
-
 public class Main {
     public static void main(String[] args) {
         try {

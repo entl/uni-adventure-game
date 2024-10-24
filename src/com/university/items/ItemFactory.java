@@ -3,15 +3,20 @@ package com.university.items;
 import java.util.*;
 import java.util.function.Supplier;
 
+/**
+ * The {@code ItemFactory} class is responsible for creating instances of various items in the game.
+ * It stores item suppliers and their respective probabilities, allowing random item creation
+ * based on a weighted probability distribution.
+ */
 public class ItemFactory {
     private Map<String, Supplier<IItem>> itemMap = new HashMap<>();
     private List<ItemProbability> itemProbabilities = new ArrayList<>();
     private Random random = new Random();
 
-    // it is easier to store items as a map of item name to item supplier.
-    // supplier is a functional interface that takes no arguments and returns an object
-    // ::new is a syntax sugar for creating a new instance of an object
-    // it is possible to use lambda expressions instead () -> new FreezeSpell()
+    /**
+     * Constructs the {@code ItemFactory} and initializes the item map and probability distribution.
+     * Items are added to the factory with specific creation probabilities.
+     */
     public ItemFactory() {
         addItem("freeze spell", FreezeSpell::new, 0.2);
         addItem("teleportation spell", TeleportationSpell::new, 0.1);
@@ -23,12 +28,24 @@ public class ItemFactory {
         addItem("alarm clock", AlarmClock::new, 0.1);
     }
 
+    /**
+     * Adds a new item to the factory with the given name, supplier, and probability.
+     *
+     * @param itemName     The name of the item.
+     * @param itemSupplier The supplier responsible for creating an instance of the item.
+     * @param probability  The probability with which the item should be created.
+     */
     public void addItem(String itemName, Supplier<IItem> itemSupplier, double probability) {
         itemMap.put(itemName, itemSupplier);
-        itemProbabilities.add(new ItemProbability(probability, itemSupplier));
+        itemProbabilities.add(new ItemProbability(itemSupplier, probability));
     }
 
-
+    /**
+     * Creates an item based on its name.
+     *
+     * @param itemName The name of the item to create.
+     * @return An instance of the item, or {@code null} if no item exists by that name.
+     */
     public IItem createItem(String itemName) {
         Supplier<IItem> item = itemMap.get(itemName);
         if (item != null) {
@@ -37,10 +54,12 @@ public class ItemFactory {
         return null;
     }
 
-
-    // create random item using cumulative probability distribution
-    // https://stackoverflow.com/questions/9330394/how-to-pick-an-item-by-its-probability
-    // https://stackoverflow.com/questions/16489449/select-element-from-array-with-probability-proportional-to-its-value/16490300#16490300
+    /**
+     * Creates a random item based on the probability distribution of the available items.
+     *
+     * @return An instance of a randomly chosen item based on probability.
+     * @throws IllegalStateException if no item could be created.
+     */
     public IItem createRandomItem() {
         double totalProbability = 0.0;
         for (ItemProbability itemProbability : itemProbabilities) {
@@ -48,11 +67,11 @@ public class ItemFactory {
         }
 
         double randomValue = random.nextDouble() * totalProbability;
-        double cummulitiveProbability = 0.0;
+        double cumulativeProbability = 0.0;
 
         for (ItemProbability itemProbability : itemProbabilities) {
-            cummulitiveProbability += itemProbability.getProbability();
-            if (randomValue < cummulitiveProbability) {
+            cumulativeProbability += itemProbability.getProbability();
+            if (randomValue < cumulativeProbability) {
                 return itemProbability.getItemSupplier().get();
             }
         }
@@ -60,10 +79,22 @@ public class ItemFactory {
         throw new IllegalStateException("No item was created");
     }
 
+    /**
+     * Checks if an item with the given name exists in the factory.
+     *
+     * @param itemName The name of the item to check.
+     * @return {@code true} if the item exists, {@code false} otherwise.
+     */
     public boolean isItem(String itemName) {
         return itemMap.containsKey(itemName);
     }
 
+    /**
+     * Finds the best matching item name based on the input tokens.
+     *
+     * @param words The array of input tokens to match against item names.
+     * @return The best matching item name or {@code null} if no match is found.
+     */
     public String findBestMatchingItemName(String[] words) {
         String bestMatch = null;
         int highestMatchCount = 0;
@@ -71,7 +102,7 @@ public class ItemFactory {
         for (String itemName : itemMap.keySet()) {
             int matchCount = 0;
 
-            // count how many words from the input are present in the item name.
+            // Count how many words from the input are present in the item name.
             for (String word : words) {
                 if (itemName.contains(word)) {
                     matchCount++;
@@ -87,24 +118,41 @@ public class ItemFactory {
         return bestMatch;
     }
 
-    // inner class to store item probabilities
-    // it seems easier to store probabilities within item factory
-    // From my perspective, if we add probabilities to the item class it will break the single responsibility principle
+    /**
+     * A helper class used to store item probabilities. It associates a supplier with a probability.
+     */
     private static class ItemProbability {
-        private double probability;
         private Supplier<IItem> itemSupplier;
+        private double probability;
 
-        public ItemProbability(double probability, Supplier<IItem> itemSupplier) {
-            this.probability = probability;
+        /**
+         * Constructs an {@code ItemProbability} with the given supplier and probability.
+         *
+         * @param itemSupplier The supplier that provides an instance of the item.
+         * @param probability  The probability of selecting this item.
+         */
+        public ItemProbability(Supplier<IItem> itemSupplier, double probability) {
             this.itemSupplier = itemSupplier;
+            this.probability = probability;
         }
 
+        /**
+         * Returns the supplier responsible for creating the item.
+         *
+         * @return The item supplier.
+         */
+        public Supplier<IItem> getItemSupplier() {
+            return itemSupplier;
+        }
+
+        /**
+         * Returns the probability associated with this item.
+         *
+         * @return The probability of selecting this item.
+         */
         public double getProbability() {
             return probability;
         }
 
-        public Supplier<IItem> getItemSupplier() {
-            return itemSupplier;
-        }
     }
 }

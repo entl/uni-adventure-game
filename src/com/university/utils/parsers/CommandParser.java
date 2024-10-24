@@ -1,12 +1,16 @@
 package com.university.utils.parsers;
 
-
 import com.university.items.ItemFactory;
 import com.university.utils.commands.*;
 
 import java.util.*;
 
-
+/**
+ * The {@code CommandParser} class is responsible for parsing user input and
+ * determining the appropriate game command to execute. It supports interpreting
+ * commands, directions, and item names from the player's input while ignoring
+ * common stopwords.
+ */
 public class CommandParser {
 
     private Set<String> stopwords;
@@ -17,11 +21,17 @@ public class CommandParser {
         initializeStopwords();
     }
 
+    /**
+     * Parses the user's input and returns the corresponding {@code ICommand} based on
+     * the command and additional context such as direction or item name.
+     *
+     * @param userInput the raw input string from the user
+     * @return the corresponding {@code ICommand} or null if no valid command is found
+     */
     public ICommand parse(String userInput) {
         String[] processedTokens = preprocessInput(userInput);
 
         Command command = extractCommand(processedTokens);
-
         String itemName = itemFactory.findBestMatchingItemName(processedTokens);
         Direction direction = parseDirection(processedTokens);
 
@@ -29,8 +39,7 @@ public class CommandParser {
             case MOVE:
                 if (direction != null) {
                     return new MoveCommand(direction);
-                }
-                else {
+                } else {
                     System.out.println("* Specify direction");
                     return null;
                 }
@@ -39,24 +48,21 @@ public class CommandParser {
             case USE:
                 if (itemName != null) {
                     return new UseCommand(itemName);
-                }
-                else {
+                } else {
                     System.out.println("* Specify item to use");
                     return null;
                 }
             case PICK_UP:
                 if (itemName != null) {
                     return new PickUpCommand(itemName);
-                }
-                else {
+                } else {
                     System.out.println("* Specify item to pick up");
                     return null;
                 }
             case DROP:
                 if (itemName != null) {
                     return new DropCommand(itemName);
-                }
-                else {
+                } else {
                     System.out.println("* Specify item to drop");
                     return null;
                 }
@@ -78,8 +84,9 @@ public class CommandParser {
         }
     }
 
-
-
+    /**
+     * Initializes the set of common stopwords that will be ignored during input parsing.
+     */
     private void initializeStopwords() {
         stopwords = new HashSet<>(Arrays.asList(
                 "a", "an", "the", "in", "on", "at", "with",
@@ -97,13 +104,19 @@ public class CommandParser {
         ));
     }
 
-
+    /**
+     * Preprocesses the user's input by removing stopwords and splitting the input
+     * into individual tokens.
+     *
+     * @param userInput the raw input string from the user
+     * @return an array of tokens after preprocessing
+     */
     private String[] preprocessInput(String userInput) {
         String[] tokens = userInput.trim().toLowerCase().split(" ");
 
         List<String> processedTokens = new ArrayList<>();
 
-        for (String token: tokens) {
+        for (String token : tokens) {
             if (!stopwords.contains(token)) {
                 processedTokens.add(token);
             }
@@ -112,6 +125,12 @@ public class CommandParser {
         return processedTokens.toArray(new String[0]);
     }
 
+    /**
+     * Extracts the {@code Command} from the array of words based on recognized command aliases.
+     *
+     * @param words the preprocessed array of words from the user's input
+     * @return the corresponding {@code Command} or {@code Command.UNKNOWN} if no valid command is found
+     */
     private Command extractCommand(String[] words) {
         for (String word : words) {
             Command command = Command.fromAlias(word);
@@ -122,6 +141,12 @@ public class CommandParser {
         return Command.UNKNOWN;
     }
 
+    /**
+     * Parses the direction from the array of words, checking for common directional commands.
+     *
+     * @param words the preprocessed array of words from the user's input
+     * @return the {@code Direction} if found, or null if no direction is specified
+     */
     private Direction parseDirection(String[] words) {
         for (String word : words) {
             switch (word) {

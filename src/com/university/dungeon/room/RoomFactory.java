@@ -9,16 +9,29 @@ import com.university.utils.commands.Direction;
 
 import java.util.*;
 
+/**
+ * Factory class responsible for creating rooms and setting adjacent rooms in a dungeon.
+ * It also handles the random generation of items, traps, and chests within the rooms.
+ */
 public class RoomFactory {
+
     private static final Random random = new Random();
     private static final double ZERO_ITEM_PROBABILITY = 0.6;
     private static final double ONE_ITEM_PROBABILITY = 0.3;
     private static final double TWO_ITEM_PROBABILITY = 0.1;
-    private static final double CHEST_PROBABILITY = 0.1; // since only 1 chest there is no need to create factory
+    private static final double CHEST_PROBABILITY = 0.1;
     private static final double TRAP_PROBABILITY = 0.2;
     private static final ItemFactory itemFactory = new ItemFactory();
     private static final TrapFactory trapFactory = new TrapFactory();
 
+    /**
+     * Creates a Room instance based on the cell type provided. The room will be initialized with
+     * items, traps, or chests depending on the room type.
+     *
+     * @param cell The type of the cell (W, E, X, T, R).
+     * @param name The label/name of the room.
+     * @return A new Room object based on the cell type.
+     */
     public static Room createRoomFromCell(String cell, String name) {
         switch (cell.toUpperCase()) {
             case "W": {
@@ -38,7 +51,7 @@ public class RoomFactory {
                 return new Room(name, false, false, true, false, null, null);
             }
             case "R": {
-                // Regular Room
+                // Regular Room with random items and traps
                 Room room = new Room(name, false, false, false, false, createTrap(), createChest());
                 addItemsToRoom(room);
                 return room;
@@ -48,9 +61,13 @@ public class RoomFactory {
                 return new Room(name, false, false, false, true, null, null);
             }
         }
-
     }
 
+    /**
+     * Creates a random trap for a room based on a set probability.
+     *
+     * @return A random ITrap object or null if no trap is generated.
+     */
     private static ITrap createTrap() {
         double probability = random.nextDouble();
         if (probability < TRAP_PROBABILITY) {
@@ -59,6 +76,11 @@ public class RoomFactory {
         return null;
     }
 
+    /**
+     * Creates a chest for a room based on a set probability.
+     *
+     * @return A Chest object or null if no chest is generated.
+     */
     private static IChest createChest() {
         double probability = random.nextDouble();
         if (probability < CHEST_PROBABILITY) {
@@ -67,14 +89,25 @@ public class RoomFactory {
         return null;
     }
 
+    /**
+     * Adds a random number of items (0, 1, or 2) to a room.
+     * The number of items is based on predefined probabilities.
+     *
+     * @param room The room where the items will be added.
+     */
     private static void addItemsToRoom(Room room) {
         int numberOfItems = generateNumberOfItemsToSpawn();
-
         for (int i = 0; i < numberOfItems; i++) {
             room.addItem(itemFactory.createRandomItem());
         }
     }
 
+    /**
+     * Determines how many items (0, 1, or 2) should be spawned in a room based on
+     * predefined probabilities.
+     *
+     * @return The number of items to spawn.
+     */
     private static int generateNumberOfItemsToSpawn() {
         double probability = random.nextDouble();
         if (probability < ZERO_ITEM_PROBABILITY) {
@@ -86,6 +119,12 @@ public class RoomFactory {
         }
     }
 
+    /**
+     * Sets adjacent rooms for each room in a 2D list of rooms.
+     * This method connects rooms in all four directions (north, south, east, west).
+     *
+     * @param rooms A 2D list of Room objects representing the dungeon layout.
+     */
     public static void setAdjacentRooms(List<List<Room>> rooms) {
         for (int i = 0; i < rooms.size(); i++) {
             for (int j = 0; j < rooms.get(i).size(); j++) {

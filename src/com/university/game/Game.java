@@ -12,19 +12,32 @@ import com.university.utils.parsers.CommandParser;
 
 import java.util.Scanner;
 
+/**
+ * The Game class represents the main entry point of the game. It manages game state,
+ * player interactions, and transitions between different game loops and dungeons.
+ * This class follows a Singleton pattern to ensure only one instance of the game is active at any time.
+ */
 public class Game {
-    private static Game instance;   // singleton instance to ensure only one game is running at a time
-    private final String[] dungeonPaths = Config.dungeonPaths;  // paths to dungeon files
-    private Dungeon[] dungeons;     // array of dungeons
-    private GameContext gameContext;    // game context
-    private CommandParser commandParser;    // command parser
+    private static Game instance;   // Singleton instance to ensure only one game is running at a time
+    private final String[] dungeonPaths = Config.dungeonPaths;  // Paths to dungeon files
+    private Dungeon[] dungeons;     // Array of dungeons in the game
+    private GameContext gameContext;    // Context of the current game state
+    private CommandParser commandParser;    // Parser for user commands
     private Scanner scanner;
 
-
+    /**
+     * Private constructor to prevent direct instantiation.
+     */
     private Game() {
         initializeGame();
     }
 
+    /**
+     * Retrieves the singleton instance of the Game class.
+     * If no instance exists, it creates one and initializes the game.
+     *
+     * @return The singleton instance of the Game class.
+     */
     public static Game getInstance() {
         if (instance == null) {
             instance = new Game();
@@ -33,11 +46,14 @@ public class Game {
         return instance;
     }
 
+    /**
+     * Initializes the game by creating dungeons, setting up the player, and loading game context.
+     */
     private void initializeGame() {
         scanner = new Scanner(System.in);
         commandParser = new CommandParser();
 
-        Player player = new Player("Brave Adventurer", 100);
+        Player player = new Player(100);
         DungeonService dungeonService = new DungeonService();
 
         dungeons = new Dungeon[dungeonPaths.length];
@@ -50,6 +66,9 @@ public class Game {
         player.getCurrentRoom().setVisited(true);
     }
 
+    /**
+     * Starts the game and presents the introduction to the player.
+     */
     public void startGame() {
         String startingArt = """
                 ======================================
@@ -70,17 +89,16 @@ public class Game {
         System.out.println("* Press Enter to start the game...");
         scanner.nextLine();
 
-
         System.out.println(
-                        """
-                        * Year: 1347.\s
-                        * The Black Death devastates Europe, claiming lives without mercy.\s
-                        * In your small village, your wife has fallen ill with the plague.\s
-                        * Desperate and out of options, you hear rumors of a *legendary elixir* hidden deep within a dangerous dungeon.
-                        * Armed with nothing but your will to save her, you determined to go on a dangerous adventure into the dark ancient dungeon.\s
-                        * Time is running out.\s
-                        * Will you find the cure before it's too late, or will the dungeon claim you, as it has so many before?
-                        """);
+                """
+                * Year: 1347.\s
+                * The Black Death devastates Europe, claiming lives without mercy.\s
+                * In your small village, your wife has fallen ill with the plague.\s
+                * Desperate and out of options, you hear rumors of a *legendary elixir* hidden deep within a dangerous dungeon.
+                * Armed with nothing but your will to save her, you determined to go on a dangerous adventure into the dark ancient dungeon.\s
+                * Time is running out.\s
+                * Will you find the cure before it's too late, or will the dungeon claim you, as it has so many before?
+                """);
 
         System.out.println("* Press Enter to begin your journey...");
         System.out.println("* Type `help` to see the list of available commands.");
@@ -92,10 +110,13 @@ public class Game {
         loop();
     }
 
+    /**
+     * The main game loop that handles user interaction, command execution, and state transitions.
+     */
     public void loop() {
         while (gameContext.isRunning()) {
             Player player = gameContext.getPlayer();
-            Room currentRoom = gameContext.getPlayer().getCurrentRoom();
+            Room currentRoom = player.getCurrentRoom();
 
             if (player.getPowerPoints() <= 0) {
                 gameContext.setGameLost(true);
@@ -113,11 +134,16 @@ public class Game {
                 advanceToNextDungeon();
             }
 
-
-            // need to check if player is asleep in the game loop
+            // Check if player is asleep in the game loop
             // since no input is taken in the sleep effect
             if (player.isAsleep()) {
-                new WakeUpCommand().execute(gameContext);
+                try {
+                    System.out.println("* Sleeping...");
+                    Thread.sleep(3000);
+                    new WakeUpCommand().execute(gameContext);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
             }
 
             System.out.print("\n* Press Enter to continue...");
@@ -141,24 +167,40 @@ public class Game {
         scanner.close();
     }
 
+    /**
+     * Checks if the game has been won.
+     *
+     * @return True if the game is won, false otherwise.
+     */
     private boolean isGameWon() {
         return gameContext.isGameWon();
     }
 
+    /**
+     * Checks if the game has been lost.
+     *
+     * @return True if the game is lost, false otherwise.
+     */
     private boolean isGameLost() {
         return gameContext.isGameLost();
     }
 
+    /**
+     * Ends the game and displays the result to the player.
+     */
     private void endGame() {
         if (isGameWon()) {
             System.out.println("* You have found the cure and saved your wife!");
-            System.out.printf("* You have won the game with %d! Congratulations!\n", gameContext.getPlayer().getPowerPoints());
+            System.out.printf("* You have won the game with %d power points! Congratulations!\n", gameContext.getPlayer().getPowerPoints());
         } else if (isGameLost()) {
             System.out.println("* You have run out of power points and died in the dungeon.");
             System.out.println("* You have lost the game. Better luck next time!");
         }
     }
 
+    /**
+     * Advances the player to the next dungeon level if they reach an exit room.
+     */
     private void advanceToNextDungeon() {
         Dungeon currentDungeon = gameContext.getCurrentDungeon();
         int currentDungeonIndex = currentDungeon.getLevel() - 1;
