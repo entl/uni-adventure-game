@@ -13,7 +13,6 @@
 - [Game Mechanics](#game-mechanics)
 - [Contributing](#contributing)
 - [License](#license)
-- [Acknowledgments](#acknowledgments)
 
 ## **Introduction**
 
@@ -45,15 +44,21 @@
    cd dungeon-adventure
    ```
 3. **Compile the Game:**
+
+    *For Unix/Linux/macOS*
    ```bash
-   javac -d bin src/**/*.java
+   javac -d bin -sourcepath src $(find src -name "*.java")
    ```
-4. **Run the Game:**
+4. **Run Tests (Optional):**
    ```bash
-   java -cp bin Game
+    java -cp bin tests.Run all
+   ```
+5. **Run the Game:**
+   ```bash
+   java -cp bin com.university.Main
    ```
 
-*Alternatively, you can import the project into your preferred IDE and run the `Game` class directly.*
+*Alternatively, you can import the project into your preferred IDE and run the `Main` class directly.*
 
 ## **How to Play**
 
