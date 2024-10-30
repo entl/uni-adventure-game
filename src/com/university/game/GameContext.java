@@ -12,6 +12,7 @@ public class GameContext {
     private static GameContext instance;
 
     private Player player;
+    private Difficulty difficulty;
     private boolean isRunning = true;
     private boolean isGameOver = false;
     private boolean isGameWon = false;
@@ -22,25 +23,22 @@ public class GameContext {
      * Private constructor to prevent direct instantiation of GameContext.
      * This constructor initializes the game context with a player and the current dungeon.
      *
-     * @param player         The player object representing the player in the game.
-     * @param currentDungeon The dungeon object representing the current dungeon the player is in.
+     * @param difficulty         The difficulty level of the game.
      */
-    private GameContext(Player player, Dungeon currentDungeon) {
-        this.player = player;
-        this.currentDungeon = currentDungeon;
+    private GameContext(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 
     /**
      * Retrieves the singleton instance of the GameContext.
      * If the instance has not been created, it initializes the instance with the player and dungeon provided.
      *
-     * @param player         The player object.
-     * @param currentDungeon The current dungeon object.
+     * @param difficulty     The difficulty level of the game.
      * @return The singleton instance of the GameContext.
      */
-    public static GameContext getInstance(Player player, Dungeon currentDungeon) {
+    public static GameContext getInstance(Difficulty difficulty) {
         if (instance == null) {
-            instance = new GameContext(player, currentDungeon);
+            instance = new GameContext(difficulty);
         }
         return instance;
     }
@@ -60,11 +58,23 @@ public class GameContext {
     }
 
     /**
+     * Sets the player for the game context.
+     *
+     * @param player The player object representing the player in the game.
+     */
+    public void setPlayer(Player player) {
+        this.player = player;
+    }
+
+    /**
      * Gets the player object from the game context.
      *
      * @return The player object.
      */
     public Player getPlayer() {
+        if (instance.player == null) {
+            throw new IllegalStateException("GameContext is not fully instantiated: Player is null.");
+        }
         return player;
     }
 
@@ -146,6 +156,9 @@ public class GameContext {
      * @return The current dungeon object.
      */
     public Dungeon getCurrentDungeon() {
+        if (instance.currentDungeon == null) {
+            throw new IllegalStateException("GameContext is not fully instantiated: Current Dungeon is null.");
+        }
         return currentDungeon;
     }
 
@@ -156,5 +169,26 @@ public class GameContext {
      */
     public void setCurrentDungeon(Dungeon currentDungeon) {
         this.currentDungeon = currentDungeon;
+    }
+
+    /**
+     * Gets the difficulty level of the game.
+     *
+     * @return The difficulty level of the game.
+     */
+    public Difficulty getDifficulty() {
+        if (instance.difficulty == null) {
+            throw new IllegalStateException("GameContext is not fully instantiated: Difficulty is null.");
+        }
+        return difficulty;
+    }
+
+    /**
+     * Sets the difficulty level of the game.
+     *
+     * @param difficulty The difficulty level to set.
+     */
+    public void setDifficulty(Difficulty difficulty) {
+        this.difficulty = difficulty;
     }
 }
