@@ -29,7 +29,6 @@ public class Game {
      * Private constructor to prevent direct instantiation.
      */
     private Game() {
-        initializeGame();
     }
 
     /**
@@ -53,17 +52,51 @@ public class Game {
         scanner = new Scanner(System.in);
         commandParser = new CommandParser();
 
-        Player player = new Player(100);
-        DungeonService dungeonService = new DungeonService();
+        Difficulty difficulty = selectDifficulty();
 
+        gameContext = GameContext.getInstance(difficulty);
+        System.out.println("* Game initialized with difficulty: " + difficulty);
+        Player player = new Player(difficulty.getPowerPoints());
+
+        DungeonService dungeonService = new DungeonService();
         dungeons = new Dungeon[dungeonPaths.length];
         for (int i = 0; i < dungeonPaths.length; i++) {
             dungeons[i] = dungeonService.initializeDungeon(dungeonPaths[i], i + 1);
         }
 
-        gameContext = GameContext.getInstance(player, dungeons[0]);
-        player.setCurrentRoom(dungeons[0].getEntranceRoom());
+        gameContext.setPlayer(player);
+        gameContext.setCurrentDungeon(dungeons[0]);
+        player.setCurrentRoom(gameContext.getCurrentDungeon().getEntranceRoom());
         player.getCurrentRoom().setVisited(true);
+    }
+
+    /**
+     * Prompts the user to select a difficulty level.
+     */
+    private Difficulty selectDifficulty() {
+        System.out.println("* Select difficulty level:");
+        System.out.println("1. Easy");
+        System.out.println("2. Medium");
+        System.out.println("3. Hard");
+
+        while (true) {
+            System.out.print("Enter your choice (1-3): ");
+            String input = scanner.nextLine();
+
+            switch (input) {
+                case "1":
+                    System.out.println("* Difficulty set to Easy.");
+                    return Difficulty.EASY;
+                case "2":
+                    System.out.println("* Difficulty set to Medium.");
+                    return Difficulty.MEDIUM;
+                case "3":
+                    System.out.println("* Difficulty set to Hard.");
+                    return Difficulty.HARD;
+                default:
+                    System.out.println("* Invalid choice. Please enter 1, 2, or 3.");
+            }
+        }
     }
 
     /**
