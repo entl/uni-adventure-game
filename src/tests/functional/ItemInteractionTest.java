@@ -71,7 +71,7 @@ public class ItemInteractionTest {
         outputResult(result, testName);
     }
 
-    public static void runTests() {
+    public static void runAllTests() {
         testPickUpItem();
         testDropItem();
         testUseItem();
