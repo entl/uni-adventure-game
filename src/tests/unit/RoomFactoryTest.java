@@ -2,6 +2,8 @@ package tests.unit;
 
 import com.university.dungeon.room.RoomFactory;
 import com.university.dungeon.room.Room;
+import com.university.game.Difficulty;
+import com.university.game.GameContext;
 import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.chests.IChest;
 import com.university.utils.commands.Direction;
@@ -13,7 +15,15 @@ import static tests.ConfigTest.outputResult;
 
 public class RoomFactoryTest {
 
+    private static GameContext context;
+
+    private static void setUp() {
+        context = GameContext.getInstance(Difficulty.EASY);
+    }
+
     public static void testCreateRoomFromCell_Wall() {
+        setUp();
+
         String testName = "RoomFactoryTest.testCreateRoomFromCell_Wall";
         Room room = RoomFactory.createRoomFromCell("W", "WallRoom");
 
@@ -22,6 +32,8 @@ public class RoomFactoryTest {
     }
 
     public static void testCreateRoomFromCell_Entrance() {
+        setUp();
+
         String testName = "RoomFactoryTest.testCreateRoomFromCell_Entrance";
         Room room = RoomFactory.createRoomFromCell("E", "EntranceRoom");
 
@@ -30,6 +42,8 @@ public class RoomFactoryTest {
     }
 
     public static void testCreateRoomFromCell_Exit() {
+        setUp();
+
         String testName = "RoomFactoryTest.testCreateRoomFromCell_Exit";
         Room room = RoomFactory.createRoomFromCell("X", "ExitRoom");
 
@@ -38,6 +52,8 @@ public class RoomFactoryTest {
     }
 
     public static void testCreateRoomFromCell_Treasure() {
+        setUp();
+
         String testName = "RoomFactoryTest.testCreateRoomFromCell_Treasure";
         Room room = RoomFactory.createRoomFromCell("T", "TreasureRoom");
 
@@ -46,6 +62,8 @@ public class RoomFactoryTest {
     }
 
     public static void testCreateRoomFromCell_RegularRoomWithItemsAndTraps() {
+        setUp();
+
         String testName = "RoomFactoryTest.testCreateRoomFromCell_RegularRoomWithItemsAndTraps";
         Room room = RoomFactory.createRoomFromCell("R", "RegularRoom");
 
@@ -58,6 +76,8 @@ public class RoomFactoryTest {
     }
 
     public static void testSetAdjacentRooms() {
+        setUp();
+
         String testName = "RoomFactoryTest.testSetAdjacentRooms";
 
         // Creating a 2x2 dungeon layout
