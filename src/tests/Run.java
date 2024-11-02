@@ -1,5 +1,6 @@
 package tests;
 
+import tests.functional.ItemInteractionTest;
 import tests.unit.InventoryManagerTest;
 import tests.unit.RoomFactoryTest;
 
@@ -37,6 +38,7 @@ public class Run {
 
     private static void runFunctionalTests() {
         System.out.println("Running functional tests...");
+        ItemInteractionTest.runTests();
     }
 
     private static void runAllTests() {
