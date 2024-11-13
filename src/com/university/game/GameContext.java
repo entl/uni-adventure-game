@@ -36,7 +36,7 @@ public class GameContext {
      * @param difficulty     The difficulty level of the game.
      * @return The singleton instance of the GameContext.
      */
-    public static GameContext getInstance(Difficulty difficulty) {
+    public static GameContext initialize(Difficulty difficulty) {
         if (instance == null) {
             instance = new GameContext(difficulty);
         }
@@ -50,7 +50,7 @@ public class GameContext {
      * @return The singleton instance of the GameContext.
      * @throws IllegalStateException if the GameContext has not been initialized before calling this method.
      */
-    public static GameContext getInstance() {
+    public static GameContext initialize() {
         if (instance == null) {
             throw new IllegalStateException("GameContext has not been initialized. Please initialize it first.");
         }

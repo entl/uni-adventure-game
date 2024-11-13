@@ -52,7 +52,7 @@ public class Player {
             currentRoom.setVisited(true);
             ITrap trap = currentRoom.getTrap();
             if (trap != null) {
-                trap.activate(GameContext.getInstance());
+                trap.activate(GameContext.initialize());
             }
             System.out.printf("* You moved to the %s room!\n", direction);
         } else {

@@ -23,7 +23,7 @@ public class ShowMapCommand implements ICommand {
     public void execute(GameContext context) {
         System.out.println("* You have great memory! Here are the places you have visited:\n");
 
-        List<List<Room>> rooms = GameContext.getInstance().getCurrentDungeon().getRooms();
+        List<List<Room>> rooms = GameContext.initialize().getCurrentDungeon().getRooms();
         Room currentRoom = context.getPlayer().getCurrentRoom();
 
         char[][] mapGrid = mapGrid(rooms, currentRoom);

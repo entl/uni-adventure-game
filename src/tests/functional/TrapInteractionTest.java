@@ -4,7 +4,6 @@ import com.university.dungeon.room.Room;
 import com.university.game.Difficulty;
 import com.university.game.GameContext;
 import com.university.gameElements.traps.MadScientists;
-import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.IEscapeStrategy;
 import com.university.gameElements.traps.strategies.LosePointsStrategy;
 import com.university.items.FreezeSpell;
@@ -19,7 +18,7 @@ public class TrapInteractionTest {
     private static GameContext context;
 
     private static void setUp() {
-        context = GameContext.getInstance(Difficulty.EASY);
+        context = GameContext.initialize(Difficulty.EASY);
         player = new Player(Difficulty.EASY.getPowerPoints());
         context.setPlayer(player);
 

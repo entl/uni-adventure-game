@@ -18,7 +18,7 @@ public class RoomFactoryTest {
     private static GameContext context;
 
     private static void setUp() {
-        context = GameContext.getInstance(Difficulty.EASY);
+        context = GameContext.initialize(Difficulty.EASY);
     }
 
     public static void testCreateRoomFromCell_Wall() {

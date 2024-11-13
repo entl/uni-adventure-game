@@ -37,7 +37,7 @@ public class Game {
      *
      * @return The singleton instance of the Game class.
      */
-    public static Game getInstance() {
+    public static Game initialize() {
         if (instance == null) {
             instance = new Game();
             instance.initializeGame();
@@ -54,7 +54,7 @@ public class Game {
 
         Difficulty difficulty = selectDifficulty();
 
-        gameContext = GameContext.getInstance(difficulty);
+        gameContext = GameContext.initialize(difficulty);
         System.out.println("* Game initialized with difficulty: " + difficulty);
         Player player = new Player(difficulty.getPowerPoints());
 

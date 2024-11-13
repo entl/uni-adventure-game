@@ -18,7 +18,7 @@ import java.util.*;
 public class RoomFactory {
 
     private static final Random random = new Random();
-    private static final Config.SpawnRates spawnRates = GameContext.getInstance().getDifficulty().getSpawnRates();
+    private static final Config.SpawnRates spawnRates = GameContext.initialize().getDifficulty().getSpawnRates();
 
     private static final ItemFactory itemFactory = new ItemFactory();
     private static final TrapFactory trapFactory = new TrapFactory();
