@@ -29,10 +29,10 @@ public class Trap implements ITrap {
      */
     @Override
     public void activate(GameContext gameContext) {
-        printDescriptionByState();
         if (!isActive) {
             return;
         }
+        printDescription();
         gameContext.getPlayer().setTrapped(true);
     }
 
@@ -86,13 +86,8 @@ public class Trap implements ITrap {
      * If the trap is inactive, it informs the player that the trap is no longer a threat.
      */
     @Override
-    public void printDescriptionByState() {
-        if (!isActive) {
-            System.out.println("* You see the trap, but it is not active anymore.");
-            return;
-        }
-
+    public void printDescription() {
         System.out.println("* " + getDescription());
-        System.out.println("* You can escape by using ** freeze spell **, ** hammer ** or ** giving 5 points  **.");
+        System.out.println("* You can escape by using ** freeze spell **, ** hammer ** or ** giving 5 points  **.\n");
     }
 }

@@ -52,5 +52,5 @@ public interface ITrap {
      * Prints the description of the trap based on its current state (active or inactive).
      * The method should display different descriptions depending on whether the trap is active or not.
      */
-    void printDescriptionByState();
+    void printDescription();
 }

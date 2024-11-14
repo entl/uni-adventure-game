@@ -31,10 +31,10 @@ public class MadScientists implements ITrap {
      */
     @Override
     public void activate(GameContext gameContext) {
-        printDescriptionByState();
         if (!isActive) {
             return;
         }
+        printDescription();
         gameContext.getPlayer().setTrapped(true);
     }
 
@@ -88,14 +88,9 @@ public class MadScientists implements ITrap {
      * If the trap is inactive, it describes the scientists as no longer talking about their experiments.
      */
     @Override
-    public void printDescriptionByState() {
-        if (!isActive) {
-            System.out.println("* You see the mad scientists, but they are not talking about their experiments anymore.");
-            return;
-        }
-
+    public void printDescription() {
         System.out.println("* " + getDescription());
         System.out.println("* Oh no! They have trapped you by talking about their experiments. You can't move.");
-        System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.");
+        System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.\n");
     }
 }
