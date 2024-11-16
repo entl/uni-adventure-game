@@ -50,10 +50,6 @@ public class Player {
         if (nextRoom != null) {
             currentRoom = nextRoom;
             currentRoom.setVisited(true);
-            ITrap trap = currentRoom.getTrap();
-            if (trap != null) {
-                trap.activate(GameContext.initialize());
-            }
             System.out.printf("* You moved to the %s room!\n", direction);
         } else {
             System.out.printf("* There is no room to the %s.\n* Try to look around\n", direction);
@@ -76,6 +72,7 @@ public class Player {
         for (Direction direction : currentRoom.getAdjacentRooms().keySet()) {
             System.out.printf("- %s\n", direction);
         }
+        System.out.println();
     }
 
     /**
