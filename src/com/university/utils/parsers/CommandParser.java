@@ -149,19 +149,9 @@ public class CommandParser {
      */
     private Direction parseDirection(String[] words) {
         for (String word : words) {
-            switch (word) {
-                case "north":
-                case "forward":
-                    return Direction.NORTH;
-                case "south":
-                case "back":
-                    return Direction.SOUTH;
-                case "east":
-                case "right":
-                    return Direction.EAST;
-                case "west":
-                case "left":
-                    return Direction.WEST;
+            Direction direction = Direction.fromAlias(word);
+            if (direction != null) {
+                return direction;
             }
         }
         return null;

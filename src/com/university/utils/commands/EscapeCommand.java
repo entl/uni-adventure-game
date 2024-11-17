@@ -33,7 +33,7 @@ public class EscapeCommand implements ICommand {
         }
 
         if (!trap.isActive()) {
-            trap.printDescriptionByState();
+            trap.printDescription();
             return;
         }
 
