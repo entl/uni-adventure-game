@@ -26,6 +26,8 @@ public class HammerEffect implements IEffect {
         Room currentRoom = gameContext.getPlayer().getCurrentRoom();
         if (currentRoom.getTrap() instanceof Trap) {
             currentRoom.getTrap().escape(gameContext, new HammerStrategy());
+        } else {
+            System.out.println("* You tried to use the hammer, but it had no effect.");
         }
     }
 }

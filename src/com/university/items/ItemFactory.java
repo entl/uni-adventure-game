@@ -26,6 +26,7 @@ public class ItemFactory {
         addItem("spanner", Spanner::new, 0.1);
         addItem("potion", Potion::new, 0.1);
         addItem("alarm clock", AlarmClock::new, 0.1);
+        addItem("sausage", Sausage::new, 0.1);
     }
 
     /**

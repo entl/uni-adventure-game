@@ -18,8 +18,9 @@ public class TrapFactory {
      * Constructs a TrapFactory with predefined traps and their respective probabilities.
      */
     public TrapFactory() {
-        addTrap("trap", Trap::new, 0.6);
+        addTrap("trap", Trap::new, 0.4);
         addTrap("mad scientist", MadScientists::new, 0.4);
+        addTrap("cutie cat", CutieCat::new, 0.2);
     }
 
     /**

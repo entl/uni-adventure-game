@@ -28,6 +28,8 @@ public class FreezeSpellEffect implements IEffect {
         Room currentRoom = gameContext.getPlayer().getCurrentRoom();
         if (currentRoom.getTrap() instanceof MadScientists || currentRoom.getTrap() instanceof Trap) {
             currentRoom.getTrap().escape(gameContext, new FreezeSpellStrategy());
+        } else {
+            System.out.println("* You tried to cast a freeze spell, but it had no effect.");
         }
     }
 }

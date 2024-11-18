@@ -30,6 +30,5 @@ public class MoveCommand implements ICommand {
     @Override
     public void execute(GameContext context) {
         context.getPlayer().move(direction);
-        context.getPlayer().lookAround();
     }
 }

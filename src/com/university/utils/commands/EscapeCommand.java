@@ -44,6 +44,9 @@ public class EscapeCommand implements ICommand {
             case "trap":
                 currentRoom.getTrap().escape(context, new LosePointsStrategy(5));
                 break;
+            case "cutiecat":
+                currentRoom.getTrap().escape(context, new LosePointsStrategy(15));
+                break;
             default:
                 System.out.println("* There is no trap in this room!");
         }

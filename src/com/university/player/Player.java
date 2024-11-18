@@ -51,6 +51,8 @@ public class Player {
             currentRoom = nextRoom;
             currentRoom.setVisited(true);
             System.out.printf("* You moved to the %s room!\n", direction);
+
+            lookAround();
         } else {
             System.out.printf("* There is no room to the %s.\n* Try to look around\n", direction);
         }
