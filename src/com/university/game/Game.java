@@ -163,6 +163,10 @@ public class Game {
                 break;
             }
 
+            if (currentRoom.getTrap() != null && currentRoom.getTrap().isActive()) {
+                currentRoom.getTrap().activate(gameContext);
+            }
+
             if (currentRoom.isExit()) {
                 advanceToNextDungeon();
             }
