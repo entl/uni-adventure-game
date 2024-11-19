@@ -7,6 +7,7 @@ import com.university.game.GameContext;
 import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.chests.IChest;
 import com.university.utils.commands.Direction;
+import com.university.utils.events.EventManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +19,7 @@ public class RoomFactoryTest {
     private static GameContext context;
 
     private static void setUp() {
-        context = GameContext.initialize(Difficulty.EASY);
+        context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
     }
 
     public static void testCreateRoomFromCell_Wall() {

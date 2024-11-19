@@ -12,6 +12,7 @@ import com.university.utils.commands.DropCommand;
 import com.university.utils.commands.ICommand;
 import com.university.utils.commands.PickUpCommand;
 import com.university.utils.commands.UseCommand;
+import com.university.utils.events.EventManager;
 
 import static tests.ConfigTest.outputResult;
 
@@ -21,7 +22,7 @@ public class ItemInteractionTest {
     private static GameContext context;
 
     private static void setUp() {
-        context = GameContext.initialize(Difficulty.EASY);
+        context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
         player = new Player(Difficulty.EASY.getPowerPoints());
         context.setPlayer(player);
 

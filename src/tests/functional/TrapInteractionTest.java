@@ -9,6 +9,7 @@ import com.university.gameElements.traps.strategies.LosePointsStrategy;
 import com.university.items.FreezeSpell;
 import com.university.items.IItem;
 import com.university.player.Player;
+import com.university.utils.events.EventManager;
 
 import static tests.ConfigTest.outputResult;
 
@@ -18,7 +19,7 @@ public class TrapInteractionTest {
     private static GameContext context;
 
     private static void setUp() {
-        context = GameContext.initialize(Difficulty.EASY);
+        context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
         player = new Player(Difficulty.EASY.getPowerPoints());
         context.setPlayer(player);
 
