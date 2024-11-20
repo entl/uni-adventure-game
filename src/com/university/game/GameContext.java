@@ -2,6 +2,7 @@ package com.university.game;
 
 import com.university.dungeon.Dungeon;
 import com.university.player.Player;
+import com.university.utils.events.EventManager;
 
 /**
  * The GameContext class manages the current state of the game.
@@ -13,6 +14,7 @@ public class GameContext {
 
     private Player player;
     private Difficulty difficulty;
+    private EventManager eventManager;
     private boolean isRunning = true;
     private boolean isGameOver = false;
     private boolean isGameWon = false;
@@ -25,8 +27,9 @@ public class GameContext {
      *
      * @param difficulty         The difficulty level of the game.
      */
-    private GameContext(Difficulty difficulty) {
+    private GameContext(Difficulty difficulty, EventManager eventManager) {
         this.difficulty = difficulty;
+        this.eventManager = eventManager;
     }
 
     /**
@@ -36,9 +39,9 @@ public class GameContext {
      * @param difficulty     The difficulty level of the game.
      * @return The singleton instance of the GameContext.
      */
-    public static GameContext initialize(Difficulty difficulty) {
+    public static GameContext initialize(Difficulty difficulty, EventManager eventManager) {
         if (instance == null) {
-            instance = new GameContext(difficulty);
+            instance = new GameContext(difficulty, eventManager);
         }
         return instance;
     }
@@ -190,5 +193,17 @@ public class GameContext {
      */
     public void setDifficulty(Difficulty difficulty) {
         this.difficulty = difficulty;
+    }
+
+    /**
+     * Gets the event manager for the game context.
+     *
+     * @return The event manager object.
+     */
+    public EventManager getEventManager() {
+        if (instance.eventManager == null) {
+            throw new IllegalStateException("GameContext is not fully instantiated: Event Manager is null.");
+        }
+        return eventManager;
     }
 }

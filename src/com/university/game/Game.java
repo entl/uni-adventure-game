@@ -8,6 +8,7 @@ import com.university.player.Player;
 import com.university.utils.ClearScreen;
 import com.university.utils.commands.ICommand;
 import com.university.utils.commands.WakeUpCommand;
+import com.university.utils.events.EventManager;
 import com.university.utils.parsers.CommandParser;
 
 import java.util.Scanner;
@@ -53,8 +54,9 @@ public class Game {
         commandParser = new CommandParser();
 
         Difficulty difficulty = selectDifficulty();
+        EventManager eventManager = EventManager.getInstance();
 
-        gameContext = GameContext.initialize(difficulty);
+        gameContext = GameContext.initialize(difficulty, eventManager);
         System.out.println("* Game initialized with difficulty: " + difficulty);
         Player player = new Player(difficulty.getPowerPoints());
 
