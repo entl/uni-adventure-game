@@ -1,14 +1,23 @@
 package com.university.gameElements.traps;
 
 import com.university.game.GameContext;
+import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
+import com.university.gameElements.traps.strategies.HammerStrategy;
 import com.university.gameElements.traps.strategies.IEscapeStrategy;
+import com.university.gameElements.traps.strategies.LosePointsStrategy;
+import com.university.utils.events.EscapeEvent;
+import com.university.utils.events.EventManager;
+import com.university.utils.events.IEvent;
+import com.university.utils.events.IEventListener;
+
+import java.util.List;
 
 /**
  * Represents the "Mad Scientists" trap in the game.
  * The trap involves a group of scientists who trap the player by talking constantly about their experiments.
  * The player becomes stuck in the room until they use a specific strategy to escape.
  */
-public class MadScientists implements ITrap {
+public class MadScientists implements ITrap, IEventListener {
     private String name;
     private String description;
     private boolean isActive;
@@ -21,6 +30,7 @@ public class MadScientists implements ITrap {
         this.name = "mad scientists";
         this.description = "Mad Scientists are talking constantly about their experiments. They are very annoying.";
         this.isActive = true;
+        subscribeToEvents();
     }
 
     /**
@@ -92,5 +102,24 @@ public class MadScientists implements ITrap {
         System.out.println("* " + getDescription());
         System.out.println("* Oh no! They have trapped you by talking about their experiments. You can't move.");
         System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.\n");
+    }
+
+    @Override
+    public void onEvent(IEvent event) {
+        List<Class<? extends IEscapeStrategy>> escapeStrategies = List.of(FreezeSpellStrategy.class, LosePointsStrategy.class);
+        if(event instanceof EscapeEvent && isActive) {
+            EscapeEvent escapeEvent = (EscapeEvent) event;
+            if(escapeEvent.getTrap() == this){
+                if (escapeStrategies.contains(escapeEvent.getEscapeStrategy().getClass())) {
+                    escape(GameContext.initialize(), escapeEvent.getEscapeStrategy());
+                } else {
+                    System.out.println("* You tried to escape, but the strategy didn't work.\n");
+                }
+            }
+        }
+    }
+
+    private void subscribeToEvents() {
+        EventManager.getInstance().registerListener(EscapeEvent.class, this);
     }
 }

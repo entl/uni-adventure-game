@@ -1,13 +1,22 @@
 package com.university.gameElements.traps;
 
 import com.university.game.GameContext;
+import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.IEscapeStrategy;
+import com.university.gameElements.traps.strategies.LosePointsStrategy;
+import com.university.gameElements.traps.strategies.SausageStrategy;
+import com.university.utils.events.EscapeEvent;
+import com.university.utils.events.EventManager;
+import com.university.utils.events.IEvent;
+import com.university.utils.events.IEventListener;
+
+import java.util.List;
 
 /**
  * Represents a special trap: CutieCat, which immobilizes the player until it is fed.
  * If the player chooses not to feed the cat, they lose 5 power points to escape.
  */
-public class CutieCat implements ITrap {
+public class CutieCat implements ITrap, IEventListener {
     private String name;
     private String description;
     private boolean isActive;
@@ -20,6 +29,7 @@ public class CutieCat implements ITrap {
         this.name = "cutiecat";
         this.description = "A hungry cute cat blocks your way, demanding food!";
         this.isActive = true;
+        subscribeToEvents();
     }
 
     /**
@@ -88,5 +98,24 @@ public class CutieCat implements ITrap {
     public void printDescription() {
         System.out.println("* " + getDescription());
         System.out.println("* You can escape by feeding the cutie cat or losing 15 power points.\n");
+    }
+
+    @Override
+    public void onEvent(IEvent event) {
+        List<Class<? extends IEscapeStrategy>> escapeStrategies = List.of(SausageStrategy.class, LosePointsStrategy.class);
+        if(event instanceof EscapeEvent && isActive) {
+            EscapeEvent escapeEvent = (EscapeEvent) event;
+            if(escapeEvent.getTrap() == this){
+                if (escapeStrategies.contains(escapeEvent.getEscapeStrategy().getClass())) {
+                    escape(GameContext.initialize(), escapeEvent.getEscapeStrategy());
+                } else {
+                        System.out.println("* You tried to escape, but the strategy didn't work.\n");
+                }
+            }
+        }
+    }
+
+    private void subscribeToEvents() {
+        EventManager.getInstance().registerListener(EscapeEvent.class, this);
     }
 }
