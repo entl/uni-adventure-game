@@ -4,6 +4,8 @@ import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
 import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.strategies.LosePointsStrategy;
+import com.university.utils.events.EscapeEvent;
+import com.university.utils.events.EventManager;
 
 /**
  * The {@code EscapeCommand} class implements the {@code ICommand} interface to escape from a trap in the current room.
@@ -39,13 +41,13 @@ public class EscapeCommand implements ICommand {
 
         switch (currentRoom.getTrap().getName()) {
             case "mad scientists":
-                currentRoom.getTrap().escape(context, new LosePointsStrategy(10));
+                EventManager.getInstance().dispatchEvent(new EscapeEvent(currentRoom.getTrap(), new LosePointsStrategy(10)));
                 break;
             case "trap":
-                currentRoom.getTrap().escape(context, new LosePointsStrategy(5));
+                EventManager.getInstance().dispatchEvent(new EscapeEvent(currentRoom.getTrap(), new LosePointsStrategy(5)));
                 break;
             case "cutiecat":
-                currentRoom.getTrap().escape(context, new LosePointsStrategy(15));
+                EventManager.getInstance().dispatchEvent(new EscapeEvent(currentRoom.getTrap(), new LosePointsStrategy(15)));
                 break;
             default:
                 System.out.println("* There is no trap in this room!");

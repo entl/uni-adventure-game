@@ -2,8 +2,11 @@ package com.university.items.effect;
 
 import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
+import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.Trap;
+import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.HammerStrategy;
+import com.university.utils.events.EscapeEvent;
 
 /**
  * The {@code HammerEffect} class represents the effect of using a hammer.
@@ -24,8 +27,9 @@ public class HammerEffect implements IEffect {
     @Override
     public void apply(GameContext gameContext) {
         Room currentRoom = gameContext.getPlayer().getCurrentRoom();
-        if (currentRoom.getTrap() instanceof Trap) {
-            currentRoom.getTrap().escape(gameContext, new HammerStrategy());
+        ITrap trap = currentRoom.getTrap();
+        if (trap != null) {
+            gameContext.getEventManager().dispatchEvent(new EscapeEvent(trap, new HammerStrategy()));
         } else {
             System.out.println("* You tried to use the hammer, but it had no effect.");
         }

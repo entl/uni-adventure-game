@@ -2,9 +2,11 @@ package com.university.items.effect;
 
 import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
+import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.MadScientists;
 import com.university.gameElements.traps.Trap;
 import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
+import com.university.utils.events.EscapeEvent;
 
 /**
  * The {@code FreezeSpellEffect} class represents the effect of using a freeze spell.
@@ -26,8 +28,9 @@ public class FreezeSpellEffect implements IEffect {
     @Override
     public void apply(GameContext gameContext) {
         Room currentRoom = gameContext.getPlayer().getCurrentRoom();
-        if (currentRoom.getTrap() instanceof MadScientists || currentRoom.getTrap() instanceof Trap) {
-            currentRoom.getTrap().escape(gameContext, new FreezeSpellStrategy());
+        ITrap trap = currentRoom.getTrap();
+        if (trap != null) {
+            gameContext.getEventManager().dispatchEvent(new EscapeEvent(trap, new FreezeSpellStrategy()));
         } else {
             System.out.println("* You tried to cast a freeze spell, but it had no effect.");
         }
