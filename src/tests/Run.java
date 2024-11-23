@@ -1,5 +1,6 @@
 package tests;
 
+import tests.e2e.GamePlayTest;
 import tests.functional.ItemInteractionTest;
 import tests.functional.TrapInteractionTest;
 import tests.unit.InventoryManagerTest;
@@ -9,7 +10,7 @@ public class Run {
 
     public static void main(String[] args) {
         if (args.length == 0) {
-            System.out.println("Please provide an argument: unit, functional, or all");
+            System.out.println("Please provide an argument: unit, functional, e2e, or all");
             return;
         }
 
@@ -21,6 +22,9 @@ public class Run {
                 break;
             case "functional":
                 runFunctionalTests();
+                break;
+            case "e2e":
+                runE2ETests();
                 break;
             case "all":
                 runAllTests();
@@ -41,6 +45,15 @@ public class Run {
         System.out.println("Running functional tests...");
         ItemInteractionTest.runAllTests();
         TrapInteractionTest.runAllTests();
+    }
+
+    private static void runE2ETests() {
+        System.out.println("Running end-to-end tests...");
+        try {
+            new GamePlayTest().runAllTests();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private static void runAllTests() {
