@@ -199,6 +199,9 @@ public class Game {
             gameContext.setGameWon(true);
             gameContext.setRunning(false);
         } else if (currentRoom.getTrap() != null && currentRoom.getTrap().isActive()) {
+            if (!player.isTrapped()) {
+                currentRoom.getTrap().printDescription();
+            }
             currentRoom.getTrap().activate(gameContext);
         } else if (currentRoom.isExit()) {
             advanceToNextDungeon();

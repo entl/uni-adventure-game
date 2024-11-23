@@ -42,7 +42,6 @@ public class CutieCat implements ITrap, IEventListener {
         if (!isActive) {
             return;
         }
-        printDescription();
         gameContext.getPlayer().setTrapped(true);
     }
 
