@@ -115,6 +115,16 @@ public class Room {
     }
 
     /**
+     * Sets items to the room.
+     *
+     * @param items The list of IItem objects to add to the room.
+     */
+    public void setItems(List<IItem> items) {
+        this.items = items;
+    }
+
+
+    /**
      * Returns a map of adjacent rooms and their directions.
      *
      * @return A HashMap where the key is the direction and the value is the room in that direction.

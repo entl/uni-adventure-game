@@ -29,8 +29,7 @@ public class Game {
     /**
      * Private constructor to prevent direct instantiation.
      */
-    private Game() {
-    }
+    private Game() {}
 
     /**
      * Retrieves the singleton instance of the Game class.
@@ -50,23 +49,42 @@ public class Game {
      * Initializes the game by creating dungeons, setting up the player, and loading game context.
      */
     private void initializeGame() {
+        setupInput();
+        Difficulty difficulty = selectDifficulty();
+
+        setupGameContext(difficulty);
+        initializeDungeons();
+
+        Player player = setupPlayer(difficulty);
+        setInitialGameState(player);
+    }
+
+    private void setupInput() {
         scanner = new Scanner(System.in);
         commandParser = new CommandParser();
+    }
 
-        Difficulty difficulty = selectDifficulty();
+    private void setupGameContext(Difficulty difficulty) {
         EventManager eventManager = EventManager.getInstance();
-
         gameContext = GameContext.initialize(difficulty, eventManager);
         System.out.println("* Game initialized with difficulty: " + difficulty);
-        Player player = new Player(difficulty.getPowerPoints());
+    }
 
+    private void initializeDungeons() {
         DungeonService dungeonService = new DungeonService();
         dungeons = new Dungeon[dungeonPaths.length];
         for (int i = 0; i < dungeonPaths.length; i++) {
             dungeons[i] = dungeonService.initializeDungeon(dungeonPaths[i], i + 1);
         }
+    }
 
+    private Player setupPlayer(Difficulty difficulty) {
+        Player player = new Player(difficulty.getPowerPoints());
         gameContext.setPlayer(player);
+        return player;
+    }
+
+    private void setInitialGameState(Player player) {
         gameContext.setCurrentDungeon(dungeons[0]);
         player.setCurrentRoom(gameContext.getCurrentDungeon().getEntranceRoom());
         player.getCurrentRoom().setVisited(true);
@@ -105,6 +123,12 @@ public class Game {
      * Starts the game and presents the introduction to the player.
      */
     public void startGame() {
+        displayIntro();
+
+        loop();
+    }
+
+    private void displayIntro() {
         String startingArt = """
                 ======================================
                 
@@ -141,8 +165,6 @@ public class Game {
 
         System.out.println("* You step into the dungeon, the air growing cold and moisture around you...");
         System.out.println("* As you turn to look back, the entrance slams shut, sealing you inside. There is no way out.");
-
-        loop();
     }
 
     /**
@@ -150,88 +172,78 @@ public class Game {
      */
     public void loop() {
         while (gameContext.isRunning()) {
-            Player player = gameContext.getPlayer();
-            Room currentRoom = player.getCurrentRoom();
+            handleGameState();
 
-            if (player.getPowerPoints() <= 0) {
-                gameContext.setGameLost(true);
-                gameContext.setRunning(false);
+            if (!gameContext.isRunning()) {
                 break;
             }
 
-            if (currentRoom.isTreasureRoom()) {
-                gameContext.setGameWon(true);
-                gameContext.setRunning(false);
-                break;
-            }
+            handlePlayerSleep();
+            waitForPlayerInput();
 
-            if (currentRoom.getTrap() != null && currentRoom.getTrap().isActive()) {
-                currentRoom.getTrap().activate(gameContext);
-            }
-
-            if (currentRoom.isExit()) {
-                advanceToNextDungeon();
-            }
-
-            // Check if player is asleep in the game loop
-            // since no input is taken in the sleep effect
-            if (player.isAsleep()) {
-                try {
-                    System.out.println("* Sleeping...");
-                    Thread.sleep(3000);
-                    new WakeUpCommand().execute(gameContext);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-
-            System.out.print("\n* Press Enter to continue...");
-            scanner.nextLine();
-            ClearScreen.clear();
-
-            System.out.println("* What would you like to do?");
-
-            System.out.print("> ");
-            String userInput = scanner.nextLine();
-            System.out.println();
-
-            ICommand command = commandParser.parse(userInput);
-
-            if (command != null) {
-                command.execute(gameContext);
-            }
+            processPlayerCommand();
         }
 
         endGame();
         scanner.close();
     }
 
-    /**
-     * Checks if the game has been won.
-     *
-     * @return True if the game is won, false otherwise.
-     */
-    private boolean isGameWon() {
-        return gameContext.isGameWon();
+    private void handleGameState() {
+        Player player = gameContext.getPlayer();
+        Room currentRoom = player.getCurrentRoom();
+
+        if (player.getPowerPoints() <= 0) {
+            gameContext.setGameLost(true);
+            gameContext.setRunning(false);
+        } else if (currentRoom.isTreasureRoom()) {
+            gameContext.setGameWon(true);
+            gameContext.setRunning(false);
+        } else if (currentRoom.getTrap() != null && currentRoom.getTrap().isActive()) {
+            currentRoom.getTrap().activate(gameContext);
+        } else if (currentRoom.isExit()) {
+            advanceToNextDungeon();
+        }
     }
 
-    /**
-     * Checks if the game has been lost.
-     *
-     * @return True if the game is lost, false otherwise.
-     */
-    private boolean isGameLost() {
-        return gameContext.isGameLost();
+    private void handlePlayerSleep() {
+        Player player = gameContext.getPlayer();
+        if (player.isAsleep()) {
+            try {
+                System.out.println("* Sleeping...");
+                Thread.sleep(3000);
+                new WakeUpCommand().execute(gameContext);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private void waitForPlayerInput() {
+        System.out.print("\n* Press Enter to continue...");
+        scanner.nextLine();
+        ClearScreen.clear();
+    }
+
+    private void processPlayerCommand() {
+        System.out.println("* What would you like to do?");
+        System.out.print("> ");
+        String userInput = scanner.nextLine();
+        System.out.println();
+
+        ICommand command = commandParser.parse(userInput);
+        if (command != null) {
+            command.execute(gameContext);
+        }
     }
 
     /**
      * Ends the game and displays the result to the player.
      */
     private void endGame() {
-        if (isGameWon()) {
+        if (gameContext.isGameWon()) {
             System.out.println("* You have found the cure and saved your wife!");
             System.out.printf("* You have won the game with %d power points! Congratulations!\n", gameContext.getPlayer().getPowerPoints());
-        } else if (isGameLost()) {
+        } else if (gameContext.isGameLost()) {
             System.out.println("* You have run out of power points and died in the dungeon.");
             System.out.println("* You have lost the game. Better luck next time!");
         }
@@ -249,5 +261,4 @@ public class Game {
         gameContext.getPlayer().setCurrentRoom(currentDungeon.getEntranceRoom());
         System.out.printf("* You have entered the Dungeon Level %d\n", currentDungeon.getLevel());
     }
-
 }
