@@ -1,6 +1,7 @@
 package com.university.utils.parsers;
 
 import com.university.items.ItemFactory;
+import com.university.utils.UI.UIManager;
 import com.university.utils.commands.*;
 
 import java.util.*;
@@ -40,7 +41,7 @@ public class CommandParser {
                 if (direction != null) {
                     return new MoveCommand(direction);
                 } else {
-                    System.out.println("* Specify direction");
+                    UIManager.getInstance().displayMessage("* Specify direction");
                     return null;
                 }
             case LOOK_AROUND:
@@ -49,21 +50,21 @@ public class CommandParser {
                 if (itemName != null) {
                     return new UseCommand(itemName);
                 } else {
-                    System.out.println("* Specify item to use");
+                    UIManager.getInstance().displayMessage("* Specify item to use");
                     return null;
                 }
             case PICK_UP:
                 if (itemName != null) {
                     return new PickUpCommand(itemName);
                 } else {
-                    System.out.println("* Specify item to pick up");
+                    UIManager.getInstance().displayMessage("* Specify item to pick up");
                     return null;
                 }
             case DROP:
                 if (itemName != null) {
                     return new DropCommand(itemName);
                 } else {
-                    System.out.println("* Specify item to drop");
+                    UIManager.getInstance().displayMessage("* Specify item to drop");
                     return null;
                 }
             case SHOW_INVENTORY:
@@ -79,7 +80,7 @@ public class CommandParser {
             case SHOW_MAP:
                 return new ShowMapCommand();
             default:
-                System.out.println("* I can't understand your input.\n* Enter `help` to see commands");
+                UIManager.getInstance().displayMessage("* I can't understand your input.\n* Enter `help` to see commands");
                 return null;
         }
     }
