@@ -3,6 +3,7 @@ package com.university.gameElements.chests;
 import com.university.game.GameContext;
 import com.university.items.IItem;
 import com.university.items.ItemFactory;
+import com.university.utils.UI.UIManager;
 
 /**
  * Represents a chest in the game that contains a random item.
@@ -33,10 +34,10 @@ public class Chest implements IChest {
     @Override
     public void open(GameContext gameContext) {
         if (isOpened) {
-            System.out.println("* The chest is already opened.");
+            UIManager.getInstance().displayMessage("* The chest is already opened.");
         } else {
-            System.out.println("* You opened the chest and found a " + item.getDisplayName() + ".");
-            System.out.println("* You can pick it up!");
+            UIManager.getInstance().displayMessage("* You opened the chest and found a " + item.getDisplayName() + ".");
+            UIManager.getInstance().displayMessage("* You can pick it up!");
             gameContext.getPlayer().getCurrentRoom().addItem(item);
             this.isOpened = true;
         }
