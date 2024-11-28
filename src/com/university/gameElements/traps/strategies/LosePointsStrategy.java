@@ -1,6 +1,8 @@
 package com.university.gameElements.traps.strategies;
 
 import com.university.game.GameContext;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 public class LosePointsStrategy implements IEscapeStrategy {
     private final int points;
@@ -11,8 +13,9 @@ public class LosePointsStrategy implements IEscapeStrategy {
 
     @Override
     public void escape(GameContext gameContext) {
-        System.out.println("* You catch your breath; it seems you've managed to escape...");
-        System.out.println("* You lost " + points + " points!");
+        UIManager.getInstance().displayMessage(GameNarrator.trapEscapeSuccess());
+        UIManager.getInstance().displayMessage(GameNarrator.pointsLost(points));
+
         gameContext.getPlayer().removePowerPoints(points);
     }
 }

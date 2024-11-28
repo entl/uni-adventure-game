@@ -5,6 +5,8 @@ import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.HammerStrategy;
 import com.university.gameElements.traps.strategies.IEscapeStrategy;
 import com.university.gameElements.traps.strategies.LosePointsStrategy;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 import com.university.utils.events.EscapeEvent;
 import com.university.utils.events.EventManager;
 import com.university.utils.events.IEvent;
@@ -98,9 +100,9 @@ public class MadScientists implements ITrap, IEventListener {
      */
     @Override
     public void printDescription() {
-        System.out.println("* " + getDescription());
-        System.out.println("* Oh no! They have trapped you by talking about their experiments. You can't move.");
-        System.out.println("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.\n");
+        UIManager.getInstance().displayMessage("* " + getDescription());
+        UIManager.getInstance().displayMessage("* Oh no! They have trapped you by talking about their experiments. You can't move.");
+        UIManager.getInstance().displayMessage("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.\n");
     }
 
     @Override
@@ -112,7 +114,7 @@ public class MadScientists implements ITrap, IEventListener {
                 if (escapeStrategies.contains(escapeEvent.getEscapeStrategy().getClass())) {
                     escape(GameContext.initialize(), escapeEvent.getEscapeStrategy());
                 } else {
-                    System.out.println("* You tried to escape, but the strategy didn't work.\n");
+                    UIManager.getInstance().displayMessage(GameNarrator.trapEscapeFail());
                 }
             }
         }

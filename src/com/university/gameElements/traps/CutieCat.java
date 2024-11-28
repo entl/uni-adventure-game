@@ -1,10 +1,11 @@
 package com.university.gameElements.traps;
 
 import com.university.game.GameContext;
-import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.IEscapeStrategy;
 import com.university.gameElements.traps.strategies.LosePointsStrategy;
 import com.university.gameElements.traps.strategies.SausageStrategy;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 import com.university.utils.events.EscapeEvent;
 import com.university.utils.events.EventManager;
 import com.university.utils.events.IEvent;
@@ -57,7 +58,6 @@ public class CutieCat implements ITrap, IEventListener {
         escapeStrategy.escape(gameContext);
         gameContext.getPlayer().setTrapped(false);
         isActive = false;
-        System.out.println("* The cat is happy and lets you pass!");
     }
 
     /**
@@ -95,8 +95,8 @@ public class CutieCat implements ITrap, IEventListener {
      */
     @Override
     public void printDescription() {
-        System.out.println("* " + getDescription());
-        System.out.println("* You can escape by feeding the cutie cat or losing 15 power points.\n");
+        UIManager.getInstance().displayMessage("* " + getDescription());
+        UIManager.getInstance().displayMessage("* You can escape by feeding the cutie cat or losing 15 power points.\n");
     }
 
     @Override
@@ -108,7 +108,7 @@ public class CutieCat implements ITrap, IEventListener {
                 if (escapeStrategies.contains(escapeEvent.getEscapeStrategy().getClass())) {
                     escape(GameContext.initialize(), escapeEvent.getEscapeStrategy());
                 } else {
-                        System.out.println("* You tried to escape, but the strategy didn't work.\n");
+                    UIManager.getInstance().displayMessage(GameNarrator.trapEscapeFail());
                 }
             }
         }
