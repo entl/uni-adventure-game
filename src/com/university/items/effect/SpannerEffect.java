@@ -3,6 +3,8 @@ package com.university.items.effect;
 import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
 import com.university.gameElements.chests.IChest;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code SpannerEffect} class represents an effect that allows the player to interact with chests in the room.
@@ -25,9 +27,9 @@ public class SpannerEffect implements IEffect {
         if (chest != null && !chest.isOpened()) {
             chest.open(gameContext);
         } else if (chest != null && chest.isOpened()) {
-            System.out.println("* The chest is already opened.");
+            UIManager.getInstance().displayMessage(GameNarrator.chestAlreadyOpen());
         } else {
-            System.out.println("* There is no chest in this room.");
+            UIManager.getInstance().displayMessage(GameNarrator.chestNotFound());
         }
     }
 }

@@ -1,6 +1,7 @@
 package com.university.items.effect;
 
 import com.university.game.GameContext;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code EatCakeEffect} class represents the effect of eating a cake in the game.
@@ -16,7 +17,7 @@ public class EatCakeEffect implements IEffect {
      */
     @Override
     public void apply(GameContext gameContext) {
-        System.out.println("* You ate the cake. It was delicious! It granted you 3 power points.");
+        UIManager.getInstance().displayMessage("* You ate the cake. It was delicious! It granted you 3 power points.");
         gameContext.getPlayer().addPowerPoints(3);
     }
 }

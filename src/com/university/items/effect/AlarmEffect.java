@@ -2,6 +2,7 @@ package com.university.items.effect;
 
 import com.university.game.GameContext;
 import com.university.player.Player;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code AlarmEffect} class represents an effect that wakes up the player
@@ -20,6 +21,6 @@ public class AlarmEffect implements IEffect {
     public void apply(GameContext gameContext) {
         Player player = gameContext.getPlayer();
         player.setAsleep(false);
-        System.out.println("* The alarm goes off, making a loud noise that echoes through the dungeon.");
+        UIManager.getInstance().displayMessage("* The alarm goes off, making a loud noise that echoes through the dungeon.");
     }
 }

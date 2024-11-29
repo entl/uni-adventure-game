@@ -1,6 +1,7 @@
 package com.university.items.effect;
 
 import com.university.game.GameContext;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code EatSandwichEffect} class represents the effect of eating a sandwich in the game.
@@ -16,7 +17,7 @@ public class EatSandwichEffect implements IEffect {
      */
     @Override
     public void apply(GameContext gameContext) {
-        System.out.println("* You ate the sandwich. It was delicious! It granted you 10 power points.");
+        UIManager.getInstance().displayMessage("* You ate the sandwich. It was delicious! It granted you 10 power points.");
         gameContext.getPlayer().addPowerPoints(10);
     }
 }

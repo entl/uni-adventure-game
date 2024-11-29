@@ -6,6 +6,7 @@ import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.MadScientists;
 import com.university.gameElements.traps.Trap;
 import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
+import com.university.utils.UI.UIManager;
 import com.university.utils.events.EscapeEvent;
 
 /**
@@ -32,7 +33,7 @@ public class FreezeSpellEffect implements IEffect {
         if (trap != null) {
             gameContext.getEventManager().dispatchEvent(new EscapeEvent(trap, new FreezeSpellStrategy()));
         } else {
-            System.out.println("* You tried to cast a freeze spell, but it had no effect.");
+            UIManager.getInstance().displayMessage("* You tried to cast a freeze spell, but it had no effect.");
         }
     }
 }

@@ -4,6 +4,7 @@ import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
 import com.university.gameElements.traps.ITrap;
 import com.university.player.Player;
+import com.university.utils.UI.UIManager;
 import com.university.utils.commands.Direction;
 
 import java.util.HashMap;
@@ -33,13 +34,13 @@ public class XRayEffect implements IEffect {
         Direction randomDirection = directionsFromCurrentRoom.get(random.nextInt(directionsFromCurrentRoom.size()));
         Room randomRoom = adjacentRooms.get(randomDirection);
 
-        System.out.println("* You have used X-Ray vision and can look around the next room.");
-        System.out.println("* In the " + randomDirection + " direction you see:");
+        UIManager.getInstance().displayMessage("* You have used X-Ray vision and can look around the next room.");
+        UIManager.getInstance().displayMessage("* In the " + randomDirection + " direction you see:");
         randomRoom.describe();
 
         ITrap trap = randomRoom.getTrap();
         if (trap != null) {
-            System.out.printf("* You have found a %s in the next room!\n", trap.getName());
+            UIManager.getInstance().displayMessage(String.format("* You have found a %s in the next room!\n", trap.getName()));
         }
     }
 }

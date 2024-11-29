@@ -6,6 +6,7 @@ import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.Trap;
 import com.university.gameElements.traps.strategies.FreezeSpellStrategy;
 import com.university.gameElements.traps.strategies.HammerStrategy;
+import com.university.utils.UI.UIManager;
 import com.university.utils.events.EscapeEvent;
 
 /**
@@ -31,7 +32,7 @@ public class HammerEffect implements IEffect {
         if (trap != null) {
             gameContext.getEventManager().dispatchEvent(new EscapeEvent(trap, new HammerStrategy()));
         } else {
-            System.out.println("* You tried to use the hammer, but it had no effect.");
+            UIManager.getInstance().displayMessage("* You tried to use the hammer, but it had no effect.");
         }
     }
 }

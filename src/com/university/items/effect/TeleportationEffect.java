@@ -2,6 +2,7 @@ package com.university.items.effect;
 
 import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
+import com.university.utils.UI.UIManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +32,8 @@ public class TeleportationEffect implements IEffect {
         }
 
         teleportPlayer(gameContext, destination);
-        System.out.println("* You have used the teleportation spell");
-        System.out.println("* You have been teleported to a random room");
+        UIManager.getInstance().displayMessage("* You have used the teleportation spell");
+        UIManager.getInstance().displayMessage("* You have been teleported to a random room");
     }
 
     /**
