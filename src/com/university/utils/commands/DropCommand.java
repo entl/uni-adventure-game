@@ -2,6 +2,8 @@ package com.university.utils.commands;
 
 import com.university.game.GameContext;
 import com.university.items.IItem;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code DropCommand}class implements the {@code ICommand} interface to drop an item from the player's inventory
@@ -32,9 +34,10 @@ public class DropCommand implements ICommand {
         if (item != null) {
             context.getPlayer().getCurrentRoom().addItem(item);
             context.getPlayer().getInventoryManager().removeItem(item);
-            System.out.println("* You dropped " + item.getDisplayName());
+
+            UIManager.getInstance().displayMessage(GameNarrator.itemDropped(itemName));
         } else {
-            System.out.printf("* %s not found!", itemName);
+            UIManager.getInstance().displayMessage(GameNarrator.itemNotFound(itemName));
         }
     }
 }

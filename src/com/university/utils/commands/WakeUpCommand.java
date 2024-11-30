@@ -3,6 +3,8 @@ package com.university.utils.commands;
 import com.university.game.GameContext;
 import com.university.items.IItem;
 import com.university.player.Player;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 public class WakeUpCommand implements ICommand {
     @Override
@@ -16,10 +18,10 @@ public class WakeUpCommand implements ICommand {
             } else {
                 player.removePowerPoints(10);
                 player.setAsleep(false);
-                System.out.println("* You wake up to the sound of a loud noise, but you can't find the source of it. You lose 10 power points.");
+                UIManager.getInstance().displayMessage(GameNarrator.wakeUp(10));
             }
         } else {
-            System.out.println("* You are already awake.");
+            UIManager.getInstance().displayMessage(GameNarrator.alreadyAwake());
         }
     }
 }

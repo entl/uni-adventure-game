@@ -2,6 +2,8 @@ package com.university.utils.commands;
 
 import com.university.game.GameContext;
 import com.university.items.IItem;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code PickUpCommand} class implements the {@code ICommand} interface and
@@ -37,13 +39,13 @@ public class PickUpCommand implements ICommand {
             boolean isPickedUp = context.getPlayer().getInventoryManager().addItem(item);
 
             if (!isPickedUp) {
-                System.out.println("* You can't pick up more items!");
+                UIManager.getInstance().displayMessage(GameNarrator.inventoryFull(itemName));
                 return;
             }
             context.getPlayer().getCurrentRoom().removeItem(item);
-            System.out.println("* You picked up " + item.getDisplayName());
+            UIManager.getInstance().displayMessage(GameNarrator.itemPickedUp(itemName));
         } else {
-            System.out.println("* Item not found!");
+            UIManager.getInstance().displayMessage(GameNarrator.itemNotFound(itemName));
         }
     }
 }

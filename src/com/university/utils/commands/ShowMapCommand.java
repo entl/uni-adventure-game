@@ -2,6 +2,8 @@ package com.university.utils.commands;
 
 import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 import java.util.*;
 
@@ -21,8 +23,6 @@ public class ShowMapCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
-        System.out.println("* You have great memory! Here are the places you have visited:\n");
-
         List<List<Room>> rooms = GameContext.initialize().getCurrentDungeon().getRooms();
         Room currentRoom = context.getPlayer().getCurrentRoom();
 
@@ -71,19 +71,6 @@ public class ShowMapCommand implements ICommand {
      * @param mapGrid the 2D character array representing the map grid.
      */
     private void displayMap(char[][] mapGrid) {
-        System.out.println("==============================");
-        System.out.println("         Dungeon Map");
-        System.out.println("==============================\n");
-        for (char[] row : mapGrid) {
-            System.out.print("\t\t");
-            for (char cell : row) {
-                System.out.printf("%-3s", cell);
-            }
-            System.out.println();
-        }
-
-        System.out.println("\n==============================");
-        System.out.println("Legend: P - You | E - Entrance | . - Route | # - Unexplored");
-        System.out.println("==============================");
+        UIManager.getInstance().displayMessage(GameNarrator.showMap(mapGrid));
     }
 }

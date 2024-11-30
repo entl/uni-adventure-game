@@ -3,6 +3,8 @@ package com.university.utils.commands;
 import com.university.game.GameContext;
 import com.university.items.IItem;
 import com.university.player.Player;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 
 /**
  * The {@code UseCommand} class implements the {@code ICommand} interface and
@@ -40,7 +42,7 @@ public class UseCommand implements ICommand {
                 player.getInventoryManager().removeItem(item);
             }
         } else {
-            System.out.println("* Item not found!");
+            UIManager.getInstance().displayMessage(GameNarrator.itemNotFound(itemName));
         }
     }
 }

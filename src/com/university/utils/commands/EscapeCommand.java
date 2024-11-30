@@ -4,6 +4,8 @@ import com.university.dungeon.room.Room;
 import com.university.game.GameContext;
 import com.university.gameElements.traps.ITrap;
 import com.university.gameElements.traps.strategies.LosePointsStrategy;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 import com.university.utils.events.EscapeEvent;
 import com.university.utils.events.EventManager;
 
@@ -30,7 +32,7 @@ public class EscapeCommand implements ICommand {
         ITrap trap = currentRoom.getTrap();
 
         if (trap == null) {
-            System.out.println("* There is no trap in this room!");
+            UIManager.getInstance().displayMessage(GameNarrator.trapNotFound());
             return;
         }
 
@@ -50,7 +52,7 @@ public class EscapeCommand implements ICommand {
                 EventManager.getInstance().dispatchEvent(new EscapeEvent(currentRoom.getTrap(), new LosePointsStrategy(15)));
                 break;
             default:
-                System.out.println("* There is no trap in this room!");
+                UIManager.getInstance().displayMessage(GameNarrator.trapNotFound());
         }
     }
 }
