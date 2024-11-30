@@ -1,10 +1,10 @@
 package com.university.player;
 
 import com.university.dungeon.room.Room;
-import com.university.game.GameContext;
-import com.university.gameElements.traps.ITrap;
 import com.university.player.inventory.InventoryManager;
+import com.university.utils.UI.UIManager;
 import com.university.utils.commands.Direction;
+import com.university.utils.UI.GameNarrator;
 
 /**
  * The {@code Player} class represents the player in the game.
@@ -37,12 +37,12 @@ public class Player {
      */
     public void move(Direction direction) {
         if (isTrapped) {
-            System.out.println("* You are trapped and cannot move!");
+            UIManager.getInstance().displayMessage(GameNarrator.trapActivated());
             return;
         }
 
         if (isAsleep) {
-            System.out.println("* You are asleep and cannot move!");
+            UIManager.getInstance().displayMessage(GameNarrator.sleepEffect());
             return;
         }
 
@@ -50,11 +50,11 @@ public class Player {
         if (nextRoom != null) {
             currentRoom = nextRoom;
             currentRoom.setVisited(true);
-            System.out.printf("* You moved to the %s room!\n", direction);
-
+            UIManager.getInstance().displayMessage(GameNarrator.movementSuccess(direction));
+            UIManager.getInstance().displayMessage("");
             lookAround();
         } else {
-            System.out.printf("* There is no room to the %s.\n* Try to look around\n", direction);
+            UIManager.getInstance().displayMessage(GameNarrator.movementFail(direction));
         }
     }
 
@@ -63,18 +63,7 @@ public class Player {
      * Describes the room and any items or chests present.
      */
     public void lookAround() {
-        System.out.println("* Looking through darkness...");
-        System.out.println("* The glimmer of light reveals **blood-stained signs** etched into the walls.");
-        System.out.printf("* You are in the **Room %s**\n\n", currentRoom.getLabel());
-
-        currentRoom.describe();
-
-        System.out.println();
-        System.out.println("* You manage to see the following rooms:");
-        for (Direction direction : currentRoom.getAdjacentRooms().keySet()) {
-            System.out.printf("- %s\n", direction);
-        }
-        System.out.println();
+        UIManager.getInstance().displayMessage(GameNarrator.lookAround(currentRoom));
     }
 
     /**

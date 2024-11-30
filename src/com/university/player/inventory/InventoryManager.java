@@ -25,6 +25,8 @@ public class InventoryManager {
         this.inventory = new ArrayList<>();
         this.spellsCount = 0;
         this.toolsCount = 0;
+        addItem(new FreezeSpell());
+        addItem(new Hammer());
     }
 
     /**
