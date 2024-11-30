@@ -5,11 +5,14 @@ import com.university.dungeon.Dungeon;
 import com.university.dungeon.DungeonService;
 import com.university.dungeon.room.Room;
 import com.university.player.Player;
-import com.university.utils.ClearScreen;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UI;
+import com.university.utils.UI.UIManager;
 import com.university.utils.commands.ICommand;
 import com.university.utils.commands.WakeUpCommand;
 import com.university.utils.events.EventManager;
 import com.university.utils.parsers.CommandParser;
+import com.university.utils.UI.ConsoleUI;
 
 import java.util.Scanner;
 
@@ -25,6 +28,7 @@ public class Game {
     private GameContext gameContext;    // Context of the current game state
     private CommandParser commandParser;    // Parser for user commands
     private Scanner scanner;
+    private UI ui;
 
     /**
      * Private constructor to prevent direct instantiation.
@@ -64,10 +68,14 @@ public class Game {
         commandParser = new CommandParser();
     }
 
+    private void setupUI() {
+        ui = UIManager.getInstance();
+    }
+
     private void setupGameContext(Difficulty difficulty) {
         EventManager eventManager = EventManager.getInstance();
         gameContext = GameContext.initialize(difficulty, eventManager);
-        System.out.println("* Game initialized with difficulty: " + difficulty);
+        UIManager.getInstance().displayMessage("* Game initialized with difficulty: " + difficulty);
     }
 
     private void initializeDungeons() {
@@ -94,27 +102,27 @@ public class Game {
      * Prompts the user to select a difficulty level.
      */
     private Difficulty selectDifficulty() {
-        System.out.println("* Select difficulty level:");
-        System.out.println("1. Easy");
-        System.out.println("2. Medium");
-        System.out.println("3. Hard");
+        UIManager.getInstance().displayMessage("* Select difficulty level:");
+        UIManager.getInstance().displayMessage("1. Easy");
+        UIManager.getInstance().displayMessage("2. Medium");
+        UIManager.getInstance().displayMessage("3. Hard");
 
         while (true) {
-            System.out.print("Enter your choice (1-3): ");
+            UIManager.getInstance().displayInline("Enter your choice (1-3): ");
             String input = scanner.nextLine();
 
             switch (input) {
                 case "1":
-                    System.out.println("* Difficulty set to Easy.");
+                    UIManager.getInstance().displayMessage("* Difficulty set to Easy.");
                     return Difficulty.EASY;
                 case "2":
-                    System.out.println("* Difficulty set to Medium.");
+                    UIManager.getInstance().displayMessage("* Difficulty set to Medium.");
                     return Difficulty.MEDIUM;
                 case "3":
-                    System.out.println("* Difficulty set to Hard.");
+                    UIManager.getInstance().displayMessage("* Difficulty set to Hard.");
                     return Difficulty.HARD;
                 default:
-                    System.out.println("* Invalid choice. Please enter 1, 2, or 3.");
+                    UIManager.getInstance().displayMessage("* Invalid choice. Please enter 1, 2, or 3.");
             }
         }
     }
@@ -142,13 +150,13 @@ public class Game {
                 
                 ======================================
                 """;
-        System.out.println(startingArt);
-        System.out.println("* Welcome to the game `Dungeons NAND Dragons!`");
+        UIManager.getInstance().displayMessage(startingArt);
+        UIManager.getInstance().displayMessage("* Welcome to the game `Dungeons NAND Dragons!`");
 
-        System.out.println("* Press Enter to start the game...");
+        UIManager.getInstance().displayMessage("* Press Enter to start the game...");
         scanner.nextLine();
 
-        System.out.println(
+        UIManager.getInstance().displayMessage(
                 """
                 * Year: 1347.\s
                 * The Black Death devastates Europe, claiming lives without mercy.\s
@@ -159,12 +167,12 @@ public class Game {
                 * Will you find the cure before it's too late, or will the dungeon claim you, as it has so many before?
                 """);
 
-        System.out.println("* Press Enter to begin your journey...");
-        System.out.println("* Type `help` to see the list of available commands.");
+        UIManager.getInstance().displayMessage("* Press Enter to begin your journey...");
+        UIManager.getInstance().displayMessage("* Type `help` to see the list of available commands.");
         scanner.nextLine();
 
-        System.out.println("* You step into the dungeon, the air growing cold and moisture around you...");
-        System.out.println("* As you turn to look back, the entrance slams shut, sealing you inside. There is no way out.");
+        UIManager.getInstance().displayMessage("* You step into the dungeon, the air growing cold and moisture around you...");
+        UIManager.getInstance().displayMessage("* As you turn to look back, the entrance slams shut, sealing you inside. There is no way out.");
     }
 
     /**
@@ -212,7 +220,7 @@ public class Game {
         Player player = gameContext.getPlayer();
         if (player.isAsleep()) {
             try {
-                System.out.println("* Sleeping...");
+                UIManager.getInstance().displayMessage("* Sleeping...");
                 Thread.sleep(3000);
                 new WakeUpCommand().execute(gameContext);
             } catch (InterruptedException e) {
@@ -222,16 +230,16 @@ public class Game {
     }
 
     private void waitForPlayerInput() {
-        System.out.print("\n* Press Enter to continue...");
+        UIManager.getInstance().displayMessage("\n* Press Enter to continue...");
         scanner.nextLine();
-        ClearScreen.clear();
+        new ConsoleUI().clearScreen();
     }
 
     private void processPlayerCommand() {
-        System.out.println("* What would you like to do?");
-        System.out.print("> ");
+        UIManager.getInstance().displayMessage("* What would you like to do?");
+        UIManager.getInstance().displayInline("> ");
         String userInput = scanner.nextLine();
-        System.out.println();
+        UIManager.getInstance().displayMessage("");
 
         ICommand command = commandParser.parse(userInput);
         if (command != null) {
@@ -244,11 +252,10 @@ public class Game {
      */
     private void endGame() {
         if (gameContext.isGameWon()) {
-            System.out.println("* You have found the cure and saved your wife!");
-            System.out.printf("* You have won the game with %d power points! Congratulations!\n", gameContext.getPlayer().getPowerPoints());
+            UIManager.getInstance().displayMessage(GameNarrator.winMessage());
+            UIManager.getInstance().displayMessage(String.format("* You have won the game with %d power points! Congratulations!\n", gameContext.getPlayer().getPowerPoints()));
         } else if (gameContext.isGameLost()) {
-            System.out.println("* You have run out of power points and died in the dungeon.");
-            System.out.println("* You have lost the game. Better luck next time!");
+            UIManager.getInstance().displayMessage(GameNarrator.loseMessage());
         }
     }
 
@@ -262,6 +269,6 @@ public class Game {
         gameContext.setCurrentDungeon(nextDungeon);
         currentDungeon = nextDungeon;
         gameContext.getPlayer().setCurrentRoom(currentDungeon.getEntranceRoom());
-        System.out.printf("* You have entered the Dungeon Level %d\n", currentDungeon.getLevel());
+        UIManager.getInstance().displayMessage(GameNarrator.proceedNextLevel(currentDungeon.getLevel()));
     }
 }
