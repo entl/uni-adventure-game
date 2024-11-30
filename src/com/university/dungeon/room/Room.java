@@ -3,6 +3,8 @@ package com.university.dungeon.room;
 import com.university.gameElements.chests.IChest;
 import com.university.gameElements.traps.ITrap;
 import com.university.items.IItem;
+import com.university.utils.UI.GameNarrator;
+import com.university.utils.UI.UIManager;
 import com.university.utils.commands.Direction;
 
 import java.util.ArrayList;
@@ -219,16 +221,13 @@ public class Room {
      */
     public void describe() {
         if (getItems().isEmpty()) {
-            System.out.println("* There's no items in the room.");
+            UIManager.getInstance().displayMessage(GameNarrator.roomEmpty());
         } else {
-            System.out.println("* You can barely see the following items in the room:");
-            for (IItem item : getItems()) {
-                System.out.printf("- %s\n", item.getDisplayName());
-            }
+            UIManager.getInstance().displayMessage(GameNarrator.roomItems(this));
         }
 
         if (getChest() != null) {
-            System.out.println("* You see a chest in the room.");
+            UIManager.getInstance().displayMessage(GameNarrator.chestInRoom());
         }
     }
 }
