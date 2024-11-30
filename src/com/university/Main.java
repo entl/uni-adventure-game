@@ -1,6 +1,7 @@
 package com.university;
 
 import com.university.game.Game;
+import com.university.utils.UI.UIManager;
 
 public class Main {
     public static void main(String[] args) {
@@ -9,7 +10,7 @@ public class Main {
             game.startGame();
         }
         catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            UIManager.getInstance().displayError("Error: " + e.getMessage());
         }
     }
 }
