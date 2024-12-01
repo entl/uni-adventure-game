@@ -8,6 +8,8 @@ import com.university.elements.traps.ITrap;
 import com.university.elements.traps.TrapFactory;
 import com.university.elements.items.ItemFactory;
 import com.university.utils.commands.Direction;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 
 import java.util.*;
 
@@ -17,6 +19,7 @@ import java.util.*;
  */
 public class RoomFactory {
 
+    private static final ILogger logger = LoggerFactory.getLogger(RoomFactory.class);
     private static final Random random = new Random();
     private static final Config.SpawnRates spawnRates = GameContext.initialize().getDifficulty().getSpawnRates();
 
@@ -32,31 +35,32 @@ public class RoomFactory {
      * @return A new Room object based on the cell type.
      */
     public static Room createRoomFromCell(String cell, String name) {
+        logger.debug("Creating room from cell type: " + cell + ", name: " + name);
         switch (cell.toUpperCase()) {
             case "W": {
-                // Wall
+                logger.debug("Created Wall room: " + name);
                 return new Room(name, false, false, false, true, null, null);
             }
             case "E": {
-                // Entrance
+                logger.debug("Created Entrance room: " + name);
                 return new Room(name, true, false, false, false, null, null);
             }
             case "X": {
-                // Exit
+                logger.debug("Created Exit room: " + name);
                 return new Room(name, false, true, false, false, null, null);
             }
             case "T": {
-                // Treasure
+                logger.debug("Created Treasure room: " + name);
                 return new Room(name, false, false, true, false, null, null);
             }
             case "R": {
-                // Regular Room with random items and traps
                 Room room = new Room(name, false, false, false, false, createTrap(), createChest());
+                logger.debug("Created Regular room: " + name);
                 addItemsToRoom(room);
                 return room;
             }
             default: {
-                // Handle unknown cell types as walls for safety
+                logger.warning("Unknown cell type: " + cell + ". Defaulting to Wall room.");
                 return new Room(name, false, false, false, true, null, null);
             }
         }
@@ -69,9 +73,13 @@ public class RoomFactory {
      */
     private static ITrap createTrap() {
         double probability = random.nextDouble();
+        logger.debug("Trap creation probability: " + probability);
         if (probability < spawnRates.trapProbability) {
-            return trapFactory.createRandomTrap();
+            ITrap trap = trapFactory.createRandomTrap();
+            logger.debug("Created trap: " + trap);
+            return trap;
         }
+        logger.debug("No trap created.");
         return null;
     }
 
@@ -82,9 +90,13 @@ public class RoomFactory {
      */
     private static IChest createChest() {
         double probability = random.nextDouble();
+        logger.debug("Chest creation probability: " + probability);
         if (probability < spawnRates.chestProbability) {
-            return new Chest();
+            IChest chest = new Chest();
+            logger.debug("Created chest: " + chest);
+            return chest;
         }
+        logger.debug("No chest created.");
         return null;
     }
 
@@ -96,8 +108,10 @@ public class RoomFactory {
      */
     private static void addItemsToRoom(Room room) {
         int numberOfItems = generateNumberOfItemsToSpawn();
+        logger.debug("Adding " + numberOfItems + " item(s) to room: " + room.getLabel());
         for (int i = 0; i < numberOfItems; i++) {
             room.addItem(itemFactory.createRandomItem());
+            logger.debug("Item added to room: " + room.getLabel());
         }
     }
 
@@ -109,11 +123,15 @@ public class RoomFactory {
      */
     private static int generateNumberOfItemsToSpawn() {
         double probability = random.nextDouble();
+        logger.debug("Item spawn probability: " + probability);
         if (probability < spawnRates.zeroItemProbability) {
+            logger.debug("0 items will be spawned.");
             return 0;
         } else if (probability < spawnRates.zeroItemProbability + spawnRates.oneItemProbability) {
+            logger.debug("1 item will be spawned.");
             return 1;
         } else {
+            logger.debug("2 items will be spawned.");
             return 2;
         }
     }
@@ -125,16 +143,18 @@ public class RoomFactory {
      * @param rooms A 2D list of Room objects representing the dungeon layout.
      */
     public static void setAdjacentRooms(List<List<Room>> rooms) {
+        logger.debug("Setting adjacent rooms.");
         for (int i = 0; i < rooms.size(); i++) {
             for (int j = 0; j < rooms.get(i).size(); j++) {
                 Room currentRoom = rooms.get(i).get(j);
                 HashMap<Direction, Room> adjacentRooms = new HashMap<>();
 
                 if (currentRoom.isWall()) {
-                    // Walls do not have adjacent rooms
+                    logger.debug("Room " + currentRoom.getLabel() + " is a wall. No adjacent rooms set.");
                     currentRoom.setAdjacentRooms(adjacentRooms);
                     continue;
                 }
+
                 // North
                 if (i > 0) {
                     Room northRoom = rooms.get(i - 1).get(j);
@@ -164,6 +184,7 @@ public class RoomFactory {
                     }
                 }
 
+                logger.debug("Adjacent rooms for " + currentRoom.getLabel() + ": " + adjacentRooms);
                 currentRoom.setAdjacentRooms(adjacentRooms);
             }
         }

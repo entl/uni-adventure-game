@@ -12,7 +12,7 @@ public class SausageStrategy implements IEscapeStrategy {
       {  `---'  }
       {  O   O  }
       ~~>  V  <~~
-       \\ \\|/ /
+       \\\\ \\|/ //
         `-----'____
         /     \\    \\_
        {       }\\  )_\\_   _

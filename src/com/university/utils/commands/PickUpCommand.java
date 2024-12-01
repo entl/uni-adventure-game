@@ -2,6 +2,8 @@ package com.university.utils.commands;
 
 import com.university.core.GameContext;
 import com.university.elements.items.IItem;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 import com.university.utils.ui.GameNarrator;
 import com.university.utils.ui.UIManager;
 
@@ -11,15 +13,17 @@ import com.university.utils.ui.UIManager;
  */
 public class PickUpCommand implements ICommand {
 
+    private static final ILogger logger = LoggerFactory.getLogger(PickUpCommand.class);
     private String itemName;
 
     /**
      * Constructs a {@code PickUpCommand} with the specified item name.
      *
-     * @param itemName the name of the item the player wants to pick up.
+     * @param itemName the name of the item the player wants to pick up
      */
     public PickUpCommand(String itemName) {
         this.itemName = itemName;
+        logger.debug("PickUpCommand created for item: " + itemName);
     }
 
     /**
@@ -29,22 +33,28 @@ public class PickUpCommand implements ICommand {
      * If the inventory is full, the player is notified that they cannot pick up more items.
      *
      * @param context the current game context which contains information about the player, their inventory,
-     *                the room, and the overall game state.
+     *                the room, and the overall game state
      */
     @Override
     public void execute(GameContext context) {
+        logger.debug("Executing PickUpCommand for item: " + itemName);
         IItem item = context.getPlayer().getCurrentRoom().getItemByName(itemName);
 
         if (item != null) {
+            logger.info("Item found in current room: " + itemName);
             boolean isPickedUp = context.getPlayer().getInventoryManager().addItem(item);
 
             if (!isPickedUp) {
+                logger.warning("Failed to pick up item: " + itemName + ". Inventory is full.");
                 UIManager.getInstance().displayMessage(GameNarrator.inventoryFull(itemName));
                 return;
             }
+
             context.getPlayer().getCurrentRoom().removeItem(item);
             UIManager.getInstance().displayMessage(GameNarrator.itemPickedUp(itemName));
+            logger.info("Item successfully picked up: " + itemName);
         } else {
+            logger.warning("Item not found in the current room: " + itemName);
             UIManager.getInstance().displayMessage(GameNarrator.itemNotFound(itemName));
         }
     }

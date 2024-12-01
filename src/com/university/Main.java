@@ -8,6 +8,7 @@ public class Main {
         try {
             Game game = Game.initialize();
             game.startGame();
+
         }
         catch (Exception e) {
             UIManager.getInstance().displayError("Error: " + e.getMessage());

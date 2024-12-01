@@ -1,10 +1,13 @@
 package com.university.utils.parsers;
 
 import com.university.elements.items.ItemFactory;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 import com.university.utils.ui.UIManager;
 import com.university.utils.commands.*;
 
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * The {@code CommandParser} class is responsible for parsing user input and
@@ -14,12 +17,15 @@ import java.util.*;
  */
 public class CommandParser {
 
+    private static final ILogger logger = LoggerFactory.getLogger(CommandParser.class);
+
     private Set<String> stopwords;
     private ItemFactory itemFactory;
 
     public CommandParser() {
         itemFactory = new ItemFactory();
         initializeStopwords();
+        logger.info("CommandParser initialized with ItemFactory and stopwords.");
     }
 
     /**
@@ -30,57 +36,81 @@ public class CommandParser {
      * @return the corresponding {@code ICommand} or null if no valid command is found
      */
     public ICommand parse(String userInput) {
+        logger.info("Parsing user input: " + userInput);
+
         String[] processedTokens = preprocessInput(userInput);
+        logger.debug("Processed tokens: " + Arrays.toString(processedTokens));
 
         Command command = extractCommand(processedTokens);
+        logger.debug("Extracted command: " + command);
+
         String itemName = itemFactory.findBestMatchingItemName(processedTokens);
+        logger.debug("Matched item name: " + itemName);
+
         Direction direction = parseDirection(processedTokens);
+        logger.debug("Parsed direction: " + direction);
 
         switch (command) {
             case MOVE:
                 if (direction != null) {
+                    logger.info("Creating MoveCommand with direction: " + direction);
                     return new MoveCommand(direction);
                 } else {
                     UIManager.getInstance().displayMessage("* Specify direction");
+                    logger.warning("Direction not specified for MOVE command.");
                     return null;
                 }
             case LOOK_AROUND:
+                logger.info("Creating LookAroundCommand.");
                 return new LookAroundCommand();
             case USE:
                 if (itemName != null) {
+                    logger.info("Creating UseCommand with item: " + itemName);
                     return new UseCommand(itemName);
                 } else {
                     UIManager.getInstance().displayMessage("* Specify item to use");
+                    logger.warning("Item not specified for USE command.");
                     return null;
                 }
             case PICK_UP:
                 if (itemName != null) {
+                    logger.info("Creating PickUpCommand with item: " + itemName);
                     return new PickUpCommand(itemName);
                 } else {
                     UIManager.getInstance().displayMessage("* Specify item to pick up");
+                    logger.warning("Item not specified for PICK_UP command.");
                     return null;
                 }
             case DROP:
                 if (itemName != null) {
+                    logger.info("Creating DropCommand with item: " + itemName);
                     return new DropCommand(itemName);
                 } else {
                     UIManager.getInstance().displayMessage("* Specify item to drop");
+                    logger.warning("Item not specified for DROP command.");
                     return null;
                 }
             case SHOW_INVENTORY:
+                logger.info("Creating ShowInventoryCommand.");
                 return new ShowInventoryCommand();
             case HELP:
+                logger.info("Creating HelpCommand.");
                 return new HelpCommand();
             case ESCAPE:
+                logger.info("Creating EscapeCommand.");
                 return new EscapeCommand();
             case QUIT:
+                logger.info("Creating QuitCommand.");
                 return new QuitCommand();
             case SHOW_STATS:
+                logger.info("Creating ShowStatsCommand.");
                 return new ShowStatsCommand();
             case SHOW_MAP:
+                logger.info("Creating ShowMapCommand.");
                 return new ShowMapCommand();
             default:
                 UIManager.getInstance().displayMessage("* I can't understand your input.\n* Enter `help` to see commands");
+                logger.warning("Unknown command encountered: " + userInput);
                 return null;
         }
     }
@@ -103,6 +133,7 @@ public class CommandParser {
                 "because", "so", "as", "until", "while", "during",
                 "although", "though", "since"
         ));
+        logger.info("Stopwords initialized with " + stopwords.size() + " entries.");
     }
 
     /**
@@ -113,8 +144,8 @@ public class CommandParser {
      * @return an array of tokens after preprocessing
      */
     private String[] preprocessInput(String userInput) {
+        logger.debug("Preprocessing input: " + userInput);
         String[] tokens = userInput.trim().toLowerCase().split(" ");
-
         List<String> processedTokens = new ArrayList<>();
 
         for (String token : tokens) {
@@ -123,6 +154,7 @@ public class CommandParser {
             }
         }
 
+        logger.debug("Tokens after removing stopwords: " + processedTokens);
         return processedTokens.toArray(new String[0]);
     }
 
@@ -133,12 +165,15 @@ public class CommandParser {
      * @return the corresponding {@code Command} or {@code Command.UNKNOWN} if no valid command is found
      */
     private Command extractCommand(String[] words) {
+        logger.debug("Extracting command from words: " + Arrays.toString(words));
         for (String word : words) {
             Command command = Command.fromAlias(word);
             if (command != Command.UNKNOWN) {
+                logger.debug("Command found: " + command);
                 return command;
             }
         }
+        logger.warning("No valid command found in input: " + Arrays.toString(words));
         return Command.UNKNOWN;
     }
 
@@ -149,12 +184,15 @@ public class CommandParser {
      * @return the {@code Direction} if found, or null if no direction is specified
      */
     private Direction parseDirection(String[] words) {
+        logger.debug("Parsing direction from words: " + Arrays.toString(words));
         for (String word : words) {
             Direction direction = Direction.fromAlias(word);
             if (direction != null) {
+                logger.debug("Direction found: " + direction);
                 return direction;
             }
         }
+        logger.debug("No direction found in input: " + Arrays.toString(words));
         return null;
     }
 }

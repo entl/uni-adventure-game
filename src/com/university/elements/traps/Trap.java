@@ -5,6 +5,8 @@ import com.university.elements.traps.strategies.FreezeSpellStrategy;
 import com.university.elements.traps.strategies.HammerStrategy;
 import com.university.elements.traps.strategies.IEscapeStrategy;
 import com.university.elements.traps.strategies.LosePointsStrategy;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 import com.university.utils.ui.GameNarrator;
 import com.university.utils.ui.UIManager;
 import com.university.utils.events.EscapeEvent;
@@ -15,10 +17,12 @@ import com.university.utils.events.IEventListener;
 import java.util.List;
 
 /**
- * Represents a generic trap in the game that can immobilize the player.
- * The trap can be escaped by using specific strategies or items.
+ * Represents a generic trap in the game that can immobilize the player
+ * The trap can be escaped by using specific strategies or items
  */
 public class Trap implements ITrap, IEventListener {
+    private static final ILogger logger = LoggerFactory.getLogger(Trap.class);
+
     private String name;
     private String description;
     private boolean isActive;
@@ -31,40 +35,45 @@ public class Trap implements ITrap, IEventListener {
         this.name = "trap";
         this.description = "Your foot is caught in a trap. You can't move.";
         this.isActive = true;
+        logger.debug("Trap created with name: " + name + " and description: " + description);
         subscribeToEvents();
     }
 
     /**
-     * Activates the trap, immobilizing the player if the trap is still active.
+     * Activates the trap, immobilizing the player if the trap is still active
      *
-     * @param gameContext The current game context, including player and environment details.
+     * @param gameContext The current game context, including player and environment details
      */
     @Override
     public void activate(GameContext gameContext) {
         if (!isActive) {
+            logger.info("Trap is already inactive, activation skipped.");
             return;
         }
+        logger.info("Activating trap for player in room: " + gameContext.getPlayer().getCurrentRoom().getLabel());
         gameContext.getPlayer().setTrapped(true);
     }
 
     /**
-     * Allows the player to escape the trap using a provided strategy.
-     * After successfully escaping, the trap becomes inactive, and the player is no longer trapped.
+     * Allows the player to escape the trap using a provided strategy
+     * After successfully escaping, the trap becomes inactive, and the player is no longer trapped
      *
-     * @param gameContext The current game context, including player and environment details.
-     * @param escapeStrategy The strategy used by the player to escape the trap.
+     * @param gameContext The current game context, including player and environment details
+     * @param escapeStrategy The strategy used by the player to escape the trap
      */
     @Override
     public void escape(GameContext gameContext, IEscapeStrategy escapeStrategy) {
+        logger.info("Attempting escape using strategy: " + escapeStrategy.getClass().getSimpleName());
         escapeStrategy.escape(gameContext);
         gameContext.getPlayer().setTrapped(false);
         isActive = false;
+        logger.info("Player successfully escaped the trap using " + escapeStrategy.getClass().getSimpleName());
     }
 
     /**
-     * Returns the name of the trap.
+     * Returns the name of the trap
      *
-     * @return The name "trap".
+     * @return The name "trap"
      */
     @Override
     public String getName() {
@@ -72,9 +81,9 @@ public class Trap implements ITrap, IEventListener {
     }
 
     /**
-     * Returns the description of the trap.
+     * Returns the description of the trap
      *
-     * @return A string describing that the player is caught and unable to move.
+     * @return A string describing that the player is caught and unable to move
      */
     @Override
     public String getDescription() {
@@ -82,9 +91,9 @@ public class Trap implements ITrap, IEventListener {
     }
 
     /**
-     * Checks whether the trap is currently active.
+     * Checks whether the trap is currently active
      *
-     * @return true if the trap is active, false otherwise.
+     * @return true if the trap is active, false otherwise
      */
     @Override
     public boolean isActive() {
@@ -98,12 +107,19 @@ public class Trap implements ITrap, IEventListener {
      */
     @Override
     public void printDescription() {
+        logger.debug("Printing trap description. Is active: " + isActive);
         UIManager.getInstance().displayMessage("* " + getDescription());
         UIManager.getInstance().displayMessage("* You can escape by using ** freeze spell **, ** hammer ** or ** giving 5 points  **.\n");
     }
 
+    /**
+     * Handles events related to the trap, such as escape attempts
+     *
+     * @param event The event being handled
+     */
     @Override
     public void onEvent(IEvent event) {
+        logger.debug("Received event: " + event.getClass().getSimpleName());
         List<Class<? extends IEscapeStrategy>> escapeStrategies = List.of(FreezeSpellStrategy.class, LosePointsStrategy.class, HammerStrategy.class);
         if(event instanceof EscapeEvent && isActive) {
             EscapeEvent escapeEvent = (EscapeEvent) event;
@@ -111,13 +127,18 @@ public class Trap implements ITrap, IEventListener {
                 if (escapeStrategies.contains(escapeEvent.getEscapeStrategy().getClass())) {
                     escape(GameContext.initialize(), escapeEvent.getEscapeStrategy());
                 } else {
+                    logger.warning("Invalid escape strategy: " + escapeEvent.getEscapeStrategy().getClass().getSimpleName());
                     UIManager.getInstance().displayMessage(GameNarrator.trapEscapeFail());
                 }
             }
         }
     }
 
+    /**
+     * Subscribes the trap to relevant events
+     */
     private void subscribeToEvents() {
+        logger.debug("Subscribing trap to EscapeEvent");
         EventManager.getInstance().registerListener(EscapeEvent.class, this);
     }
 }

@@ -2,6 +2,8 @@ package com.university.utils.commands;
 
 import com.university.core.GameContext;
 import com.university.elements.items.IItem;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 import com.university.utils.ui.GameNarrator;
 import com.university.utils.ui.UIManager;
 
@@ -10,6 +12,8 @@ import com.university.utils.ui.UIManager;
  * into the current room. It is part of the command pattern used to handle player actions in the game.
  */
 public class DropCommand implements ICommand {
+
+    private static final ILogger logger = LoggerFactory.getLogger(DropCommand.class);
     private String itemName;
 
     /**
@@ -19,6 +23,7 @@ public class DropCommand implements ICommand {
      */
     public DropCommand(String itemName) {
         this.itemName = itemName;
+        logger.debug("DropCommand created for item: " + itemName);
     }
 
     /**
@@ -29,15 +34,22 @@ public class DropCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
+        logger.debug("Executing DropCommand for item: " + itemName);
+
         IItem item = context.getPlayer().getInventoryManager().getItemByName(itemName);
 
         if (item != null) {
+            logger.info("Item found in inventory: " + itemName);
             context.getPlayer().getCurrentRoom().addItem(item);
             context.getPlayer().getInventoryManager().removeItem(item);
 
             UIManager.getInstance().displayMessage(GameNarrator.itemDropped(itemName));
+            logger.info("Item successfully dropped into room: " + context.getPlayer().getCurrentRoom().getLabel());
         } else {
+            logger.warning("Item not found in inventory: " + itemName);
             UIManager.getInstance().displayMessage(GameNarrator.itemNotFound(itemName));
         }
+
+        logger.debug("DropCommand execution completed");
     }
 }

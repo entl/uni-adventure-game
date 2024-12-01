@@ -2,6 +2,8 @@ package com.university.dungeon;
 
 import com.university.dungeon.room.Room;
 import com.university.dungeon.room.RoomFactory;
+import com.university.utils.logger.ILogger;
+import com.university.utils.logger.LoggerFactory;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,18 +18,25 @@ import java.util.Scanner;
  */
 public class DungeonService {
 
+    private static final ILogger logger = LoggerFactory.getLogger(DungeonService.class);
 
     /**
      * Initializes a dungeon by reading a CSV file, creating a grid of rooms, and setting
      * the entrance room and dungeon level.
      *
      * @param dungeonCSV The path to the CSV file representing the dungeon layout.
-     * @param level The level of the dungeon.
+     * @param level      The level of the dungeon.
      * @return A Dungeon object containing the initialized rooms and entrance.
      */
     public Dungeon initializeDungeon(String dungeonCSV, int level) {
+        logger.info("Initializing dungeon from file: " + dungeonCSV + " at level: " + level);
         List<List<Room>> rooms = initializeDungeonMap(dungeonCSV);
         Room entrance = getEntrance(rooms);
+        if (entrance == null) {
+            logger.warning("Entrance room not found in dungeon.");
+        } else {
+            logger.info("Entrance room found: " + entrance.getLabel());
+        }
         return new Dungeon(rooms, entrance, level);
     }
 
@@ -38,13 +47,15 @@ public class DungeonService {
      * @return A 2D list of Room objects.
      */
     private List<List<Room>> initializeDungeonMap(String dungeonCSV) {
+        logger.debug("Reading dungeon map from file: " + dungeonCSV);
         List<List<String>> dungeonCells = null;
         List<List<Room>> dungeon = new ArrayList<>();
 
         try {
             dungeonCells = readDungeonCSV(dungeonCSV);
+            logger.info("Dungeon map successfully read from file.");
         } catch (FileNotFoundException e) {
-            System.out.println("Error initializing rooms: " + e.getMessage());
+            logger.error("Error initializing rooms: " + e.getMessage());
             System.exit(1);
             return null;
         }
@@ -54,11 +65,13 @@ public class DungeonService {
             for (int j = 0; j < dungeonCells.get(i).size(); j++) {
                 String roomLabel = generateGridLabel(i, j);
                 Room room = RoomFactory.createRoomFromCell(dungeonCells.get(i).get(j), roomLabel);
+                logger.debug("Created room: " + room.getLabel() + " of type: " + dungeonCells.get(i).get(j));
                 roomRow.add(room);
             }
             dungeon.add(roomRow);
         }
 
+        logger.debug("Setting adjacent rooms for the dungeon.");
         RoomFactory.setAdjacentRooms(dungeon);
 
         return dungeon;
@@ -73,6 +86,7 @@ public class DungeonService {
      * @throws FileNotFoundException If the CSV file is not found.
      */
     private List<List<String>> readDungeonCSV(String csvFile) throws FileNotFoundException {
+        logger.debug("Reading dungeon CSV file: " + csvFile);
         List<List<String>> dungeon = new ArrayList<>();
 
         try {
@@ -84,11 +98,11 @@ public class DungeonService {
 
                 // Skip empty lines
                 if (line.isEmpty()) {
+                    logger.debug("Skipping empty line in CSV file.");
                     continue;
                 }
 
                 String[] values = line.split(",");
-
                 List<String> lineValues = new ArrayList<>();
                 for (String value : values) {
                     lineValues.add(value.trim());
@@ -97,11 +111,11 @@ public class DungeonService {
             }
 
             scanner.close();
+            logger.info("CSV file successfully read.");
             return dungeon;
         } catch (FileNotFoundException e) {
-            System.out.println("Error reading file: " + e.getMessage());
-            System.exit(1);
-            return null;
+            logger.error("Error reading file: " + e.getMessage());
+            throw e;
         }
     }
 
@@ -109,14 +123,17 @@ public class DungeonService {
      * Generates a label for a room based on its row and column indices in the grid.
      * The label format is a combination of a letter (for rows) and a number (for columns).
      *
-     * @param rowIndex The row index of the room.
+     * @param rowIndex    The row index of the room.
      * @param columnIndex The column index of the room.
      * @return A string representing the label of the room (e.g., A1, B2).
      */
     private String generateGridLabel(int rowIndex, int columnIndex) {
         char rowLabel = (char) ('A' + rowIndex); // Start from A, each row is a letter
         int columnLabel = columnIndex + 1; // Start from 1, each column is a number
-        return rowLabel + String.valueOf(columnLabel);
+        String label = rowLabel + String.valueOf(columnLabel);
+
+        logger.debug("Generated room label: " + label);
+        return label;
     }
 
     /**
@@ -126,13 +143,16 @@ public class DungeonService {
      * @return The entrance Room object if found, otherwise null.
      */
     public Room getEntrance(List<List<Room>> dungeon) {
+        logger.debug("Searching for entrance room in the dungeon.");
         for (List<Room> row : dungeon) {
             for (Room room : row) {
                 if (room.isEntrance()) {
+                    logger.info("Entrance room found: " + room.getLabel());
                     return room;
                 }
             }
         }
+        logger.warning("No entrance room found in the dungeon.");
         return null;
     }
 }
