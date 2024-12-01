@@ -1,6 +1,6 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
+import com.university.core.GameContext;
 
 /**
  * The {@code ICommand} interface defines the structure for all command classes in the game.

@@ -1,13 +1,13 @@
 package tests.functional;
 
 import com.university.dungeon.room.Room;
-import com.university.game.Difficulty;
-import com.university.game.GameContext;
-import com.university.gameElements.traps.MadScientists;
-import com.university.gameElements.traps.strategies.IEscapeStrategy;
-import com.university.gameElements.traps.strategies.LosePointsStrategy;
-import com.university.items.FreezeSpell;
-import com.university.items.IItem;
+import com.university.core.Difficulty;
+import com.university.core.GameContext;
+import com.university.elements.traps.MadScientists;
+import com.university.elements.traps.strategies.IEscapeStrategy;
+import com.university.elements.traps.strategies.LosePointsStrategy;
+import com.university.elements.items.FreezeSpell;
+import com.university.elements.items.IItem;
 import com.university.player.Player;
 import com.university.utils.events.EventManager;
 

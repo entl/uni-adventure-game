@@ -1,6 +1,10 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
+import com.university.core.GameContext;
+import com.university.dungeon.room.Room;
+import com.university.player.Player;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 
 /**
  * The {@code MoveCommand} class implements the {@code ICommand} interface and
@@ -29,6 +33,34 @@ public class MoveCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
-        context.getPlayer().move(direction);
+        Player player = context.getPlayer();
+        if (canMove(player)) {
+            player.move(direction);
+            UIManager.getInstance().displayMessage(GameNarrator.movementSuccess(direction));
+            UIManager.getInstance().displayMessage("");
+        }
+    }
+
+    private boolean canMove(Player player) {
+
+        if (player.isTrapped()) {
+            UIManager.getInstance().displayMessage(GameNarrator.trapActivated());
+            return false;
+        }
+
+        if (player.isAsleep()) {
+            UIManager.getInstance().displayMessage(GameNarrator.sleepEffect());
+            return false;
+        }
+
+        Room currentRoom = player.getCurrentRoom();
+        Room nextRoom = currentRoom.getRoomInDirection(direction);
+
+        if (nextRoom == null) {
+            UIManager.getInstance().displayMessage(GameNarrator.movementFail(direction));
+            return false;
+        }
+
+        return true;
     }
 }

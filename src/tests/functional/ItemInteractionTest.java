@@ -1,12 +1,12 @@
 package tests.functional;
 
 import com.university.dungeon.room.Room;
-import com.university.game.Difficulty;
-import com.university.game.GameContext;
-import com.university.items.Cake;
-import com.university.items.IItem;
-import com.university.items.Spanner;
-import com.university.items.TeleportationSpell;
+import com.university.core.Difficulty;
+import com.university.core.GameContext;
+import com.university.elements.items.Cake;
+import com.university.elements.items.IItem;
+import com.university.elements.items.Spanner;
+import com.university.elements.items.TeleportationSpell;
 import com.university.player.Player;
 import com.university.utils.commands.DropCommand;
 import com.university.utils.commands.ICommand;

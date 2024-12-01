@@ -1,7 +1,7 @@
 package com.university.utils.parsers;
 
-import com.university.items.ItemFactory;
-import com.university.utils.UI.UIManager;
+import com.university.elements.items.ItemFactory;
+import com.university.utils.ui.UIManager;
 import com.university.utils.commands.*;
 
 import java.util.*;

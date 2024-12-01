@@ -1,8 +1,8 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
-import com.university.utils.UI.GameNarrator;
-import com.university.utils.UI.UIManager;
+import com.university.core.GameContext;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 
 /**
  * The {@code HelpCommand} class implements the {@code ICommand} interface

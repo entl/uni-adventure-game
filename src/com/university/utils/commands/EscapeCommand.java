@@ -1,11 +1,11 @@
 package com.university.utils.commands;
 
 import com.university.dungeon.room.Room;
-import com.university.game.GameContext;
-import com.university.gameElements.traps.ITrap;
-import com.university.gameElements.traps.strategies.LosePointsStrategy;
-import com.university.utils.UI.GameNarrator;
-import com.university.utils.UI.UIManager;
+import com.university.core.GameContext;
+import com.university.elements.traps.ITrap;
+import com.university.elements.traps.strategies.LosePointsStrategy;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 import com.university.utils.events.EscapeEvent;
 import com.university.utils.events.EventManager;
 

@@ -1,10 +1,10 @@
 package com.university.dungeon.room;
 
-import com.university.gameElements.chests.IChest;
-import com.university.gameElements.traps.ITrap;
-import com.university.items.IItem;
-import com.university.utils.UI.GameNarrator;
-import com.university.utils.UI.UIManager;
+import com.university.elements.chests.IChest;
+import com.university.elements.traps.ITrap;
+import com.university.elements.items.IItem;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 import com.university.utils.commands.Direction;
 
 import java.util.ArrayList;

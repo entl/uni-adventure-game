@@ -1,9 +1,9 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
+import com.university.core.GameContext;
 import com.university.player.Player;
-import com.university.utils.UI.GameNarrator;
-import com.university.utils.UI.UIManager;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 
 /**
  * The {@code ShowStatsCommand} class implements the {@code ICommand} interface

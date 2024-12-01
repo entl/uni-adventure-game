@@ -1,12 +1,12 @@
 package com.university.dungeon.room;
 
-import com.university.Config;
-import com.university.game.GameContext;
-import com.university.gameElements.chests.Chest;
-import com.university.gameElements.chests.IChest;
-import com.university.gameElements.traps.ITrap;
-import com.university.gameElements.traps.TrapFactory;
-import com.university.items.ItemFactory;
+import com.university.config.Config;
+import com.university.core.GameContext;
+import com.university.elements.chests.Chest;
+import com.university.elements.chests.IChest;
+import com.university.elements.traps.ITrap;
+import com.university.elements.traps.TrapFactory;
+import com.university.elements.items.ItemFactory;
 import com.university.utils.commands.Direction;
 
 import java.util.*;

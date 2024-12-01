@@ -2,10 +2,10 @@ package tests.unit;
 
 import com.university.dungeon.room.RoomFactory;
 import com.university.dungeon.room.Room;
-import com.university.game.Difficulty;
-import com.university.game.GameContext;
-import com.university.gameElements.traps.ITrap;
-import com.university.gameElements.chests.IChest;
+import com.university.core.Difficulty;
+import com.university.core.GameContext;
+import com.university.elements.traps.ITrap;
+import com.university.elements.chests.IChest;
 import com.university.utils.commands.Direction;
 import com.university.utils.events.EventManager;
 

@@ -1,7 +1,7 @@
 package tests.unit;
 
-import com.university.items.FreezeSpell;
-import com.university.items.IItem;
+import com.university.elements.items.FreezeSpell;
+import com.university.elements.items.IItem;
 import com.university.player.inventory.InventoryManager;
 
 import static tests.ConfigTest.outputResult;

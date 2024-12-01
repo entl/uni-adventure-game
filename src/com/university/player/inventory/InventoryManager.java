@@ -1,6 +1,6 @@
 package com.university.player.inventory;
 
-import com.university.items.*;
+import com.university.elements.items.*;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -2,10 +2,10 @@ package tests.e2e;
 
 import com.university.dungeon.Dungeon;
 import com.university.dungeon.room.Room;
-import com.university.game.Difficulty;
-import com.university.game.Game;
-import com.university.game.GameContext;
-import com.university.items.Cake;
+import com.university.core.Difficulty;
+import com.university.core.Game;
+import com.university.core.GameContext;
+import com.university.elements.items.Cake;
 import com.university.utils.commands.Direction;
 import com.university.utils.commands.MoveCommand;
 import com.university.utils.commands.PickUpCommand;

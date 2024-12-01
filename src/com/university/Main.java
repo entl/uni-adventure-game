@@ -1,7 +1,7 @@
 package com.university;
 
-import com.university.game.Game;
-import com.university.utils.UI.UIManager;
+import com.university.core.Game;
+import com.university.utils.ui.UIManager;
 
 public class Main {
     public static void main(String[] args) {

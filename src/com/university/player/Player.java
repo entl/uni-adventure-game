@@ -2,9 +2,9 @@ package com.university.player;
 
 import com.university.dungeon.room.Room;
 import com.university.player.inventory.InventoryManager;
-import com.university.utils.UI.UIManager;
+import com.university.utils.ui.UIManager;
 import com.university.utils.commands.Direction;
-import com.university.utils.UI.GameNarrator;
+import com.university.utils.ui.GameNarrator;
 
 /**
  * The {@code Player} class represents the player in the game.
@@ -36,26 +36,9 @@ public class Player {
      * @param direction The direction in which to move the player.
      */
     public void move(Direction direction) {
-        if (isTrapped) {
-            UIManager.getInstance().displayMessage(GameNarrator.trapActivated());
-            return;
-        }
-
-        if (isAsleep) {
-            UIManager.getInstance().displayMessage(GameNarrator.sleepEffect());
-            return;
-        }
-
-        Room nextRoom = currentRoom.getRoomInDirection(direction);
-        if (nextRoom != null) {
-            currentRoom = nextRoom;
-            currentRoom.setVisited(true);
-            UIManager.getInstance().displayMessage(GameNarrator.movementSuccess(direction));
-            UIManager.getInstance().displayMessage("");
-            lookAround();
-        } else {
-            UIManager.getInstance().displayMessage(GameNarrator.movementFail(direction));
-        }
+        currentRoom = currentRoom.getRoomInDirection(direction);
+        currentRoom.setVisited(true);
+        lookAround();
     }
 
     /**

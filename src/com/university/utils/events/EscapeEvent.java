@@ -1,7 +1,7 @@
 package com.university.utils.events;
 
-import com.university.gameElements.traps.ITrap;
-import com.university.gameElements.traps.strategies.IEscapeStrategy;
+import com.university.elements.traps.ITrap;
+import com.university.elements.traps.strategies.IEscapeStrategy;
 
 /**
  * Represents an event triggered when a player attempts to escape from a trap.

@@ -1,6 +1,6 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
+import com.university.core.GameContext;
 
 /**
  * The {@code LookAroundCommand} class implements the {@code ICommand} interface

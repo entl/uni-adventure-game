@@ -1,9 +1,9 @@
 package com.university.utils.commands;
 
-import com.university.game.GameContext;
-import com.university.items.IItem;
-import com.university.utils.UI.GameNarrator;
-import com.university.utils.UI.UIManager;
+import com.university.core.GameContext;
+import com.university.elements.items.IItem;
+import com.university.utils.ui.GameNarrator;
+import com.university.utils.ui.UIManager;
 
 /**
  * The {@code PickUpCommand} class implements the {@code ICommand} interface and
