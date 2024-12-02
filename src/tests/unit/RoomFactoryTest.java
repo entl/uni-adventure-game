@@ -5,7 +5,7 @@ import com.university.dungeon.room.Room;
 import com.university.core.Difficulty;
 import com.university.core.GameContext;
 import com.university.elements.traps.ITrap;
-import com.university.elements.chests.IChest;
+import com.university.elements.chests.IBox;
 import com.university.utils.commands.Direction;
 import com.university.utils.events.EventManager;
 
@@ -69,7 +69,7 @@ public class RoomFactoryTest {
         Room room = RoomFactory.createRoomFromCell("R", "RegularRoom");
 
         boolean hasTrap = room.getTrap() instanceof ITrap || room.getTrap() == null;
-        boolean hasChest = room.getChest() instanceof IChest || room.getChest() == null;
+        boolean hasChest = room.getChest() instanceof IBox || room.getChest() == null;
         boolean hasItems = room.getItems() != null;
 
         boolean result = hasTrap && hasChest && hasItems && !room.isWall() && !room.isEntrance() && !room.isExit();

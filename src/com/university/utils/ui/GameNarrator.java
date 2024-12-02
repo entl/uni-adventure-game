@@ -331,7 +331,11 @@ public class GameNarrator {
             }
 
             if (currentRoom.getChest() != null) {
-                message.append("* You see a chest in the room.\n\n");
+                if (currentRoom.getChest().isOpened()) {
+                    message.append("* The chest in the room is already opened.\n\n");
+                } else {
+                    message.append("* You see a closed chest in the room.\n\n");
+                }
             }
         }
 

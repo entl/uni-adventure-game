@@ -1,12 +1,13 @@
 package com.university.elements.chests;
 
 import com.university.core.GameContext;
+import com.university.elements.items.effect.IEffect;
 
 /**
  * Represents a chest in the game that can be opened by the player.
  * A chest may contain items or rewards that the player can collect.
  */
-public interface IChest {
+public interface IBox {
 
     /**
      * Opens the chest and reveals its contents
@@ -14,7 +15,7 @@ public interface IChest {
      *
      * @param gameContext The current game context, which provides information about the player and the game state.
      */
-    void open(GameContext gameContext);
+    void open(GameContext gameContext, IEffect effect);
 
     /**
      * Checks whether the chest has already been opened.

@@ -1,6 +1,6 @@
 package com.university.dungeon.room;
 
-import com.university.elements.chests.IChest;
+import com.university.elements.chests.IBox;
 import com.university.elements.traps.ITrap;
 import com.university.elements.items.IItem;
 import com.university.utils.ui.GameNarrator;
@@ -25,7 +25,7 @@ public class Room {
     private final boolean isTreasureRoom;
     private final boolean isWall;
     private final ITrap trap;
-    private final IChest chest;
+    private final IBox chest;
 
     /**
      * Constructor for creating a new Room instance.
@@ -38,7 +38,7 @@ public class Room {
      * @param trap          An optional trap that may be in the room.
      * @param chest         An optional chest that may be in the room.
      */
-    public Room(String label, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall, ITrap trap, IChest chest) {
+    public Room(String label, boolean isEntrance, boolean isExit, boolean isTreasureRoom, boolean isWall, ITrap trap, IBox chest) {
         this.label = label;
         this.isEntrance = isEntrance;
         this.isExit = isExit;
@@ -212,7 +212,7 @@ public class Room {
      *
      * @return The IChest object if there is a chest, otherwise null.
      */
-    public IChest getChest() {
+    public IBox getChest() {
         return chest;
     }
 

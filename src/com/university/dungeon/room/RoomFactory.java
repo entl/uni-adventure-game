@@ -3,7 +3,7 @@ package com.university.dungeon.room;
 import com.university.config.Config;
 import com.university.core.GameContext;
 import com.university.elements.chests.Chest;
-import com.university.elements.chests.IChest;
+import com.university.elements.chests.IBox;
 import com.university.elements.traps.ITrap;
 import com.university.elements.traps.TrapFactory;
 import com.university.elements.items.ItemFactory;
@@ -88,11 +88,11 @@ public class RoomFactory {
      *
      * @return A Chest object or null if no chest is generated.
      */
-    private static IChest createChest() {
+    private static IBox createChest() {
         double probability = random.nextDouble();
         logger.debug("Chest creation probability: " + probability);
         if (probability < spawnRates.chestProbability) {
-            IChest chest = new Chest();
+            IBox chest = new Chest();
             logger.debug("Created chest: " + chest);
             return chest;
         }

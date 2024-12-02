@@ -2,7 +2,8 @@ package com.university.elements.items.effect;
 
 import com.university.dungeon.room.Room;
 import com.university.core.GameContext;
-import com.university.elements.chests.IChest;
+import com.university.elements.chests.IBox;
+import com.university.utils.events.OpenEvent;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
 import com.university.utils.ui.GameNarrator;
@@ -28,10 +29,10 @@ public class SpannerEffect implements IEffect {
         Room currentRoom = gameContext.getPlayer().getCurrentRoom();
         logger.debug("Current room: " + currentRoom.getLabel());
 
-        IChest chest = currentRoom.getChest();
+        IBox chest = currentRoom.getChest();
         if (chest != null && !chest.isOpened()) {
             logger.info("Chest found in room: " + currentRoom.getLabel() + " and it is closed. Attempting to open.");
-            chest.open(gameContext);
+            gameContext.getEventManager().dispatchEvent(new OpenEvent(this, chest));
             logger.info("Chest in room: " + currentRoom.getLabel() + " opened successfully.");
         } else if (chest != null && chest.isOpened()) {
             logger.info("Chest found in room: " + currentRoom.getLabel() + " but it is already opened.");

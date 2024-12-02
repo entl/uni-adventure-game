@@ -7,7 +7,6 @@ import com.university.utils.ui.UIManager;
 import com.university.utils.commands.*;
 
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * The {@code CommandParser} class is responsible for parsing user input and
