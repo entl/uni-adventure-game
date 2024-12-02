@@ -1,4 +1,4 @@
-
+g
 # **Dungeon Adventure**
 
 
@@ -51,7 +51,7 @@
    ```
 4. **Run Tests (Optional):**
    ```bash
-    java -cp bin tests.Run all
+    java -cp bin Run all
    ```
 5. **Run the Game:**
    ```bash

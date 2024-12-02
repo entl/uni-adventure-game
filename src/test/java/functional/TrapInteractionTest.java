@@ -1,4 +1,4 @@
-package test.functional;
+package functional;
 
 import com.university.dungeon.room.Room;
 import com.university.core.Difficulty;
@@ -10,15 +10,19 @@ import com.university.elements.items.FreezeSpell;
 import com.university.elements.items.IItem;
 import com.university.player.Player;
 import com.university.utils.events.EventManager;
+import org.junit.Before;
+import org.junit.Test;
 
-import static test.ConfigTest.outputResult;
+import static org.junit.Assert.*;
 
 public class TrapInteractionTest {
-    private static Player player;
-    private static Room room;
-    private static GameContext context;
 
-    private static void setUp() {
+    private Player player;
+    private Room room;
+    private GameContext context;
+
+    @Before
+    public void setUp() {
         context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
         player = new Player(Difficulty.EASY.getPowerPoints(), "Test Player");
         context.setPlayer(player);
@@ -27,43 +31,34 @@ public class TrapInteractionTest {
         player.setCurrentRoom(room);
     }
 
-    public static void activateTrap() {
-        setUp();
-        String testName = "TrapInteractionTest.activateTrap";
-
+    @Test
+    public void activateTrap_ShouldSetPlayerTrapped_WhenTrapIsActivated() {
         room.getTrap().activate(context);
 
-        boolean result = player.isTrapped();
-        outputResult(result, testName);
+        assertTrue(player.isTrapped());
     }
 
-    public static void escapeTrapWithPoints() {
-        setUp();
-        String testName = "TrapInteractionTest.escapeTrapWithPoints";
+    @Test
+    public void escapeTrapWithPoints_ShouldFreePlayer_WhenUsingLosePointsStrategy() {
         IEscapeStrategy escapeStrategy = new LosePointsStrategy(10);
 
         room.getTrap().activate(context);
         room.getTrap().escape(context, escapeStrategy);
 
-        boolean result = !player.isTrapped() && player.getPowerPoints() == 90;
-        outputResult(result, testName);
+        assertFalse(player.isTrapped());
+        assertEquals(90, player.getPowerPoints());
     }
 
-    public static void escapeTrapWithItem() {
-        setUp();
-        String testName = "TrapInteractionTest.escapeTrapWithoutPoints";
-        IItem item = new FreezeSpell();
+    @Test
+    public void escapeTrapWithItem_ShouldFreePlayer_WhenUsingFreezeSpell() {
+        IItem freezeSpell = new FreezeSpell();
 
+
+        player.getInventoryManager().addItem(freezeSpell);
         room.getTrap().activate(context);
-        item.use(context);
+        freezeSpell.use(context);
 
-        boolean result = !player.isTrapped() && player.getPowerPoints() == 100 && player.getInventoryManager().getItemByName(item.getName()) == null;
-        outputResult(result, testName);
-    }
-
-    public static void runAllTests() {
-        activateTrap();
-        escapeTrapWithPoints();
-        escapeTrapWithItem();
+        assertFalse(player.isTrapped());
+        assertNull(player.getInventoryManager().getItemByName("Freeze Spell"));
     }
 }

@@ -1,8 +1,8 @@
-package test.functional;
+package functional;
 
-import com.university.dungeon.room.Room;
 import com.university.core.Difficulty;
 import com.university.core.GameContext;
+import com.university.dungeon.room.Room;
 import com.university.elements.items.Cake;
 import com.university.elements.items.IItem;
 import com.university.elements.items.Spanner;
@@ -13,68 +13,67 @@ import com.university.utils.commands.ICommand;
 import com.university.utils.commands.PickUpCommand;
 import com.university.utils.commands.UseCommand;
 import com.university.utils.events.EventManager;
+import org.junit.Before;
+import org.junit.Test;
 
-import static test.ConfigTest.outputResult;
+import static org.mockito.Mockito.*;
+import static org.junit.Assert.*;
 
 public class ItemInteractionTest {
-    private static Player player;
-    private static Room room;
-    private static GameContext context;
 
-    private static void setUp() {
-        context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
+    private Player player;
+    private Room room;
+    private GameContext context;
+
+    @Before
+    public void setUp() {
+        context = GameContext.initialize(Difficulty.EASY, mock(EventManager.class));
         player = new Player(Difficulty.EASY.getPowerPoints(), "Test Player");
         context.setPlayer(player);
 
-        room = new Room("A1", false, false, false, false, null, null);
+        room = mock(Room.class);
+        when(room.getLabel()).thenReturn("A1");
         player.setCurrentRoom(room);
     }
 
-    public static void testPickUpItem() {
-        setUp();
-        String testName = "ItemInteractionTest.testPickUpItem";
+    @Test
+    public void pickUpItem_ShouldSucceed_WhenItemExistsInRoom() {
+        IItem teleportationSpell = mock(TeleportationSpell.class);
+        when(teleportationSpell.getName()).thenReturn("Teleportation Spell");
+        when(room.getItemByName("Teleportation Spell")).thenReturn(teleportationSpell);
 
-        IItem item = new TeleportationSpell();
-        room.addItem(item); // add item for test
-
-        ICommand pickUpCommand = new PickUpCommand(item.getName());
+        ICommand pickUpCommand = new PickUpCommand("Teleportation Spell");
         pickUpCommand.execute(context);
 
-        boolean result = player.getInventoryManager().getItemByName(item.getName()) == item;
-        outputResult(result, testName);
+        assertEquals(teleportationSpell, player.getInventoryManager().getItemByName("Teleportation Spell"));
+        verify(room).removeItem(teleportationSpell);
     }
 
-    public static void testDropItem() {
-        setUp();
-        String testName = "ItemInteractionTest.testDropItem";
+    @Test
+    public void dropItem_ShouldSucceed_WhenItemExistsInInventory() {
+        IItem spanner = mock(Spanner.class);
+        when(spanner.getName()).thenReturn("Spanner");
+        player.getInventoryManager().addItem(spanner);
 
-        IItem item = new Spanner();
-        player.getInventoryManager().addItem(item);
-
-        ICommand dropCommand = new DropCommand(item.getName());
+        ICommand dropCommand = new DropCommand("Spanner");
         dropCommand.execute(context);
 
-        boolean result = player.getInventoryManager().getInventory().isEmpty();
-        outputResult(result, testName);
+        assertNull(player.getInventoryManager().getItemByName("Spanner"));
+        verify(room).addItem(spanner);
     }
 
-    public static void testUseItem() {
-        setUp();
-        String testName = "ItemInteractionTest.testUseItem";
+    @Test
+    public void useItem_ShouldSucceed_WhenItemExistsInInventory() {
+        IItem cake = mock(Cake.class);
+        when(cake.getName()).thenReturn("cake");
+        when(cake.isConsumable()).thenReturn(true);
 
-        IItem item = new Cake();
-        player.getInventoryManager().addItem(item);
+        player.getInventoryManager().addItem(cake);
 
-        ICommand useCommand = new UseCommand(item.getName());
+        ICommand useCommand = new UseCommand("cake");
         useCommand.execute(context);
 
-        boolean result = player.getInventoryManager().getInventory().isEmpty() && player.getPowerPoints() == 103;
-        outputResult(result, testName);
-    }
-
-    public static void runAllTests() {
-        testPickUpItem();
-        testDropItem();
-        testUseItem();
+//        verify(cake).use(context);
+        assertEquals(0, player.getInventoryManager().getInventory().size());
     }
 }

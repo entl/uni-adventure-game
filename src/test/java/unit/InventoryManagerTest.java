@@ -1,111 +1,105 @@
-package test.unit;
+package unit;
 
-import com.university.elements.items.FreezeSpell;
 import com.university.elements.items.IItem;
+import com.university.elements.items.Spell;
 import com.university.player.inventory.InventoryManager;
+import org.junit.Before;
+import org.junit.Test;
 
-import static test.ConfigTest.outputResult;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 public class InventoryManagerTest {
 
-    private static InventoryManager inventoryManager;
+    private InventoryManager inventoryManager;
 
-    // new instance of InventoryManager should be created for each test to ensure isolation
-    public static void setUp() {
+    @Before
+    public void setUp() {
         inventoryManager = new InventoryManager();
     }
 
-    public static void testAddItem_Success() {
-        setUp();
-        String testName = "InventoryManagerTest.testAddItem_Success";
+    @Test
+    public void addItem_ShouldSucceed_WhenItemDoesNotExceedLimit() {
+        IItem freezeSpell = mock(IItem.class);
+        when(freezeSpell.getName()).thenReturn("Freeze Spell");
 
-        IItem freezeSpell = new FreezeSpell();
-        boolean addItemResult = inventoryManager.addItem(freezeSpell);
+        boolean result = inventoryManager.addItem(freezeSpell);
 
-        // ideally, we should mock the item and method getItemsByName to test this method
-        // since unit imply to test a single unit of code
-        // but in plain java it would be too complex to mock the item and method
-        boolean result = addItemResult && inventoryManager.getItemByName(freezeSpell.getName()) == freezeSpell;
-        outputResult(result, testName);
+        assertTrue(result);
+        assertEquals(freezeSpell, inventoryManager.getItemByName("Freeze Spell"));
     }
 
-    public static void testAddItem_ExceedLimit() {
-        setUp();
-        String testName = "InventoryManagerTest.testAddItem_ExceedLimit";
+    @Test
+    public void addItem_ShouldFail_WhenAddingMoreThanAllowedSpells() {
+        IItem freezeSpell1 = mock(Spell.class);
+        IItem freezeSpell2 = mock(Spell.class);
+        IItem extraSpell = mock(Spell.class);
 
-        // add spells until the limit is reached
-        inventoryManager.addItem(new FreezeSpell());
-        inventoryManager.addItem(new FreezeSpell());
+        when(freezeSpell1.getName()).thenReturn("Freeze Spell 1");
+        when(freezeSpell2.getName()).thenReturn("Freeze Spell 2");
+        when(extraSpell.getName()).thenReturn("Extra Spell");
 
-        // try adding another spell which should fail
-        IItem extraSpell = new FreezeSpell();
-        boolean addItemResult = inventoryManager.addItem(extraSpell);
+        inventoryManager.addItem(freezeSpell1);
+        inventoryManager.addItem(freezeSpell2);
 
-        // check that last item was not added and inventory size is still 2
-        boolean result = !addItemResult && inventoryManager.getInventory().size() == 2;
-        outputResult(result, testName);
+        boolean result = inventoryManager.addItem(extraSpell);
+
+        assertFalse(result);
+        assertEquals(2, inventoryManager.getInventory().size());
     }
 
-    public static void testRemoveItem() {
-        setUp();
-        String testName = "InventoryManagerTest.testRemoveItem";
+    @Test
+    public void removeItem_ShouldSucceed_WhenItemExistsInInventory() {
+        IItem freezeSpell = mock(IItem.class);
+        when(freezeSpell.getName()).thenReturn("Freeze Spell");
 
-        IItem freezeSpell = new FreezeSpell();
         inventoryManager.addItem(freezeSpell);
 
-        boolean removeItemResult = inventoryManager.removeItem(freezeSpell);
-        boolean result = removeItemResult && inventoryManager.getItemByName(freezeSpell.getName()) == null;
-        outputResult(result, testName);
+        boolean result = inventoryManager.removeItem(freezeSpell);
+
+        assertTrue(result);
+        assertNull(inventoryManager.getItemByName("Freeze Spell"));
     }
 
-    public static void testRemoveItem_NotInInventory() {
-        setUp();
-        String testName = "InventoryManagerTest.testRemoveItem_NotInInventory";
+    @Test
+    public void removeItem_ShouldFail_WhenItemDoesNotExistInInventory() {
+        IItem freezeSpell = mock(IItem.class);
+        when(freezeSpell.getName()).thenReturn("Freeze Spell");
 
-        IItem freezeSpell = new FreezeSpell();
-        boolean removeItemResult = inventoryManager.removeItem(freezeSpell);
+        boolean result = inventoryManager.removeItem(freezeSpell);
 
-        boolean result = !removeItemResult && inventoryManager.getInventory().isEmpty();
-        outputResult(result, testName);
+        assertFalse(result);
+        assertTrue(inventoryManager.getInventory().isEmpty());
     }
 
-    public static void testGetItemByName_ItemExists() {
-        setUp();
-        String testName = "InventoryManagerTest.testGetItemByName_ItemExists";
+    @Test
+    public void getItemByName_ShouldReturnItem_WhenItemExists() {
+        IItem freezeSpell = mock(IItem.class);
+        when(freezeSpell.getName()).thenReturn("Freeze Spell");
 
-        IItem freezeSpell = new FreezeSpell();
         inventoryManager.addItem(freezeSpell);
 
-        boolean result = inventoryManager.getItemByName(freezeSpell.getName()) == freezeSpell;
-        outputResult(result, testName);
+        IItem retrievedItem = inventoryManager.getItemByName("Freeze Spell");
+
+        assertEquals(freezeSpell, retrievedItem);
     }
 
-    public static void testGetItemByName_ItemNotExists() {
-        setUp();
-        String testName = "InventoryManagerTest.testGetItemByName_ItemNotExists";
+    @Test
+    public void getItemByName_ShouldReturnNull_WhenItemDoesNotExist() {
+        IItem retrievedItem = inventoryManager.getItemByName("Nonexistent Item");
 
-        boolean result = inventoryManager.getItemByName("AnotherItem") == null;
-        outputResult(result, testName);
+        assertNull(retrievedItem);
     }
 
-    public static void testGetInventory() {
-        setUp();
-        String testName = "InventoryManagerTest.testGetInventory";
+    @Test
+    public void getInventory_ShouldReturnCorrectSize_WhenItemsAreAdded() {
+        IItem freezeSpell = mock(IItem.class);
+        when(freezeSpell.getName()).thenReturn("Freeze Spell");
 
-        IItem freezeSpell = new FreezeSpell();
         inventoryManager.addItem(freezeSpell);
 
-        boolean result = inventoryManager.getInventory().size() == 1;
-        outputResult(result, testName);
-    }
+        int size = inventoryManager.getInventory().size();
 
-    public static void runAllTests() {
-        testAddItem_Success();
-        testAddItem_ExceedLimit();
-        testRemoveItem();
-        testRemoveItem_NotInInventory();
-        testGetItemByName_ItemExists();
-        testGetItemByName_ItemNotExists();
-        testGetInventory();
+        assertEquals(1, size);
     }
 }
