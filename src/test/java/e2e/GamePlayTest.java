@@ -1,4 +1,4 @@
-package tests.e2e;
+package test.e2e;
 
 import com.university.dungeon.Dungeon;
 import com.university.dungeon.room.Room;
@@ -18,7 +18,7 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import static tests.ConfigTest.outputResult;
+import static test.ConfigTest.outputResult;
 
 public class GamePlayTest {
     private GameContext gameContext;

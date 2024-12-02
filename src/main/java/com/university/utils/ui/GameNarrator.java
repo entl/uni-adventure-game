@@ -382,6 +382,7 @@ public class GameNarrator {
         message.append(getDashSeparator()).append("\n");
 
         // Print power points and current room
+        message.append(String.format("%-20s %s%n", "Player Name", player.getName()));
         message.append(String.format("%-20s %d%n", "Power Points", player.getPowerPoints()));
         message.append(String.format("%-20s %s%n", "Current Room", player.getCurrentRoom().getLabel()));
 

@@ -1,10 +1,10 @@
-package tests.unit;
+package test.unit;
 
 import com.university.elements.items.FreezeSpell;
 import com.university.elements.items.IItem;
 import com.university.player.inventory.InventoryManager;
 
-import static tests.ConfigTest.outputResult;
+import static test.ConfigTest.outputResult;
 
 public class InventoryManagerTest {
 

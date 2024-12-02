@@ -17,4 +17,9 @@ public class ConsoleUI implements UI {
             System.out.println();
         }
     }
+
+    @Override
+    public void displayInputPrompt(String message) {
+        System.out.print(message);
+    }
 }

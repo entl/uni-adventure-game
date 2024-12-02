@@ -1,4 +1,4 @@
-package tests.functional;
+package test.functional;
 
 import com.university.dungeon.room.Room;
 import com.university.core.Difficulty;
@@ -11,7 +11,7 @@ import com.university.elements.items.IItem;
 import com.university.player.Player;
 import com.university.utils.events.EventManager;
 
-import static tests.ConfigTest.outputResult;
+import static test.ConfigTest.outputResult;
 
 public class TrapInteractionTest {
     private static Player player;
@@ -20,7 +20,7 @@ public class TrapInteractionTest {
 
     private static void setUp() {
         context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
-        player = new Player(Difficulty.EASY.getPowerPoints());
+        player = new Player(Difficulty.EASY.getPowerPoints(), "Test Player");
         context.setPlayer(player);
 
         room = new Room("A1", false, false, false, false, new MadScientists(), null);

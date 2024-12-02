@@ -16,6 +16,7 @@ import com.university.utils.ui.ConsoleUI;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
 
+import java.sql.DriverManager;
 import java.util.Scanner;
 
 /**
@@ -161,9 +162,22 @@ public class Game {
      */
     private Player setupPlayer(Difficulty difficulty) {
         logger.info("Setting up player with initial power points: " + difficulty.getPowerPoints());
-        Player player = new Player(difficulty.getPowerPoints());
+        String playerName = inputPlayerName();
+        Player player = new Player(difficulty.getPowerPoints(), playerName);
         gameContext.setPlayer(player);
         return player;
+    }
+
+    private String inputPlayerName() {
+        UIManager.getInstance().displayInputPrompt("* Enter your name: ");
+        while (true) {
+            String playerName = scanner.nextLine();
+            if (playerName.isBlank()) {
+                UIManager.getInstance().displayInputPrompt("* Name cannot be empty. Please enter your name: ");
+            } else {
+                return playerName;
+            }
+        }
     }
 
     /**
@@ -190,7 +204,7 @@ public class Game {
         UIManager.getInstance().displayMessage("3. Hard");
 
         while (true) {
-            UIManager.getInstance().displayInline("Enter your choice (1-3): ");
+            UIManager.getInstance().displayInputPrompt("Enter your choice (1-3): ");
             String input = scanner.nextLine();
 
             switch (input) {
@@ -344,7 +358,7 @@ public class Game {
     private void processPlayerCommand() {
         logger.debug("Processing player command.");
         UIManager.getInstance().displayMessage("* What would you like to do?");
-        UIManager.getInstance().displayInline("> ");
+        UIManager.getInstance().displayInputPrompt("> ");
         String userInput = scanner.nextLine();
         UIManager.getInstance().displayMessage("");
 

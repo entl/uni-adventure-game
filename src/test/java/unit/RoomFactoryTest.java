@@ -1,4 +1,4 @@
-package tests.unit;
+package test.unit;
 
 import com.university.dungeon.room.RoomFactory;
 import com.university.dungeon.room.Room;
@@ -12,7 +12,7 @@ import com.university.utils.events.EventManager;
 import java.util.ArrayList;
 import java.util.List;
 
-import static tests.ConfigTest.outputResult;
+import static test.ConfigTest.outputResult;
 
 public class RoomFactoryTest {
 

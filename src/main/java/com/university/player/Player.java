@@ -15,6 +15,7 @@ import com.university.utils.ui.GameNarrator;
 public class Player {
     private static final ILogger logger = LoggerFactory.getLogger(Player.class);
 
+    private final String name;
     private int powerPoints;
     private Room currentRoom;
     private InventoryManager inventory;
@@ -27,11 +28,12 @@ public class Player {
      *
      * @param powerPoints The initial number of power points for the player
      */
-    public Player(Integer powerPoints) {
+    public Player(Integer powerPoints, String name) {
         this.powerPoints = powerPoints;
         this.inventory = new InventoryManager();
         this.isTrapped = false;
         this.isAsleep = false;
+        this.name = name;
         logger.debug("Player created with initial power points: " + powerPoints);
     }
 
@@ -150,5 +152,14 @@ public class Player {
     public void setAsleep(boolean isAsleep) {
         this.isAsleep = isAsleep;
         logger.info("Player's asleep status set to: " + isAsleep);
+    }
+
+    /**
+     * Returns the name of the player
+     *
+     * @return The name of the player
+     */
+    public String getName() {
+        return name;
     }
 }

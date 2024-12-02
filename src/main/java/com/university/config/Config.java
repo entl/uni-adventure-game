@@ -8,9 +8,9 @@ import java.nio.file.Paths;
  * dynamically using the {@code Paths.get()} method to ensure cross-platform compatibility.
  */
 public class Config {
-    private static final String dungeonPath1 = Paths.get("src", "resources", "dungeon1.csv").toString();
-    private static final String dungeonPath2 = Paths.get("src", "resources", "dungeon2.csv").toString();
-    private static final String dungeonPath3 = Paths.get("src", "resources", "dungeon3.csv").toString();
+    private static final String dungeonPath1 = Paths.get("src", "main", "resources", "dungeon1.csv").toString();
+    private static final String dungeonPath2 = Paths.get("src", "main", "resources", "dungeon2.csv").toString();
+    private static final String dungeonPath3 = Paths.get("src", "main", "resources", "dungeon3.csv").toString();
 
     /**
      * Array containing all dungeon paths.

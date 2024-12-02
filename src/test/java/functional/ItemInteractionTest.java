@@ -1,4 +1,4 @@
-package tests.functional;
+package test.functional;
 
 import com.university.dungeon.room.Room;
 import com.university.core.Difficulty;
@@ -14,7 +14,7 @@ import com.university.utils.commands.PickUpCommand;
 import com.university.utils.commands.UseCommand;
 import com.university.utils.events.EventManager;
 
-import static tests.ConfigTest.outputResult;
+import static test.ConfigTest.outputResult;
 
 public class ItemInteractionTest {
     private static Player player;
@@ -23,7 +23,7 @@ public class ItemInteractionTest {
 
     private static void setUp() {
         context = GameContext.initialize(Difficulty.EASY, EventManager.getInstance());
-        player = new Player(Difficulty.EASY.getPowerPoints());
+        player = new Player(Difficulty.EASY.getPowerPoints(), "Test Player");
         context.setPlayer(player);
 
         room = new Room("A1", false, false, false, false, null, null);
