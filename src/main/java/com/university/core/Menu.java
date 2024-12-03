@@ -90,15 +90,17 @@ public class Menu {
      * If no runs are found, a message is displayed
      */
     private void displayRunHistory() {
-        ui.displayMessage("* Retrieving run history...");
+        ui.displayMessage("""
+                =====================================
+                            Previous Runs
+                =====================================
+                """);
         List<RunHistoryEntity> runs = runHistoryRepository.findAll();
 
         if (runs.isEmpty()) {
             ui.displayMessage("* No previous runs found.");
         } else {
             StringBuilder message = new StringBuilder();
-
-            message.append("Previous Runs\n\n");
 
             // Column headers
             message.append(String.format("%-10s %-20s %-15s %-15s %-25s%n",

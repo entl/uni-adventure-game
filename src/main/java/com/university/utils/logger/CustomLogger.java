@@ -20,12 +20,12 @@ public class CustomLogger implements ILogger {
      */
     public CustomLogger(Class<?> clazz, Handler handler) {
         logger = Logger.getLogger(clazz.getName());
-        logger.setLevel(Level.ALL);
+        logger.setLevel(Level.SEVERE);
 
         // Disable parent loggers
         logger.setUseParentHandlers(false);
 
-        handler.setLevel(Level.INFO);
+        handler.setLevel(Level.SEVERE);
         logger.addHandler(handler);
     }
 
