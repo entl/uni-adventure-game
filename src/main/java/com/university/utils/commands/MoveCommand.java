@@ -42,8 +42,8 @@ public class MoveCommand implements ICommand {
 
         if (canMove(player)) {
             logger.info("Player " + player + " is moving in direction: " + direction);
-            player.move(direction);
             UIManager.getInstance().displayMessage(GameNarrator.movementSuccess(direction));
+            player.move(direction);
             logger.info("Player " + player + " successfully moved to the next room in direction: " + direction);
         } else {
             logger.info("Player " + player + " could not move in direction: " + direction);

@@ -44,7 +44,6 @@ public class EscapeCommand implements ICommand {
 
         if (!trap.isActive()) {
             logger.info("Trap in room " + currentRoom.getLabel() + " is not active");
-            trap.printDescription();
             return;
         }
 

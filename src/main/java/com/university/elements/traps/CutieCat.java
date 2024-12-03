@@ -24,6 +24,7 @@ public class CutieCat implements ITrap, IEventListener {
 
     private String name;
     private String description;
+    private String escapeDescription;
     private boolean isActive;
 
     /**
@@ -33,6 +34,7 @@ public class CutieCat implements ITrap, IEventListener {
     public CutieCat() {
         this.name = "cutiecat";
         this.description = "A hungry cute cat blocks your way, demanding food!";
+        this.escapeDescription = "You can escape by feeding the cutie cat or losing 15 power points.";
         this.isActive = true;
         logger.debug("CutieCat trap created with name: " + name + " and description: " + description);
         subscribeToEvents();
@@ -90,6 +92,16 @@ public class CutieCat implements ITrap, IEventListener {
     }
 
     /**
+     * Returns the description of the escape options for the trap
+     *
+     * @return A string describing the escape options for the CutieCat trap
+     */
+    @Override
+    public String getEscapeDescription() {
+        return escapeDescription;
+    }
+
+    /**
      * Checks whether the CutieCat trap is currently active
      *
      * @return true if the trap is active, false otherwise
@@ -97,16 +109,6 @@ public class CutieCat implements ITrap, IEventListener {
     @Override
     public boolean isActive() {
         return isActive;
-    }
-
-    /**
-     * Prints the description of the CutieCat trap
-     */
-    @Override
-    public void printDescription() {
-        logger.debug("Printing CutieCat trap description. Is active: " + isActive);
-        UIManager.getInstance().displayMessage("* " + getDescription());
-        UIManager.getInstance().displayMessage("* You can escape by feeding the cutie cat or losing 15 power points.\n");
     }
 
     /**

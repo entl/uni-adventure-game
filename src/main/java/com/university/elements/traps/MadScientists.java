@@ -25,6 +25,7 @@ public class MadScientists implements ITrap, IEventListener {
 
     private String name;
     private String description;
+    private String escapeDescription;
     private boolean isActive;
 
     /**
@@ -34,6 +35,7 @@ public class MadScientists implements ITrap, IEventListener {
     public MadScientists() {
         this.name = "mad scientists";
         this.description = "Mad Scientists are talking constantly about their experiments. They are very annoying.";
+        this.escapeDescription = "You can escape by using a freeze spell or giving them 10 points.";
         this.isActive = true;
         logger.debug("MadScientists trap created with name: " + name + " and description: " + description);
         subscribeToEvents();
@@ -101,17 +103,15 @@ public class MadScientists implements ITrap, IEventListener {
         return isActive;
     }
 
+
     /**
-     * Prints the description of the trap based on whether it is active or inactive
-     * If the trap is active, it describes how the scientists trap the player
-     * If the trap is inactive, it describes the scientists as no longer talking about their experiments
+     * Returns the description of the escape options for the trap
+     *
+     * @return A string describing the escape options for the MadScientists trap
      */
     @Override
-    public void printDescription() {
-        logger.debug("Printing MadScientists trap description. Is active: " + isActive);
-        UIManager.getInstance().displayMessage("* " + getDescription());
-        UIManager.getInstance().displayMessage("* Oh no! They have trapped you by talking about their experiments. You can't move.");
-        UIManager.getInstance().displayMessage("* From rumors you heard, you know that you can escape by using ** freeze spell ** or ** giving them 10 points  **.\n");
+    public String getEscapeDescription() {
+        return escapeDescription;
     }
 
     /**

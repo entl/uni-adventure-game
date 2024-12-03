@@ -49,8 +49,9 @@ public interface ITrap {
     boolean isActive();
 
     /**
-     * Prints the description of the trap based on its current state (active or inactive).
-     * The method should display different descriptions depending on whether the trap is active or not.
+     * Returns the description of the escape options for the trap.
+     *
+     * @return A description of the escape options for the trap.
      */
-    void printDescription();
+    String getEscapeDescription();
 }

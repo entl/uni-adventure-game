@@ -25,6 +25,7 @@ public class Trap implements ITrap, IEventListener {
 
     private String name;
     private String description;
+    private String escapeDescription;
     private boolean isActive;
 
     /**
@@ -34,6 +35,7 @@ public class Trap implements ITrap, IEventListener {
     public Trap() {
         this.name = "trap";
         this.description = "Your foot is caught in a trap. You can't move.";
+        this.escapeDescription = "You can escape by using a freeze spell, hammer, or giving 5 points.";
         this.isActive = true;
         logger.debug("Trap created with name: " + name + " and description: " + description);
         subscribeToEvents();
@@ -101,15 +103,13 @@ public class Trap implements ITrap, IEventListener {
     }
 
     /**
-     * Prints the description of the trap based on whether it is active or inactive.
-     * If the trap is active, it describes how the player is immobilized.
-     * If the trap is inactive, it informs the player that the trap is no longer a threat.
+     * Returns the description of the escape options for the trap
+     *
+     * @return A string describing the escape options for the trap
      */
     @Override
-    public void printDescription() {
-        logger.debug("Printing trap description. Is active: " + isActive);
-        UIManager.getInstance().displayMessage("* " + getDescription());
-        UIManager.getInstance().displayMessage("* You can escape by using ** freeze spell **, ** hammer ** or ** giving 5 points  **.\n");
+    public String getEscapeDescription() {
+        return escapeDescription;
     }
 
     /**
