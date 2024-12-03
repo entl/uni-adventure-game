@@ -16,6 +16,13 @@ import com.university.utils.ui.ConsoleUI;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
 
+import com.university.persistance.entities.PlayerEntity;
+import com.university.persistance.entities.RunHistoryEntity;
+import com.university.persistance.repositories.PlayerRepository;
+import com.university.persistance.repositories.RunHistoryRepository;
+
+import java.time.LocalDateTime;
+
 
 /**
  * The {@code Game} class serves as the central controller for the game.
@@ -64,7 +71,7 @@ public class Game {
     private CommandParser commandParser;
 
     /**
-     * Scanner for reading user input
+     * Class for reading user input
      */
     private IInputHandler inputHandler;
 
@@ -73,12 +80,17 @@ public class Game {
      */
     private UI ui;
 
-    public Game(UI ui, CommandParser commandParser, DungeonService dungeonService, String[] dungeonPaths, IInputHandler inputHandler) {
+    private PlayerRepository playerRepository;
+    private RunHistoryRepository runHistoryRepository;
+
+    public Game(UI ui, CommandParser commandParser, DungeonService dungeonService, String[] dungeonPaths, IInputHandler inputHandler, PlayerRepository playerRepository, RunHistoryRepository runHistoryRepository) {
         this.ui = ui;
         this.commandParser = commandParser;
         this.dungeonPaths = dungeonPaths;
         this.dungeonService = dungeonService;
         this.inputHandler = inputHandler;
+        this.playerRepository = playerRepository;
+        this.runHistoryRepository = runHistoryRepository;
     }
 
     /**
@@ -343,13 +355,53 @@ public class Game {
      * Ends the game and displays the win or loss message
      */
     private void endGame() {
+        Player player = gameContext.getPlayer();
+
         if (gameContext.isGameWon()) {
             logger.info("Game ended. Player won.");
             UIManager.getInstance().displayMessage(GameNarrator.winMessage());
-            UIManager.getInstance().displayMessage(String.format("* You have won the game with %d power points! Congratulations!\n", gameContext.getPlayer().getPowerPoints()));
+            UIManager.getInstance().displayMessage(
+                    String.format("* You have won the game with %d power points! Congratulations!\n", player.getPowerPoints())
+            );
+
+            saveRunHistory(player, "won");
         } else if (gameContext.isGameLost()) {
             logger.info("Game ended. Player lost.");
             UIManager.getInstance().displayMessage(GameNarrator.loseMessage());
+
+            saveRunHistory(player, "lost");
+        }
+    }
+
+    private void saveRunHistory(Player player, String outcome) {
+        try {
+            PlayerEntity playerEntity = new PlayerEntity(
+                    0,
+                    player.getName(),
+                    player.getPowerPoints(),
+                    player.getCurrentRoom().getLabel(),
+                    gameContext.getCurrentDungeon().getLevel(),
+                    player.isTrapped(),
+                    player.isAsleep(),
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
+            );
+
+            int playerId = playerRepository.save(playerEntity);
+
+            RunHistoryEntity runHistory = new RunHistoryEntity(
+                    0,
+                    playerId, // Foreign key to the players table
+                    outcome,
+                    LocalDateTime.now(),
+                    LocalDateTime.now(),
+                    LocalDateTime.now()
+            );
+            runHistoryRepository.save(runHistory);
+
+            logger.info("Run history saved successfully.");
+        } catch (Exception e) {
+            logger.error("Failed to save run history: " + e.getMessage(), e);
         }
     }
 

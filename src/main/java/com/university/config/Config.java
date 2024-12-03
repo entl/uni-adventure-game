@@ -19,11 +19,16 @@ public class Config {
     public static final String[] dungeonPaths = {dungeonPath1, dungeonPath2, dungeonPath3};
 
     /**
+     * Database URL for the game.
+     */
+    public static final String databaseUrl = "jdbc:sqlite:" + Paths.get("src", "main", "resources", "game.db").toString();
+
+    /**
      * Static nested class representing spawn rates for different difficulty levels.
      */
     public static class SpawnRates {
 
-        public static final SpawnRates EASY = new SpawnRates(0.6, 0.3, 0.1, 0.1, 1);
+        public static final SpawnRates EASY = new SpawnRates(0.6, 0.3, 0.1, 0.1, 0.2);
         public static final SpawnRates MEDIUM = new SpawnRates(0.75, 0.2, 0.05, 0.1, 0.3);
         public static final SpawnRates HARD = new SpawnRates(0.8, 0.15, 0.05, 0.05, 0.4);
 
