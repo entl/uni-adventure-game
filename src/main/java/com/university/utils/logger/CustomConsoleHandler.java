@@ -7,6 +7,6 @@ import java.util.logging.ConsoleHandler;
  */
 public class CustomConsoleHandler extends ConsoleHandler {
     public CustomConsoleHandler() {
-        setFormatter(new CustomLogFormatter()); // Use your custom formatter
+        setFormatter(new CustomLogFormatter());
     }
 }

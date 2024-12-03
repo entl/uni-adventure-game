@@ -391,7 +391,7 @@ public class Game {
 
             RunHistoryEntity runHistory = new RunHistoryEntity(
                     0,
-                    playerId, // Foreign key to the players table
+                    playerId,
                     outcome,
                     LocalDateTime.now(),
                     LocalDateTime.now(),

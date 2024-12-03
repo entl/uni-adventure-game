@@ -4,7 +4,6 @@ public class UIManager {
 
     private static UI instance;
 
-    // Prevent instantiation
     private UIManager() {}
 
     /**

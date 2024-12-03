@@ -41,7 +41,7 @@ public class RunHistoryRepository extends AbstractGenericRepository<RunHistoryEn
     protected RunHistoryEntity mapRowToEntity(ResultSet resultSet) throws SQLException {
         return new RunHistoryEntity(
                 resultSet.getInt("id"),
-                resultSet.getInt("player_id"), // Foreign key mapping
+                resultSet.getInt("player_id"),
                 resultSet.getString("outcome"),
                 resultSet.getTimestamp("run_date").toLocalDateTime(),
                 resultSet.getTimestamp("created_at").toLocalDateTime(),
@@ -96,17 +96,14 @@ public class RunHistoryRepository extends AbstractGenericRepository<RunHistoryEn
     public int save(RunHistoryEntity entity) {
         String query = "INSERT INTO run_history (player_id, outcome, run_date, created_at, updated_at) VALUES (?, ?, ?, ?, ?)";
         try (PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS)) {
-            // Set parameters for the query
-            statement.setInt(1, entity.getPlayerId()); // Foreign key
+            statement.setInt(1, entity.getPlayerId());
             statement.setString(2, entity.getOutcome());
             statement.setTimestamp(3, java.sql.Timestamp.valueOf(entity.getRunDate()));
             statement.setTimestamp(4, java.sql.Timestamp.valueOf(entity.getCreatedAt()));
-            statement.setTimestamp(5, java.sql.Timestamp.valueOf(LocalDateTime.now())); // Updated timestamp
+            statement.setTimestamp(5, java.sql.Timestamp.valueOf(LocalDateTime.now()));
 
-            // Execute the INSERT statement
             statement.executeUpdate();
 
-            // Retrieve the generated keys
             try (ResultSet generatedKeys = statement.getGeneratedKeys()) {
                 if (generatedKeys.next()) {
                     return generatedKeys.getInt(1); // Return the generated ID

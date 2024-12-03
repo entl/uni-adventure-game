@@ -109,7 +109,7 @@ public class PlayerRepository extends AbstractGenericRepository<PlayerEntity, In
             statement.setBoolean(5, entity.isTrapped());
             statement.setBoolean(6, entity.isAsleep());
             statement.setTimestamp(7, java.sql.Timestamp.valueOf(entity.getCreatedAt()));
-            statement.setTimestamp(8, java.sql.Timestamp.valueOf(LocalDateTime.now())); // Updated timestamp
+            statement.setTimestamp(8, java.sql.Timestamp.valueOf(LocalDateTime.now()));
 
             statement.executeUpdate();
 
@@ -123,7 +123,7 @@ public class PlayerRepository extends AbstractGenericRepository<PlayerEntity, In
             }
         } catch (SQLException e) {
             e.printStackTrace();
-            throw new RuntimeException("Error saving player entity", e); // Rethrow as runtime exception or handle appropriately
+            throw new RuntimeException("Error saving player entity", e);
         }
     }
 }

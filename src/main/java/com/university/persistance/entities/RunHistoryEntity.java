@@ -7,7 +7,7 @@ import java.time.LocalDateTime;
  * Represents a previous run of the game.
  */
 public class RunHistoryEntity extends BaseEntity {
-    private int playerId; // Foreign key to the Player table
+    private int playerId;
     private String outcome;
     private LocalDateTime runDate;
 

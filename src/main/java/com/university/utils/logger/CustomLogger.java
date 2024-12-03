@@ -22,7 +22,7 @@ public class CustomLogger implements ILogger {
         logger = Logger.getLogger(clazz.getName());
         logger.setLevel(Level.ALL);
 
-        // Disable propagation to parent loggers
+        // Disable parent loggers
         logger.setUseParentHandlers(false);
 
         handler.setLevel(Level.INFO);
