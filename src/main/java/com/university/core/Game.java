@@ -1,10 +1,10 @@
 package com.university.core;
 
-import com.university.config.Config;
 import com.university.dungeon.Dungeon;
 import com.university.dungeon.DungeonService;
 import com.university.dungeon.room.Room;
 import com.university.player.Player;
+import com.university.utils.input.IInputHandler;
 import com.university.utils.ui.GameNarrator;
 import com.university.utils.ui.UI;
 import com.university.utils.ui.UIManager;
@@ -16,19 +16,15 @@ import com.university.utils.ui.ConsoleUI;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
 
-import java.sql.DriverManager;
-import java.util.Scanner;
 
 /**
  * The {@code Game} class serves as the central controller for the game.
  * It initializes the game, manages player interactions, game state,
  * and transitions between different levels of the dungeon
  *
- * <p>This class follows the Singleton pattern</p>
  *
  * <p>Main responsibilities include:
  * <ul>
- * <li>Initializing game components like dungeons, players, and UI</li>
  * <li>Managing the main game loop</li>
  * <li>Handling game state transitions like winning, losing, or moving between levels</li>
  * <li>Processing player commands and actions</li>
@@ -39,22 +35,23 @@ public class Game {
     /**
      * Logger for the Game class to log events and errors
      */
-    private static final ILogger logger = LoggerFactory.getLogger(Game.class);
+    private ILogger logger = LoggerFactory.getLogger(Game.class);
 
     /**
      * Singleton instance of the Game class
      */
-    private static Game instance;
+    private Game instance;
 
     /**
      * Paths to dungeon configuration files.
      */
-    private final String[] dungeonPaths = Config.dungeonPaths;
+    private String[] dungeonPaths;
 
     /**
      * Array of dungeons in the game
      */
     private Dungeon[] dungeons;
+    private DungeonService dungeonService;
 
     /**
      * Current game context storing the player, difficulty, and game state
@@ -69,63 +66,33 @@ public class Game {
     /**
      * Scanner for reading user input
      */
-    private Scanner scanner;
+    private IInputHandler inputHandler;
 
     /**
      * User interface instance for displaying messages and interacting with the player.
      */
     private UI ui;
 
-    /**
-     * Private constructor to enforce Singleton pattern
-     */
-    private Game() {}
-
-    /**
-     * Retrieves the Singleton instance of the {@code Game} class.
-     * If no instance exists, it initializes one and sets up the game.
-     *
-     * @return The Singleton instance of the Game class.
-     */
-    public static Game initialize() {
-        if (instance == null) {
-            instance = new Game();
-            instance.initializeGame();
-        }
-        return instance;
+    public Game(UI ui, CommandParser commandParser, DungeonService dungeonService, String[] dungeonPaths, IInputHandler inputHandler) {
+        this.ui = ui;
+        this.commandParser = commandParser;
+        this.dungeonPaths = dungeonPaths;
+        this.dungeonService = dungeonService;
+        this.inputHandler = inputHandler;
     }
 
     /**
      * Initializes the game by setting up input, UI, game context,
      * dungeons, and the player
      */
-    private void initializeGame() {
+    public void initialize() {
         logger.info("Initializing game...");
-        setupInput();
         Difficulty difficulty = selectDifficulty();
         setupGameContext(difficulty);
         initializeDungeons();
-        setupUI();
         Player player = setupPlayer(difficulty);
         setInitialGameState(player);
         logger.info("Game initialized successfully.");
-    }
-
-    /**
-     * Sets up the input and command parser for the game
-     */
-    private void setupInput() {
-        logger.debug("Setting up input and command parser.");
-        scanner = new Scanner(System.in);
-        commandParser = new CommandParser();
-    }
-
-    /**
-     * Sets up the user interface for the game
-     */
-    private void setupUI() {
-        logger.debug("Setting up UI.");
-        ui = UIManager.getInstance();
     }
 
     /**
@@ -145,7 +112,6 @@ public class Game {
      */
     private void initializeDungeons() {
         logger.info("Initializing dungeons...");
-        DungeonService dungeonService = new DungeonService();
         dungeons = new Dungeon[dungeonPaths.length];
         for (int i = 0; i < dungeonPaths.length; i++) {
             logger.debug("Initializing dungeon from file: " + dungeonPaths[i]);
@@ -171,7 +137,7 @@ public class Game {
     private String inputPlayerName() {
         UIManager.getInstance().displayInputPrompt("* Enter your name: ");
         while (true) {
-            String playerName = scanner.nextLine();
+            String playerName = inputHandler.getInput();
             if (playerName.isBlank()) {
                 UIManager.getInstance().displayInputPrompt("* Name cannot be empty. Please enter your name: ");
             } else {
@@ -205,7 +171,7 @@ public class Game {
 
         while (true) {
             UIManager.getInstance().displayInputPrompt("Enter your choice (1-3): ");
-            String input = scanner.nextLine();
+            String input = inputHandler.getInput();
 
             switch (input) {
                 case "1":
@@ -232,6 +198,7 @@ public class Game {
      */
     public void startGame() {
         logger.info("Game started.");
+        initialize();
         displayIntro();
         loop();
     }
@@ -258,7 +225,7 @@ public class Game {
         UIManager.getInstance().displayMessage("* Welcome to the game `Dungeons NAND Dragons!`");
 
         UIManager.getInstance().displayMessage("* Press Enter to start the game...");
-        scanner.nextLine();
+        inputHandler.getInput();
 
         UIManager.getInstance().displayMessage(
                 """
@@ -273,7 +240,7 @@ public class Game {
 
         UIManager.getInstance().displayMessage("* Press Enter to begin your journey...");
         UIManager.getInstance().displayMessage("* Type `help` to see the list of available commands.");
-        scanner.nextLine();
+        inputHandler.getInput();
 
         UIManager.getInstance().displayMessage("* You step into the dungeon, the air growing cold and moisture around you...");
         UIManager.getInstance().displayMessage("* As you turn to look back, the entrance slams shut, sealing you inside. There is no way out.");
@@ -292,7 +259,7 @@ public class Game {
             processPlayerCommand();
         }
         endGame();
-        scanner.close();
+        inputHandler.close();
     }
 
     /**
@@ -314,7 +281,9 @@ public class Game {
         } else if (currentRoom.getTrap() != null && currentRoom.getTrap().isActive()) {
             logger.info("Player encountered an active trap in room: " + currentRoom.getLabel());
             if (!player.isTrapped()) {
-                currentRoom.getTrap().printDescription();
+                UIManager.getInstance().displayMessage("* You are trapped by a " + currentRoom.getTrap().getName() + "!");
+                UIManager.getInstance().displayMessage("* " + currentRoom.getTrap().getDescription());
+                UIManager.getInstance().displayMessage("* " + currentRoom.getTrap().getEscapeDescription());
             }
             currentRoom.getTrap().activate(gameContext);
         } else if (currentRoom.isExit()) {
@@ -348,7 +317,7 @@ public class Game {
     private void waitForPlayerInput() {
         logger.debug("Waiting for player input.");
         UIManager.getInstance().displayMessage("\n* Press Enter to continue...");
-        scanner.nextLine();
+        inputHandler.getInput();
         new ConsoleUI().clearScreen();
     }
 
@@ -359,7 +328,7 @@ public class Game {
         logger.debug("Processing player command.");
         UIManager.getInstance().displayMessage("* What would you like to do?");
         UIManager.getInstance().displayInputPrompt("> ");
-        String userInput = scanner.nextLine();
+        String userInput = inputHandler.getInput();
         UIManager.getInstance().displayMessage("");
 
         ICommand command = commandParser.parse(userInput);
@@ -395,6 +364,7 @@ public class Game {
         gameContext.setCurrentDungeon(nextDungeon);
         currentDungeon = nextDungeon;
         gameContext.getPlayer().setCurrentRoom(currentDungeon.getEntranceRoom());
+        gameContext.getPlayer().getCurrentRoom().setVisited(true);
         UIManager.getInstance().displayMessage(GameNarrator.proceedNextLevel(currentDungeon.getLevel()));
     }
 }
