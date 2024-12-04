@@ -103,17 +103,19 @@ public class Menu {
             StringBuilder message = new StringBuilder();
 
             // Column headers
-            message.append(String.format("%-10s %-20s %-15s %-15s %-25s%n",
-                    "Run ID", "Player Name", "Outcome", "Dungeon Level", "Date"));
+            message.append(String.format("%-10s %-20s %-15s %-15s %-15s %-15s %-25s%n",
+                    "Run ID", "Player Name", "Level", "Room", "Outcome", "Dungeon Level", "Date"));
 
             for (RunHistoryEntity run : runs) {
                 PlayerEntity player = playerRepository.findById(run.getPlayerId());
                 message.append(String.format(
-                        "%-10d %-20s %-15s %-15d %-25s%n",
+                        "%-10d %-20s %-15s %-15s %-15d %-15s %-25s%n",
                         run.getId(),
                         player.getName(),
-                        run.getOutcome(),
                         player.getDungeonLevel(),
+                        player.getRoom(),
+                        player.getPowerPoints(),
+                        run.getOutcome(),
                         run.getRunDate()
                 ));
             }

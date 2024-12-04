@@ -271,7 +271,6 @@ public class Game {
             processPlayerCommand();
         }
         endGame();
-        inputHandler.close();
     }
 
     /**
@@ -370,6 +369,9 @@ public class Game {
             UIManager.getInstance().displayMessage(GameNarrator.loseMessage());
 
             saveRunHistory(player, "lost");
+        } else {
+            logger.info("Game ended. Player quit.");
+            System.exit(0);
         }
     }
 
