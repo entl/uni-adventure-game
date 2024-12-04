@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta name="dc.created" content="2024-12-03">
-<meta name="description" content="declaration: package: com.university.elements.chests, class: Chest">
+<meta name="description" content="declaration: package: com.university.elements.boxes, class: Chest">
 <meta name="generator" content="javadoc/ClassWriter">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/jquery-ui.min.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../resource-files/stylesheet.css" title="Style">
@@ -41,7 +41,7 @@ loadScripts(document, 'script');</script>
 <div class="sub-nav">
 <div class="nav-content">
 <ol class="sub-nav-list">
-<li><a href="package-summary.html">com.university.elements.chests</a></li>
+<li><a href="package-summary.html">com.university.elements.boxes</a></li>
 <li><a href="Chest.html" class="current-selection">Chest</a></li>
 </ol>
 <div class="nav-list-search">
@@ -84,18 +84,18 @@ loadScripts(document, 'script');</script>
 <h1 title="Class Chest" class="title">Class Chest</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">com.university.elements.chests.Chest</div>
+<div class="inheritance">com.university.elements.boxes.Chest</div>
 </div>
 <section class="class-description" id="class-description">
 <div class="horizontal-scroll">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="IBox.html" title="interface in com.university.elements.chests">IBox</a></code>, <code><a href="../../utils/events/IEventListener.html" title="interface in com.university.utils.events">IEventListener</a></code></dd>
+<dd><code><a href="IBox.html" title="interface in com.university.elements.boxes">IBox</a></code>, <code><a href="../../utils/events/IEventListener.html" title="interface in com.university.utils.events">IEventListener</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">Chest</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/23/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="IBox.html" title="interface in com.university.elements.chests">IBox</a>, <a href="../../utils/events/IEventListener.html" title="interface in com.university.utils.events">IEventListener</a></span></div>
+implements <a href="IBox.html" title="interface in com.university.elements.boxes">IBox</a>, <a href="../../utils/events/IEventListener.html" title="interface in com.university.utils.events">IEventListener</a></span></div>
 <div class="block">Represents a chest in the game that contains a random item
  The chest can be opened by the player, and once opened, the item is added to the current room's inventory</div>
 </div>
@@ -191,7 +191,7 @@ implements <a href="IBox.html" title="interface in com.university.elements.chest
  Upon opening, the item inside the chest is added to the current room's inventory</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="IBox.html#open(com.university.core.GameContext,com.university.elements.items.effect.IEffect)">open</a></code>&nbsp;in interface&nbsp;<code><a href="IBox.html" title="interface in com.university.elements.chests">IBox</a></code></dd>
+<dd><code><a href="IBox.html#open(com.university.core.GameContext,com.university.elements.items.effect.IEffect)">open</a></code>&nbsp;in interface&nbsp;<code><a href="IBox.html" title="interface in com.university.elements.boxes">IBox</a></code></dd>
 <dt>Parameters:</dt>
 <dd><code>gameContext</code> - The current game context, providing information about the player and the room</dd>
 </dl>
@@ -206,7 +206,7 @@ implements <a href="IBox.html" title="interface in com.university.elements.chest
 <div class="block">Checks whether the chest has been opened</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="IBox.html#isOpened()">isOpened</a></code>&nbsp;in interface&nbsp;<code><a href="IBox.html" title="interface in com.university.elements.chests">IBox</a></code></dd>
+<dd><code><a href="IBox.html#isOpened()">isOpened</a></code>&nbsp;in interface&nbsp;<code><a href="IBox.html" title="interface in com.university.elements.boxes">IBox</a></code></dd>
 <dt>Returns:</dt>
 <dd>true if the chest has been opened, false otherwise</dd>
 </dl>

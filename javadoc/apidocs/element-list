@@ -3,7 +3,7 @@ com.university.config
 com.university.core
 com.university.dungeon
 com.university.dungeon.room
-com.university.elements.chests
+com.university.elements.boxes
 com.university.elements.items
 com.university.elements.items.effect
 com.university.elements.traps

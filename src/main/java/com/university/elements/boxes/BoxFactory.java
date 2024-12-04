@@ -1,4 +1,4 @@
-package com.university.elements.chests;
+package com.university.elements.boxes;
 
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;

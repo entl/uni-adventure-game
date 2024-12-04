@@ -1,6 +1,6 @@
 package com.university.dungeon.room;
 
-import com.university.elements.chests.IBox;
+import com.university.elements.boxes.IBox;
 import com.university.elements.traps.ITrap;
 import com.university.elements.items.IItem;
 import com.university.utils.ui.GameNarrator;

@@ -2,7 +2,7 @@ package com.university.elements.items.effect;
 
 import com.university.dungeon.room.Room;
 import com.university.core.GameContext;
-import com.university.elements.chests.IBox;
+import com.university.elements.boxes.IBox;
 import com.university.utils.events.OpenEvent;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;

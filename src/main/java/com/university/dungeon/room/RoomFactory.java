@@ -2,8 +2,8 @@ package com.university.dungeon.room;
 
 import com.university.config.Config;
 import com.university.core.GameContext;
-import com.university.elements.chests.BoxFactory;
-import com.university.elements.chests.IBox;
+import com.university.elements.boxes.BoxFactory;
+import com.university.elements.boxes.IBox;
 import com.university.elements.traps.ITrap;
 import com.university.elements.traps.TrapFactory;
 import com.university.elements.items.ItemFactory;

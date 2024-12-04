@@ -1,6 +1,6 @@
 package com.university.utils.events;
 
-import com.university.elements.chests.IBox;
+import com.university.elements.boxes.IBox;
 import com.university.elements.items.effect.IEffect;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
