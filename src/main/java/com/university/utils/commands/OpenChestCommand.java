@@ -25,6 +25,11 @@ public class OpenChestCommand implements ICommand{
             return;
         }
 
+        // No additional check is done here to allow some funny attempts, such as
+        // "open chest with cake."
+        // instead of opening the chest, the player will eat the cake.
+        // they will think, "Oops! I ate the cake."
+        // This is not a bug, it's a feature because it is done intentionally.
         itemFromInventory.use(context);
     }
 }
