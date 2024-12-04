@@ -65,6 +65,11 @@ public enum Command {
     ESCAPE("Attempt to escape from a trap", "escape", "run"),
 
     /**
+     * Command to open a chest.
+     */
+    OPEN("Open a chest", "open", "unlock"),
+
+    /**
      * Command for unknown or unrecognized input.
      */
     UNKNOWN("Unknown command");

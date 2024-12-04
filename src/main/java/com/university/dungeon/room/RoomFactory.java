@@ -2,7 +2,7 @@ package com.university.dungeon.room;
 
 import com.university.config.Config;
 import com.university.core.GameContext;
-import com.university.elements.chests.Chest;
+import com.university.elements.chests.BoxFactory;
 import com.university.elements.chests.IBox;
 import com.university.elements.traps.ITrap;
 import com.university.elements.traps.TrapFactory;
@@ -25,6 +25,7 @@ public class RoomFactory {
 
     private static final ItemFactory itemFactory = new ItemFactory();
     private static final TrapFactory trapFactory = new TrapFactory();
+    private static final BoxFactory boxFactory = new BoxFactory();
 
     /**
      * Creates a Room instance based on the cell type provided. The room will be initialized with
@@ -92,7 +93,7 @@ public class RoomFactory {
         double probability = random.nextDouble();
         logger.debug("Chest creation probability: " + probability);
         if (probability < spawnRates.chestProbability) {
-            IBox chest = new Chest();
+            IBox chest = boxFactory.createRandomBox();
             logger.debug("Created chest: " + chest);
             return chest;
         }

@@ -107,6 +107,15 @@ public class CommandParser {
             case SHOW_MAP:
                 logger.info("Creating ShowMapCommand.");
                 return new ShowMapCommand();
+            case OPEN:
+                logger.info("Creating OpenChestCommand.");
+                if (itemName != null) {
+                    return new OpenChestCommand(itemName);
+                } else {
+                    UIManager.getInstance().displayMessage("* Specify item to open with");
+                    logger.warning("Item not specified for OPEN command.");
+                    return null;
+                }
             default:
                 UIManager.getInstance().displayMessage("* I can't understand your input.\n* Enter `help` to see commands");
                 logger.warning("Unknown command encountered: " + userInput);
