@@ -1,6 +1,4 @@
-g
 # **Dungeon Adventure**
-
 
 ## **Table of Contents**
 - [Introduction](#introduction)
@@ -11,12 +9,10 @@ g
 - [How to Play](#how-to-play)
     - [Commands](#commands)
 - [Game Mechanics](#game-mechanics)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## **Introduction**
 
-**Dungeon Adventure** is a text-based Java game developed as a ** project for the Advanced Object-Oriented Programming (OOP) module** in the **3rd year** at Anglia Ruskin University. This game challenges players to navigate through a mysterious dungeon filled with treasures, traps, and magical items. Explore different rooms, collect items, cast spells, and overcome various challenges to achieve victory!
+**Dungeon Adventure** is a text-based Java game developed as a **project for the Advanced Object-Oriented Programming (OOP) module** in the **3rd year** at Anglia Ruskin University. This game challenges players to navigate through a mysterious dungeon filled with treasures, traps, and magical items. Explore different rooms, collect items, cast spells, and overcome various challenges to achieve victory!
 
 ## **Features**
 
@@ -31,31 +27,30 @@ g
 ### **Prerequisites**
 
 - **Java Development Kit (JDK):** Ensure you have JDK 8 or higher installed on your system.
-- **IDE (Optional):** An Integrated Development Environment like IntelliJ IDEA, Eclipse, or VS Code can enhance your development experience.
+- **Maven:** Install Maven for dependency and build management.
+- **SQLite:** Ensure SQLite is installed or available as part of the setup.
 
 ### **Installation**
 
 1. **Clone the Repository:**
    ```bash
-   git clone https://github.com/yourusername/dungeon-adventure.git
+   git clone https://github.com/entl/uni-adventure-game.git
    ```
 2. **Navigate to the Project Directory:**
    ```bash
    cd dungeon-adventure
    ```
-3. **Compile the Game:**
-
-    *For Unix/Linux/macOS*
+3. **Build the Project with Maven:**
    ```bash
-   javac -d bin -sourcepath src $(find src -name "*.java")
+   mvn clean install
    ```
-4. **Run Tests (Optional):**
+4. **Run Tests:**
    ```bash
-    java -cp bin Run all
+   mvn test
    ```
 5. **Run the Game:**
    ```bash
-   java -cp bin com.university.Main
+   mvn exec:java
    ```
 
 *Alternatively, you can import the project into your preferred IDE and run the `Main` class directly.*
@@ -144,12 +139,3 @@ Interact with the game using the following commands. You can type commands in na
    ```bash
    git push origin feature/YourFeature
    ```
-5. **Open a Pull Request**
-
-Please ensure your code adheres to the project's coding standards and includes appropriate comments and documentation.
-
-## **License**
-
-Distributed under the [MIT License](LICENSE). See `LICENSE` for more information.
-
----
