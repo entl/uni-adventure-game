@@ -29,7 +29,6 @@ public class InventoryManager {
         this.inventory = new ArrayList<>();
         this.spellsCount = 0;
         this.toolsCount = 0;
-        addItem(new Spanner());
         logger.debug("InventoryManager initialized with empty inventory.");
     }
 

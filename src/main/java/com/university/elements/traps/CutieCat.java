@@ -21,6 +21,7 @@ import java.util.List;
  */
 public class CutieCat implements ITrap, IEventListener {
     private static final ILogger logger = LoggerFactory.getLogger(CutieCat.class);
+    private List<Class<? extends IEscapeStrategy>> escapeStrategies = List.of(SausageStrategy.class, LosePointsStrategy.class);
 
     private String name;
     private String description;
@@ -119,7 +120,6 @@ public class CutieCat implements ITrap, IEventListener {
     @Override
     public void onEvent(IEvent event) {
         logger.debug("Received event: " + event.getClass().getSimpleName());
-        List<Class<? extends IEscapeStrategy>> escapeStrategies = List.of(SausageStrategy.class, LosePointsStrategy.class);
         if(event instanceof EscapeEvent && isActive) {
             EscapeEvent escapeEvent = (EscapeEvent) event;
             if(escapeEvent.getTrap() == this){

@@ -66,6 +66,7 @@ public class ItemInteractionTest {
     public void useItem_ShouldSucceed_WhenItemExistsInInventory() {
         IItem cake = mock(Cake.class);
         when(cake.getName()).thenReturn("cake");
+        when(cake.getDisplayName()).thenReturn("cake");
         when(cake.isConsumable()).thenReturn(true);
 
         player.getInventoryManager().addItem(cake);
@@ -73,7 +74,6 @@ public class ItemInteractionTest {
         ICommand useCommand = new UseCommand("cake");
         useCommand.execute(context);
 
-//        verify(cake).use(context);
         assertEquals(0, player.getInventoryManager().getInventory().size());
     }
 }

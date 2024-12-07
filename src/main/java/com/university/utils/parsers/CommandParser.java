@@ -46,7 +46,7 @@ public class CommandParser {
         String itemName = itemFactory.findBestMatchingItemName(processedTokens);
         logger.debug("Matched item name: " + itemName);
 
-        Direction direction = parseDirection(processedTokens);
+        Direction direction = extractDirection(processedTokens);
         logger.debug("Parsed direction: " + direction);
 
         switch (command) {
@@ -191,7 +191,7 @@ public class CommandParser {
      * @param words the preprocessed array of words from the user's input
      * @return the {@code Direction} if found, or null if no direction is specified
      */
-    private Direction parseDirection(String[] words) {
+    private Direction extractDirection(String[] words) {
         logger.debug("Parsing direction from words: " + Arrays.toString(words));
         for (String word : words) {
             Direction direction = Direction.fromAlias(word);

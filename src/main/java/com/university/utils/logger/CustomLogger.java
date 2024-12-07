@@ -23,6 +23,7 @@ public class CustomLogger implements ILogger {
         logger.setLevel(Level.SEVERE);
 
         // Disable parent loggers
+        // https://examples.javacodegeeks.com/java-development/core-java/util/logging/prevent-the-logger-send-log-messages-to-its-parent-logger/
         logger.setUseParentHandlers(false);
 
         handler.setLevel(Level.SEVERE);
