@@ -8,6 +8,10 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
+/**
+ * The {@code CommandFactory} class is responsible for creating commands based on the command name and context.
+ */
 public class CommandFactory {
     private final ILogger logger = LoggerFactory.getLogger(CommandFactory.class);
     // store command and lambda function to create command

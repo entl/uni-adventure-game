@@ -1,6 +1,9 @@
 package com.university.utils.commands;
 
-
+/**
+ * The {@code CommandContext} class represents the context of a command, which includes
+ * additional information such as the item name or direction associated with the command.
+ */
 public class CommandContext {
     private final String itemName;
     private final Direction direction;
