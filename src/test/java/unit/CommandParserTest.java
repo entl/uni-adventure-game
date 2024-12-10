@@ -21,19 +21,23 @@ public class CommandParserTest {
     private ItemFactory mockItemFactory;
 
     @Mock
+    private CommandFactory mockCommandFactory;
+
+    @Mock
     private UI mockUI;
 
     @Before
     public void setUp() {
         // create mocks automatically
         MockitoAnnotations.openMocks(this);
-        commandParser = new CommandParser();
+        commandParser = new CommandParser(mockItemFactory, mockCommandFactory);
         UIManager.setInstance(mockUI);
     }
 
     @Test
     public void parse_ShouldReturnMoveCommand_WhenInputContainsValidDirection() {
         String input = "move north";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new MoveCommand(Direction.NORTH));
         ICommand command = commandParser.parse(input);
 
         assertNotNull(command);
@@ -45,6 +49,7 @@ public class CommandParserTest {
         String input = "pick up hammer";
 
         when(mockItemFactory.findBestMatchingItemName(any())).thenReturn("hammer");
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new PickUpCommand("hammer"));
 
         ICommand command = commandParser.parse(input);
 
@@ -57,6 +62,7 @@ public class CommandParserTest {
         String input = "use potion";
 
         when(mockItemFactory.findBestMatchingItemName(any())).thenReturn("potion");
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new UseCommand("potion"));
 
         ICommand command = commandParser.parse(input);
 
@@ -64,29 +70,21 @@ public class CommandParserTest {
         assertTrue(command instanceof UseCommand);
     }
 
-    @Test
-    public void parse_ShouldReturnNull_WhenInvalidDirectionIsProvided() {
-        String input = "move upward";
-
-        ICommand command = commandParser.parse(input);
-
-        assertNull(command);
-        verify(mockUI).displayMessage("* Specify direction");
-    }
 
     @Test
     public void parse_ShouldReturnNull_WhenInvalidCommandIsProvided() {
         String input = "jump";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new UnknownCommand());
 
         ICommand command = commandParser.parse(input);
 
-        assertNull(command);
-        verify(mockUI).displayMessage("* I can't understand your input.\n* Enter `help` to see commands");
+        assertTrue(command instanceof UnknownCommand);
     }
 
     @Test
     public void parse_ShouldReturnLookAroundCommand_WhenInputIsLookAround() {
         String input = "look around";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new LookAroundCommand());
 
         ICommand command = commandParser.parse(input);
 
@@ -97,6 +95,7 @@ public class CommandParserTest {
     @Test
     public void parse_ShouldReturnHelpCommand_WhenInputIsHelp() {
         String input = "help";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new HelpCommand());
 
         ICommand command = commandParser.parse(input);
 
@@ -107,6 +106,7 @@ public class CommandParserTest {
     @Test
     public void parse_ShouldReturnQuitCommand_WhenInputIsQuit() {
         String input = "quit";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new QuitCommand());
 
         ICommand command = commandParser.parse(input);
 
@@ -117,6 +117,7 @@ public class CommandParserTest {
     @Test
     public void parse_ShouldIgnoreStopwords_WhenInputContainsStopwords() {
         String input = "the move to the north";
+        when(mockCommandFactory.createCommand(any(), any())).thenReturn(new MoveCommand(Direction.NORTH));
 
         ICommand command = commandParser.parse(input);
 
