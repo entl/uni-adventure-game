@@ -4,6 +4,8 @@ import com.university.config.Config;
 import com.university.core.Game;
 import com.university.core.Menu;
 import com.university.dungeon.DungeonService;
+import com.university.elements.items.ItemFactory;
+import com.university.utils.commands.CommandFactory;
 import com.university.utils.input.ConsoleInputHandler;
 import com.university.utils.input.IInputHandler;
 import com.university.utils.parsers.CommandParser;
@@ -24,8 +26,11 @@ public class Main {
             DatabaseInitializer.initializeDatabase(databaseUrl);
             Connection connection = DatabaseConnection.getInstance(databaseUrl);
 
+            ItemFactory itemFactory = new ItemFactory();
+            CommandFactory commandFactory = new CommandFactory();
+
             UI ui = UIManager.getInstance();
-            CommandParser commandParser = new CommandParser();
+            CommandParser commandParser = new CommandParser(itemFactory, commandFactory);
             String[] dungeonPaths = Config.dungeonPaths;
             DungeonService dungeonService = new DungeonService();
             IInputHandler inputHandler = new ConsoleInputHandler();

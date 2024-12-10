@@ -36,6 +36,12 @@ public class UseCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
+        if (itemName == null) {
+            logger.warning("Item name not specified for USE command.");
+            UIManager.getInstance().displayMessage("* Specify item name");
+            return;
+        }
+
         Player player = context.getPlayer();
         logger.debug("Executing UseCommand for item: " + itemName + " by player: " + player);
 

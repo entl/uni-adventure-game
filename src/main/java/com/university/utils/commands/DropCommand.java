@@ -34,6 +34,12 @@ public class DropCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
+        if (itemName == null) {
+            logger.warning("Item name not specified for DROP command.");
+            UIManager.getInstance().displayMessage("* Specify item name");
+            return;
+        }
+
         logger.debug("Executing DropCommand for item: " + itemName);
 
         IItem item = context.getPlayer().getInventoryManager().getItemByName(itemName);

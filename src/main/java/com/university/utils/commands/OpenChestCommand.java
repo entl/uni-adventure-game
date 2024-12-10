@@ -18,6 +18,12 @@ public class OpenChestCommand implements ICommand{
 
     @Override
     public void execute(GameContext context) {
+        if (itemName == null) {
+            logger.warning("Item name not specified for OPEN command.");
+            UIManager.getInstance().displayMessage("* Specify item name");
+            return;
+        }
+
         IItem itemFromInventory = context.getPlayer().getInventoryManager().getItemByName(itemName);
 
         if (itemFromInventory == null) {

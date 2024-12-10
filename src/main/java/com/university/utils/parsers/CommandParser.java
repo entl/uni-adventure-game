@@ -3,7 +3,6 @@ package com.university.utils.parsers;
 import com.university.elements.items.ItemFactory;
 import com.university.utils.logger.ILogger;
 import com.university.utils.logger.LoggerFactory;
-import com.university.utils.ui.UIManager;
 import com.university.utils.commands.*;
 
 import java.util.*;
@@ -20,9 +19,11 @@ public class CommandParser {
 
     private Set<String> stopwords;
     private ItemFactory itemFactory;
+    private CommandFactory commandFactory;
 
-    public CommandParser() {
-        itemFactory = new ItemFactory();
+    public CommandParser(ItemFactory itemFactory, CommandFactory commandFactory) {
+        this.itemFactory = itemFactory;
+        this.commandFactory = commandFactory;
         initializeStopwords();
         logger.info("CommandParser initialized with ItemFactory and stopwords.");
     }
@@ -49,78 +50,9 @@ public class CommandParser {
         Direction direction = extractDirection(processedTokens);
         logger.debug("Parsed direction: " + direction);
 
-        switch (command) {
-            case MOVE:
-                if (direction != null) {
-                    logger.info("Creating MoveCommand with direction: " + direction);
-                    return new MoveCommand(direction);
-                } else {
-                    UIManager.getInstance().displayMessage("* Specify direction");
-                    logger.warning("Direction not specified for MOVE command.");
-                    return null;
-                }
-            case LOOK_AROUND:
-                logger.info("Creating LookAroundCommand.");
-                return new LookAroundCommand();
-            case USE:
-                if (itemName != null) {
-                    logger.info("Creating UseCommand with item: " + itemName);
-                    return new UseCommand(itemName);
-                } else {
-                    UIManager.getInstance().displayMessage("* Specify item to use");
-                    logger.warning("Item not specified for USE command.");
-                    return null;
-                }
-            case PICK_UP:
-                if (itemName != null) {
-                    logger.info("Creating PickUpCommand with item: " + itemName);
-                    return new PickUpCommand(itemName);
-                } else {
-                    UIManager.getInstance().displayMessage("* Specify item to pick up");
-                    logger.warning("Item not specified for PICK_UP command.");
-                    return null;
-                }
-            case DROP:
-                if (itemName != null) {
-                    logger.info("Creating DropCommand with item: " + itemName);
-                    return new DropCommand(itemName);
-                } else {
-                    UIManager.getInstance().displayMessage("* Specify item to drop");
-                    logger.warning("Item not specified for DROP command.");
-                    return null;
-                }
-            case SHOW_INVENTORY:
-                logger.info("Creating ShowInventoryCommand.");
-                return new ShowInventoryCommand();
-            case HELP:
-                logger.info("Creating HelpCommand.");
-                return new HelpCommand();
-            case ESCAPE:
-                logger.info("Creating EscapeCommand.");
-                return new EscapeCommand();
-            case QUIT:
-                logger.info("Creating QuitCommand.");
-                return new QuitCommand();
-            case SHOW_STATS:
-                logger.info("Creating ShowStatsCommand.");
-                return new ShowStatsCommand();
-            case SHOW_MAP:
-                logger.info("Creating ShowMapCommand.");
-                return new ShowMapCommand();
-            case OPEN:
-                logger.info("Creating OpenChestCommand.");
-                if (itemName != null) {
-                    return new OpenChestCommand(itemName);
-                } else {
-                    UIManager.getInstance().displayMessage("* Specify item to open with");
-                    logger.warning("Item not specified for OPEN command.");
-                    return null;
-                }
-            default:
-                UIManager.getInstance().displayMessage("* I can't understand your input.\n* Enter `help` to see commands");
-                logger.warning("Unknown command encountered: " + userInput);
-                return null;
-        }
+        CommandContext context = new CommandContext(itemName, direction);
+
+        return commandFactory.createCommand(command, context);
     }
 
     /**

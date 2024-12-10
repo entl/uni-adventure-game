@@ -37,6 +37,12 @@ public class PickUpCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
+        if (itemName == null) {
+            logger.warning("Item name not specified for PICKUP command.");
+            UIManager.getInstance().displayMessage("* Specify item name");
+            return;
+        }
+
         logger.debug("Executing PickUpCommand for item: " + itemName);
         IItem item = context.getPlayer().getCurrentRoom().getItemByName(itemName);
 

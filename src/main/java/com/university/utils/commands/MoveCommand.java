@@ -37,6 +37,12 @@ public class MoveCommand implements ICommand {
      */
     @Override
     public void execute(GameContext context) {
+        if (direction == null) {
+            logger.warning("Direction not specified for MOVE command.");
+            UIManager.getInstance().displayMessage("* Specify direction");
+            return;
+        }
+
         Player player = context.getPlayer();
         logger.debug("Executing MoveCommand for direction: " + direction + " by player: " + player);
 
