@@ -38,7 +38,7 @@ public class UseCommand implements ICommand {
     public void execute(GameContext context) {
         if (itemName == null) {
             logger.warning("Item name not specified for USE command.");
-            UIManager.getInstance().displayMessage("* Specify item name");
+            UIManager.getInstance().displayMessage(GameNarrator.itemNotSpecified());
             return;
         }
 

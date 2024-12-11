@@ -39,7 +39,7 @@ public class MoveCommand implements ICommand {
     public void execute(GameContext context) {
         if (direction == null) {
             logger.warning("Direction not specified for MOVE command.");
-            UIManager.getInstance().displayMessage("* Specify direction");
+            UIManager.getInstance().displayMessage(GameNarrator.directionNotSpecified());
             return;
         }
 

@@ -10,6 +10,10 @@ import com.university.utils.commands.Direction;
 import java.util.Map;
 import java.util.Random;
 
+/**
+ * GameNarrator class contains static methods to generate messages for various game events.
+ * These messages are used to provide feedback to the player during gameplay.
+ */
 public class GameNarrator {
 
     private static final Random RANDOM = new Random();
@@ -177,6 +181,25 @@ public class GameNarrator {
             "* Congratulations! You have completed the current level. Moving on to the %d level...",
     };
 
+    // parser messages
+    private static final String[] UNKNOWN_COMMAND = {
+            "* Invalid command. Type 'help' to see a list of available commands.",
+            "* Command not recognized. Type 'help' to see a list of available commands.",
+            "* I don't understand that command. Type 'help' to see a list of available commands."
+    };
+
+    private static final String[] ITEM_NOT_SPECIFIED = {
+            "* Specify item name",
+            "* You need to specify an item name",
+            "* Please specify an item name"
+    };
+
+   private static final String[] DIRECTION_NOT_SPECIFIED = {
+            "* Specify a direction",
+            "* You need to specify a direction",
+            "* Please specify a direction"
+    };
+
 
     public static String movementSuccess(Direction direction) {
         return getRandomMessage(MOVEMENT_SUCCESS, direction);
@@ -292,6 +315,18 @@ public class GameNarrator {
 
     public static String proceedNextLevel(int level) {
         return getRandomMessage(PROCEED_NEXT_LEVEL, level);
+    }
+
+    public static String unknownCommand() {
+        return getRandomMessage(UNKNOWN_COMMAND);
+    }
+
+    public static String itemNotSpecified() {
+        return getRandomMessage(ITEM_NOT_SPECIFIED);
+    }
+
+    public static String directionNotSpecified() {
+        return getRandomMessage(DIRECTION_NOT_SPECIFIED);
     }
 
     /**

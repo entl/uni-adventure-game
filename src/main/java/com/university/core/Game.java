@@ -371,8 +371,8 @@ public class Game {
             saveRunHistory(player, "lost");
         } else {
             logger.info("Game ended. Player quit.");
-            System.exit(0);
         }
+        System.exit(0);
     }
 
     private void saveRunHistory(Player player, String outcome) {
